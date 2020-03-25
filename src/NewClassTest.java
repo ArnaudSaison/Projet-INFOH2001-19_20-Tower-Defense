@@ -1,3 +1,3 @@
-public class NewClassTest {
+public class NewClassTest { //ceci est un commentaire.
 }
 
