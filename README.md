@@ -3,11 +3,11 @@
 Model
 - Game 
 - NPC
- - pathfinding
- - characters : health, speed, ...
- - (Attck : weapons, spells, ...)
- - position
- - loot
+  - pathfinding
+  - characters : health, speed, ...
+  - (Attck : weapons, spells, ...)
+  - position
+  - loot
  
 - NPC Factory
 - Towers
