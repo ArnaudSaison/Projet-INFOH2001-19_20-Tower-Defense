@@ -29,9 +29,9 @@
 lien entre view et model
 
 # Quesitons à poser
-• comment repérer les objets et personnages sur la carte ? Cases ? Pixels ? position exacte ?
-• comment intégrer le MVC : échelle de JaveFX (exemple : stockage et conversion de la positon)
-• est-ce qu'on doit faire les deux scénarios ?
+- comment repérer les objets et personnages sur la carte ? Cases ? Pixels ? position exacte ?
+- comment intégrer le MVC : échelle de JaveFX (exemple : stockage et conversion de la positon)
+- est-ce qu'on doit faire les deux scénarios ?
 
 # Répartition des tâches
 **Arnaud**
