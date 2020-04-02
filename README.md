@@ -1,6 +1,6 @@
 # Projet-INFOH2001-19_20-Tower-Defense
 
-##Model
+## Model
 - Game 
 - NPC
   - pathfinding
@@ -17,7 +17,7 @@
 - Postion
 - Gold Mine
 
-##View
+## View
 - NPC
   - representation
   - animation
@@ -25,7 +25,7 @@
 - Level
 - Map Builder
 
-##Controller
+## Controller
 lien entre view et model
 
 # Quesitons à poser
@@ -36,6 +36,7 @@ lien entre view et model
 # Répartition des tâches
 **Arnaud**
 interface
+
 codage des méthodes plus précises dans codes général
 
 **Pierre**
