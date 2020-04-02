@@ -1,6 +1,6 @@
 # Projet-INFOH2001-19_20-Tower-Defense
 
-Model
+##Model
 - Game 
 - NPC
   - pathfinding
@@ -17,7 +17,7 @@ Model
 - Postion
 - Gold Mine
 
-View
+##View
 - NPC
   - representation
   - animation
@@ -25,8 +25,8 @@ View
 - Level
 - Map Builder
 
-Controller
-
+##Controller
+lien entre view et model
 
 # Quesitons à poser
 • comment repérer les objets et personnages sur la carte ? Cases ? Pixels ? position exacte ?
