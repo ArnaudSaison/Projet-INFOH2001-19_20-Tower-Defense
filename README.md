@@ -1,13 +1,13 @@
 # Projet-INFOH2001-19_20-Tower-Defense
 
-Model
+## Model
 - Game 
 - NPC
- - pathfinding
- - characters : health, speed, ...
- - (Attck : weapons, spells, ...)
- - position
- - loot
+  - pathfinding
+  - characters : health, speed, ...
+  - (Attck : weapons, spells, ...)
+  - position
+  - loot
  
 - NPC Factory
 - Towers
@@ -17,7 +17,7 @@ Model
 - Postion
 - Gold Mine
 
-View
+## View
 - NPC
   - representation
   - animation
@@ -25,17 +25,18 @@ View
 - Level
 - Map Builder
 
-Controller
-
+## Controller
+lien entre view et model
 
 # Quesitons à poser
-• comment repérer les objets et personnages sur la carte ? Cases ? Pixels ? position exacte ?
-• comment intégrer le MVC : échelle de JaveFX (exemple : stockage et conversion de la positon)
-• est-ce qu'on doit faire les deux scénarios ?
+- comment repérer les objets et personnages sur la carte ? Cases ? Pixels ? position exacte ?
+- comment intégrer le MVC : échelle de JaveFX (exemple : stockage et conversion de la positon)
+- est-ce qu'on doit faire les deux scénarios ?
 
 # Répartition des tâches
 **Arnaud**
 interface
+
 codage des méthodes plus précises dans codes général
 
 **Pierre**
