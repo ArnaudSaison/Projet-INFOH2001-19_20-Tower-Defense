@@ -1,4 +1,4 @@
-package Model;
+package game.model;
 
 public interface DealsDamage {
 
