@@ -16,7 +16,7 @@ public class MainController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
+        System.out.println("test2");
     }
 
     protected enum NextScene {MENU, GAME, EDITOR}

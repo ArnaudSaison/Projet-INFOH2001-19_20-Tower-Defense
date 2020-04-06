@@ -10,6 +10,10 @@ import java.io.IOException;
 
 public class MenuController extends MainController {
 
+    public MenuController() {
+        super();
+    }
+
     @FXML
     public void handleNewGameButtonClicked(MouseEvent event) throws IOException {
         Stage window = (Stage)((Node)event.getSource()).getScene().getWindow();

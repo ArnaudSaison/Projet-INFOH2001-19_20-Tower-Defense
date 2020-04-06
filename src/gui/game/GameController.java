@@ -10,6 +10,10 @@ import java.io.IOException;
 
 public class GameController extends MainController {
 
+    public GameController(){
+        super();
+    }
+
     @FXML
     public void handleQuitGameButtonClicked(MouseEvent event) throws IOException {
         Stage window = (Stage)((Node)event.getSource()).getScene().getWindow();
