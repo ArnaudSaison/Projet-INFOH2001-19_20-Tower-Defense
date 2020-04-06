@@ -30,11 +30,11 @@ public class MenuController implements Initializable, GUIController {
     // Gestion des éléments FXML
     @FXML
     public void handleNewGameButtonClicked(MouseEvent event) throws IOException {
-        mainApplication.setCurrentSceneTo("GAME");
+        mainApplication.setCurrentSceneTo(MainApplication.SceneType.GAME);
     }
 
     @FXML
     public void handleMapEditorButtonClicked(MouseEvent event) throws IOException {
-        mainApplication.setCurrentSceneTo("EDITOR");
+        mainApplication.setCurrentSceneTo(MainApplication.SceneType.EDITOR);
     }
 }

@@ -14,8 +14,10 @@ import java.util.Properties;
 public class MainApplication extends Application {
     private static Properties settings;
 
+    public enum SceneType {MENU, EDITOR, GAME}
     private Stage mainWindow;
     private Parent currentPane;
+    private GUIController currentController;
 
     /*
     Méthode appelée par JavaFX lors de l'ouverture de l'application.
@@ -25,7 +27,7 @@ public class MainApplication extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         mainWindow = stage;
-        setCurrentSceneTo("MENU");
+        setCurrentSceneTo(SceneType.MENU);
         mainWindow.setTitle("Tower Defense");
         mainWindow.show();
     }
@@ -33,55 +35,16 @@ public class MainApplication extends Application {
     /*
     Méthodes permettant de changer de scène
      */
-    /*public void setCurrentSceneToMenu() throws IOException {
-        FXMLLoader loader = new FXMLLoader();
-
-        loader.setLocation(getClass().getResource("gui/menu/MenuFXML.fxml")); // Initialisation du loader avec le bon chemin
-        currentPane = loader.load(); // On récupère le contenu de la scène
-
-        GUIController currentController = loader.getController(); // On récupère le controlleur associé au FXML
-        currentController.setMainApplication(this);
-
-        Scene scene = new Scene(currentPane);
-        mainWindow.setScene(scene);
-    }
-
-    public void setCurrentSceneToGame() throws IOException {
-        FXMLLoader loader = new FXMLLoader();
-
-        loader.setLocation(getClass().getResource("gui/game/GameFXML.fxml")); // Initialisation du loader avec le bon chemin
-        currentPane = loader.load(); // On récupère le contenu de la scène
-
-        GUIController currentController = loader.getController(); // On récupère le controlleur associé au FXML
-        currentController.setMainApplication(this);
-
-        Scene scene = new Scene(currentPane);
-        mainWindow.setScene(scene);
-    }
-
-    public void setCurrentSceneToMapEditor() throws IOException {
-        FXMLLoader loader = new FXMLLoader();
-
-        loader.setLocation(getClass().getResource("gui/map/editor/MapEditorFXML.fxml")); // Initialisation du loader avec le bon chemin
-        currentPane = loader.load(); // On récupère le contenu de la scène
-
-        GUIController currentController = loader.getController(); // On récupère le controlleur associé au FXML
-        currentController.setMainApplication(this);
-
-        Scene scene = new Scene(currentPane);
-        mainWindow.setScene(scene);
-    }*/
-
-    public void setCurrentSceneTo(String sceneType) throws IOException {
+    public void setCurrentSceneTo(SceneType sceneType) throws IOException {
         String sceneTypePath;
         switch (sceneType) {
-            case "GAME":
+            case GAME:
                 sceneTypePath = "gui/game/GameFXML.fxml";
                 break;
-            case "MENU":
+            case MENU:
                 sceneTypePath = "gui/menu/MenuFXML.fxml";
                 break;
-            case "EDITOR":
+            case EDITOR:
                 sceneTypePath = "gui/map/editor/MapEditorFXML.fxml";
                 break;
             default:
@@ -93,7 +56,7 @@ public class MainApplication extends Application {
         loader.setLocation(getClass().getResource(sceneTypePath)); // Initialisation du loader avec le bon chemin
         currentPane = loader.load(); // On récupère le contenu de la scène
 
-        GUIController currentController = loader.getController(); // On récupère le controlleur associé au FXML
+        currentController = loader.getController(); // On récupère le controlleur associé au FXML
         currentController.setMainApplication(this);
 
         Scene scene = new Scene(currentPane);
