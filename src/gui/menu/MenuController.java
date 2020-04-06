@@ -1,32 +1,24 @@
 package gui.menu;
 
-
-import gui.menu.listeners.MenuButtonListener;
-import javafx.application.Application;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.layout.*;
+import gui.MainController;
+import javafx.fxml.FXML;
+import javafx.scene.Node;
+import javafx.scene.input.MouseEvent;
 import javafx.stage.Stage;
 
 import java.io.IOException;
 
-public class MenuController {
+public class MenuController extends MainController {
 
-    // Méthodes d'initialisation
-    public Scene getScene() throws IOException {
-        Parent menuPane = FXMLLoader.load(getClass().getResource("MenuFXML.fxml"));
-        return new Scene(menuPane);
+    @FXML
+    public void handleNewGameButtonClicked(MouseEvent event) throws IOException {
+        Stage window = (Stage)((Node)event.getSource()).getScene().getWindow();
+        this.setCurrentSceneTo(window, NextScene.GAME);
     }
 
-    // Méthodes pour le controller
-    public void handleNewGameButtonClicked(){
-        System.out.println("New Game");
-    }
-
-    public void handleMapEditorButtonClicked(){
-        System.out.println("Map Editor");
+    @FXML
+    public void handleMapEditorButtonClicked(MouseEvent event) throws IOException {
+        Stage window = (Stage)((Node)event.getSource()).getScene().getWindow();
+        this.setCurrentSceneTo(window, NextScene.EDITOR);
     }
 }
