@@ -5,7 +5,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
-import towerdefense.gui.gui.GUIController;
+import towerdefense.gui.generic.GUIController;
 
 import java.io.IOException;
 import java.util.Properties;
@@ -14,7 +14,7 @@ import java.util.Properties;
 public class MainApplication extends Application {
     private static Properties settings;
 
-    public enum SceneType {MENU, EDITOR, GAME}
+    public enum SceneType {MENU, EDITOR, GAME, SELCTOR}
     private Stage mainWindow;
     private Parent currentPane;
     private GUIController currentController;
@@ -47,6 +47,8 @@ public class MainApplication extends Application {
             case EDITOR:
                 sceneTypePath = "gui/map/editor/MapEditorFXML.fxml";
                 break;
+            case SELCTOR:
+                sceneTypePath = "gui/map/selector/MapSelectorFXML.fxml";
             default:
                 throw new IllegalStateException("Unexpected value: " + sceneType);
         }

@@ -1,0 +1,15 @@
+.creditsbutton {
+	-fx-background-color: rgba(0, 0, 0, 0);
+	-fx-background-radius: 0;
+	-fx-border-width: 0;
+	-fx-border-style: none;
+	-fx-background-insets: 0;
+}
+
+.creditsbutton:focused {
+	-fx-background-color: rgba(0, 0, 0, 0);
+}
+
+.creditsbutton:hover {
+	-fx-background-color: rgba(0, 0, 0, 0);
+}

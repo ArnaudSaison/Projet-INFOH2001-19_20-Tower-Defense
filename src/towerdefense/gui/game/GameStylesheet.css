@@ -1,0 +1,8 @@
+.gameInfoBarItem {
+	-fx-background-color: rgba(217, 217, 217, 0.5);
+	-fx-background-radius: 10;
+}
+
+.gameSideBar {
+	-fx-background-color: #cccccc;
+}

@@ -1,0 +1,31 @@
+.menubarbutton {
+	-fx-background-color: #999999;
+	-fx-background-radius: 0;
+	-fx-border-width: 0;
+	-fx-border-style: none;
+	-fx-background-insets: 0;
+}
+
+.pagelabel {
+	-fx-font-weight: bold;
+}
+
+.menubarbutton:focused {
+	-fx-background-color: #999999;
+}
+
+.menubarbutton:hover {
+	-fx-background-color: #888888;
+}
+
+.background {
+	-fx-background-color: #333333;
+}
+
+.menubar {
+	-fx-background-color: #a6a6a6;
+}
+
+.sidebar {
+	-fx-background-color: #cccccc;
+}

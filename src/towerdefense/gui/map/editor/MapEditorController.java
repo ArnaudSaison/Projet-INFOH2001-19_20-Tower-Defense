@@ -4,7 +4,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.input.MouseEvent;
 import towerdefense.MainApplication;
-import towerdefense.gui.gui.GUIController;
+import towerdefense.gui.generic.GUIController;
 
 import java.io.IOException;
 import java.net.URL;
