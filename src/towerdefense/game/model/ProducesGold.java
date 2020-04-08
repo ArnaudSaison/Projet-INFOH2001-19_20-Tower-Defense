@@ -1,8 +1,13 @@
 package towerdefense.game.model;
 
 public interface ProducesGold {
+    final int gold = 1;
 
-    //public void Producegold(){}
+    public void produceGold();
 
-    //public int retrieveGold(){}
+    public int getProductionRate();
+
+    public void increaseProductionRate(int increment);
+
+    //public int retrieveGold(); ?
 }

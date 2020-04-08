@@ -2,5 +2,5 @@ package towerdefense.game.model;
 
 public interface DealsDamage {
 
-    //public void dealDamage(NPC npc){}
+    public void dealDamage(int damage);
 }
