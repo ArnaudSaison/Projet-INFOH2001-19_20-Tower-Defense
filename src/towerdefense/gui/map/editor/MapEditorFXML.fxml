@@ -60,7 +60,7 @@
                   <Font size="16.0" />
                </font></Button>
             <Region HBox.hgrow="ALWAYS" />
-            <Button alignment="CENTER_RIGHT" mnemonicParsing="false" styleClass="menubarbutton" text="Save">
+            <Button alignment="CENTER_RIGHT" mnemonicParsing="false" onMouseClicked="#handleSaveButtonClicked" styleClass="menubarbutton" text="Save">
                <HBox.margin>
                   <Insets />
                </HBox.margin>
@@ -104,6 +104,6 @@
          </children></VBox>
    </right>
    <center>
-      <StackPane prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
+      <StackPane fx:id="mapPlaceHolder" prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
    </center>
 </BorderPane>
