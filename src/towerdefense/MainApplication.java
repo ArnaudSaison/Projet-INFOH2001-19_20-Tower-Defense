@@ -4,7 +4,9 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
+import towerdefense.gui.confirmwindow.ConfirmWindow;
 import towerdefense.gui.generic.GUIController;
 
 import java.io.IOException;
@@ -13,10 +15,14 @@ import java.util.Properties;
 
 public class MainApplication extends Application {
     private static Properties settings;
+    private int windowWidth = 1280;
+    private int windowHeight = 720;
 
-    public enum SceneType {MENU, EDITOR, GAME, SELCTOR}
+    public enum SceneType {MENU, EDITOR, GAME, SELECTOR}
+
     private Stage mainWindow;
     private Parent currentPane;
+    private Scene currentScene;
     private GUIController currentController;
 
     /*
@@ -27,7 +33,9 @@ public class MainApplication extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         mainWindow = stage;
+        currentScene = new Scene(new Pane());
         setCurrentSceneTo(SceneType.MENU);
+        mainWindow.setScene(currentScene);
         mainWindow.setTitle("Tower Defense");
         mainWindow.show();
     }
@@ -47,8 +55,9 @@ public class MainApplication extends Application {
             case EDITOR:
                 sceneTypePath = "gui/map/editor/MapEditorFXML.fxml";
                 break;
-            case SELCTOR:
+            case SELECTOR:
                 sceneTypePath = "gui/map/selector/MapSelectorFXML.fxml";
+                break;
             default:
                 throw new IllegalStateException("Unexpected value: " + sceneType);
         }
@@ -61,8 +70,14 @@ public class MainApplication extends Application {
         currentController = loader.getController(); // On récupère le controlleur associé au FXML
         currentController.setMainApplication(this);
 
-        Scene scene = new Scene(currentPane);
-        mainWindow.setScene(scene);
+        currentScene.setRoot(currentPane);
+
+//        Scene scene = new Scene(currentPane);
+//        mainWindow.setScene(scene);
+    }
+
+    public boolean confirmWindow(String msg, String msgYES, String msgNO, String windowTitle){
+        return ConfirmWindow.askUser(msg, msgYES, msgNO, windowTitle, mainWindow);
     }
 
 //    private static void loadSettings() throws IOException{

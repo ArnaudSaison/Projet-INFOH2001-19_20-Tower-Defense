@@ -30,6 +30,9 @@ public class MapEditorController implements Initializable, GUIController {
     // Gestion des éléments FXML
     @FXML
     public void handleBackToMenuButtonClicked(MouseEvent event) throws IOException {
-        mainApplication.setCurrentSceneTo(MainApplication.SceneType.MENU);
+        boolean answer = mainApplication.confirmWindow("Unsaved changes will be lost. Are you sure you want to exit the editor ?", "Yes", "No", "Confirm");
+        if (answer){
+            mainApplication.setCurrentSceneTo(MainApplication.SceneType.MENU);
+        }
     }
 }

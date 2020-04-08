@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.net.URL?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
@@ -7,19 +8,11 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-
 <BorderPane fx:id="borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="towerdefense.gui.menu.MenuController">
-   <bottom>
-      <Label alignment="CENTER" prefHeight="26.0" text="Tower Defense Game by Arnaud Saison and Pierre Durand" textAlignment="CENTER" BorderPane.alignment="CENTER">
-         <font>
-            <Font name="Arial" size="18.0" />
-         </font>
-      </Label>
-   </bottom>
    <center>
       <VBox fx:id="buttonsVBox" alignment="CENTER" spacing="30.0" BorderPane.alignment="CENTER">
          <children>
-            <Button fx:id="newGameButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onMouseClicked="#handleNewGameButtonClicked" text="New Game">
+            <Button fx:id="newGameButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onMouseClicked="#handleNewGameButtonClicked" styleClass="menubutton" text="New Game">
                <font>
                   <Font size="30.0" />
                </font>
@@ -27,7 +20,7 @@
                   <Insets bottom="10.0" left="20.0" right="20.0" top="10.0" />
                </padding>
             </Button>
-            <Button fx:id="mapEditorButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onMouseClicked="#handleMapEditorButtonClicked" text="Map Editor">
+            <Button fx:id="mapEditorButton" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onMouseClicked="#handleMapEditorButtonClicked" styleClass="menubutton" text="Map Editor">
                <font>
                   <Font size="30.0" />
                </font>
@@ -48,4 +41,20 @@
          </BorderPane.margin>
       </Label>
    </top>
+   <bottom>
+      <VBox alignment="CENTER" BorderPane.alignment="CENTER">
+         <children>
+            <Label alignment="CENTER" prefHeight="26.0" text="Tower Defense Game by Arnaud Saison and Pierre Durand" textAlignment="CENTER">
+               <font>
+                  <Font name="Arial" size="18.0" />
+               </font>
+            </Label>
+            <Label text="Credits : Coins by Adrien Coquet from the Noun Project" />
+         </children>
+      </VBox>
+   </bottom>
+   <stylesheets>
+      <URL value="@../generic/GenericStylesheet.css" />
+      <URL value="@MenuStylesheet.css" />
+   </stylesheets>
 </BorderPane>

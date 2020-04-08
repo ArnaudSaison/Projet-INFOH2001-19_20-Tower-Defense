@@ -1,8 +1,9 @@
 .menubarbutton {
 	-fx-background-color: #999999;
 	-fx-background-radius: 0;
+
 	-fx-border-width: 0;
-	-fx-border-style: none;
+
 	-fx-background-insets: 0;
 }
 
@@ -16,6 +17,8 @@
 
 .menubarbutton:hover {
 	-fx-background-color: #888888;
+	-fx-border-width: 0, 0, 3, 0;
+	-fx-border-color: black;
 }
 
 .background {

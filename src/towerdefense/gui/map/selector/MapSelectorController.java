@@ -1,4 +1,4 @@
-package towerdefense.gui.map.editor;
+package towerdefense.gui.map.selector;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -26,10 +26,10 @@ public class MapSelectorController implements Initializable, GUIController {
     public void setMainApplication(MainApplication main){
         this.mainApplication = main;
     }
-
+/*
     // Gestion des éléments FXML
     @FXML
     public void handleBackToMenuButtonClicked(MouseEvent event) throws IOException {
         mainApplication.setCurrentSceneTo(MainApplication.SceneType.MENU);
-    }
+    }*/
 }

@@ -1,0 +1,37 @@
+.message {
+    -fx-font-size: 14;
+}
+
+.button {
+    -fx-background-radius: 15;
+    -fx-border-width: 0;
+    -fx-background-insets: 0;
+}
+
+.no {
+    -fx-background-color: green;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+.no:focused {
+    -fx-background-color: green;
+}
+
+.no:hover {
+    -fx-background-color: darkgreen;
+}
+
+.yes {
+    -fx-background-color: red;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+}
+
+.yes:focused {
+    -fx-background-color: red;
+}
+
+.yes:hover {
+    -fx-background-color: darkred;
+}
