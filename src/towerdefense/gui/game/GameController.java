@@ -14,6 +14,8 @@ import java.util.ResourceBundle;
 
 public class GameController implements Initializable, GUIController {
     private MainApplication mainApplication;
+    private boolean isGameFinished;
+
     @FXML private HBox gameInfoBar;
     @FXML private HBox gameHealthInfoBar;
     @FXML private HBox gameGoldInfoBar;
@@ -22,7 +24,7 @@ public class GameController implements Initializable, GUIController {
 
     // Initialisation du controller
     public GameController(){
-
+        isGameFinished = false;
     }
 
     @Override
@@ -37,6 +39,13 @@ public class GameController implements Initializable, GUIController {
     // Gestion des éléments FXML
     @FXML
     public void handleQuitGameButtonClicked(MouseEvent event) throws IOException {
-        mainApplication.setCurrentSceneTo(MainApplication.SceneType.MENU);
+        if (!isGameFinished) {
+            boolean answer = mainApplication.confirmWindow("The Game is not finished yet. Do you want to quit anyway ?", "Quit Game", "Go back to Game", "Confirm");
+            if (answer){
+                mainApplication.setCurrentSceneTo(MainApplication.SceneType.MENU);
+            }
+        } else {
+            mainApplication.setCurrentSceneTo(MainApplication.SceneType.MENU);
+        }
     }
 }
