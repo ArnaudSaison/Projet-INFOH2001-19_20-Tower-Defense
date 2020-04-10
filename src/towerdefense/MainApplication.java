@@ -71,9 +71,6 @@ public class MainApplication extends Application {
         currentController.setMainApplication(this);
 
         currentScene.setRoot(currentPane);
-
-//        Scene scene = new Scene(currentPane);
-//        mainWindow.setScene(scene);
     }
 
     public boolean confirmWindow(String msg, String msgYES, String msgNO, String windowTitle){
@@ -88,6 +85,11 @@ public class MainApplication extends Application {
 //            ex.printStackTrace();
 //        }
 //    }
+
+
+    public static void setupProperties(){
+
+    }
 
     /*
     Fonction main qui est exécutée par Java lors du démarrage du programme.
