@@ -1,15 +1,19 @@
 package towerdefense.game.model;
 
+import javafx.util.Pair;
+
 import java.util.ArrayList;
-import java.util.Iterator;
+
 
 public abstract class Tower implements Buyable, DealsDamage, UpgradeLevel {
+    protected Position position;
     static int level;
     protected int price;
     protected double range;
     protected int fireRate;
     protected int damage;
     protected ArrayList<NPC> targets;
+    protected ArrayList<NPC> potentialTargets;
     protected int maxTargetNumber;
     //private int health; (optionnel)
 
@@ -20,6 +24,7 @@ public abstract class Tower implements Buyable, DealsDamage, UpgradeLevel {
         fireRate = 3;// coups/seconde
         damage = 1;// en point de vie
         targets = new ArrayList<NPC>();
+        potentialTargets = new ArrayList<NPC>();
         maxTargetNumber = 5;
     }
 
@@ -43,22 +48,39 @@ public abstract class Tower implements Buyable, DealsDamage, UpgradeLevel {
         }
     }
 
-    //******Setteurs******
+    public Position getTowerPosition(){return position;}
 
-    public void setTargets(NPC target){targets.add(target);}
+    //******Traitement des cibles*****
 
-    //******Autres*****
+    //
+    public void findTargets(NPC potentialTarget){
+        if (potentialTarget.getDetected()){
+            potentialTargets.add(potentialTarget);
+        }
+    }
 
-    public void increasePrice(int increment) {price += increment;}
-
-    public void dealDamage(int damage){
-        for (NPC target : targets){
-            target.hit(damage);
-            if (target.getHealth() == 0){
-                targets.remove(target);
-                }
+    public void setTargets() {
+        if (targets.size() < 5) {
+            for (NPC potentialTarget : potentialTargets){
+                targets.add(potentialTarget);
             }
         }
+    }
+
+    //Cette fonction modélise l'attaque d'une tour : quand la vie d'une cible arrive à 0 ou qu'elle sort du rayon d'action de la tour
+    //elle doit être retirée de la liste targets; le NPC doit être tué et si il y en a une, une nouvelle cible doit être ajoutée à la liste targets.
+    public void dealDamage(int damage) {
+        for (NPC target : targets) {
+            target.hit(damage);
+            if (target.health == 0){
+                targets.remove(target);
+            }
+        }
+    }
+
+    //******Augmentation du niveau******
+
+    public void increasePrice(int increment) {price += increment;}
 
     public boolean canBeLevelUp(int maxLevel) {
         if (level < maxLevel) {

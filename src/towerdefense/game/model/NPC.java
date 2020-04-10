@@ -3,8 +3,10 @@ package towerdefense.game.model;
 import java.awt.geom.Point2D;
 
 public abstract class NPC implements Hittable{
+    protected Position position;
     protected int health;
     private int loot;
+    protected boolean detected;
     //private ArrayList<Weapon> weapons; (optionnel)
 
     public NPC (){
@@ -14,7 +16,9 @@ public abstract class NPC implements Hittable{
 
     //******Getteurs******
 
-    public int getHealth() {return health;}
+    public int getHealth(){return health;}
+
+    public boolean getDetected(){return detected;}
 
     public int getLoot(){return loot;}
 
@@ -27,7 +31,11 @@ public abstract class NPC implements Hittable{
         }
     }
 
-    public void kill(NPC npc) {npc = null;}
+    public void kill(NPC npc){npc = null;}
 
-
+    public void isDetected(Tower tower){
+        if (position.getDistance(tower.getTowerPosition()) < tower.getRange()){
+            detected = true;
+        }
+    }
 }

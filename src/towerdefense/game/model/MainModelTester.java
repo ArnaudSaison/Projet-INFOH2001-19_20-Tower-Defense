@@ -16,7 +16,7 @@ public class MainModelTester {
         System.out.println("level: " + mine.getLevel() + " price: " + mine.getPrice() + " productionrate: " +  mine.getProductionRate() + " maxGold: " + mine.getMaxGoldStorage() + " gold: " + mine.getGoldStorage());
 
         //Test tour :
-        ArcherTower archerTower = new ArcherTower(p);
+        ArcherTower archerTower = new ArcherTower();
         archerTower.levelUp(archerTower);
         System.out.println("level: " + archerTower.getLevel() + " price: " + archerTower.getPrice() + " damage: " +  archerTower.getDamage() + " maxTarget: " + archerTower.getMaxTargetNumber() + " range: " + archerTower.getRange() + " firerate: " + archerTower.getFireRate());
         //archerTower.setTargets();
@@ -32,8 +32,7 @@ public class MainModelTester {
 
         //test tour attaque ennemis:
 
-        archerTower.setTargets(enemy);
-        archerTower.setTargets(enemy1);
+
         archerTower.getTargets();
         archerTower.dealDamage(5);
         System.out.println("Health enemy  " + enemy.getHealth());
@@ -42,7 +41,7 @@ public class MainModelTester {
         System.out.println("Health enemy  " + enemy.getHealth());
         System.out.println("Health enemy1 " + enemy1.getHealth());
         archerTower.getTargets();
-        //System.out.println(enemy);
-        //System.out.println(enemy1);
+        System.out.println(enemy);
+        System.out.println(enemy1);
     }
 }

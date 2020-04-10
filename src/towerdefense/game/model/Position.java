@@ -1,5 +1,10 @@
 package towerdefense.game.model;
 
+import javafx.util.Pair;
+
+import java.awt.*;
+import java.awt.geom.Point2D;
+
 public class Position{
 
     private double x;
@@ -29,9 +34,14 @@ public class Position{
 
     public double getPositionY(){return y;}
 
+    //public Pair getPosition(){
+        //Pair<Double, Double> point = new Pair<Double, Double>(x,y);
+        //return point;
+    //}
+
     //******Autres******
 
-    public double getDistance(Position p1, Position p2){
-        return Math.sqrt(Math.pow(p1.getPositionX()-p2.getPositionX(),2)+Math.pow(p1.getPositionY()-p2.getPositionY(),2));
+    public double getDistance(Position p){
+        return Math.sqrt(Math.pow(x-p.getPositionX(),2)+Math.pow(y-p.getPositionY(),2));
     }
 }
