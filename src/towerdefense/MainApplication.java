@@ -66,7 +66,7 @@ public class MainApplication extends Application {
 
         loader.setLocation(getClass().getResource(sceneTypePath)); // Initialisation du loader avec le bon chemin
         currentPane = loader.load(); // On récupère le contenu de la scène
-
+        
         currentController = loader.getController(); // On récupère le controlleur associé au FXML
         currentController.setMainApplication(this);
 
@@ -85,11 +85,11 @@ public class MainApplication extends Application {
 //            ex.printStackTrace();
 //        }
 //    }
-
-
-    public static void setupProperties(){
-
-    }
+//
+//
+//    public static void setupProperties(){
+//
+//    }
 
     /*
     Fonction main qui est exécutée par Java lors du démarrage du programme.
