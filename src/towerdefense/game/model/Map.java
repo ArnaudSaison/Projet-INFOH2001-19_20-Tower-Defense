@@ -1,4 +1,5 @@
 package towerdefense.game.model;
 
-public class Map {
+public class Map{
+
 }

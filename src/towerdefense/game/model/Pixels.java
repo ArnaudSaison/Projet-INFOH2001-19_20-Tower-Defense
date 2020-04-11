@@ -1,4 +1,3 @@
 package towerdefense.game.model;
 
-public interface Attacks {
-}
+public class Pixels {}

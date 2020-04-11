@@ -1,20 +1,20 @@
 package towerdefense.game.model;
-
 public class Tile {
     private int tileX;
     private int tileY;
-    //private int size; Plutôt dans le module View ?
 
-    public Tile (int tileX, int tileY){
-        this.tileX = tileX;
-        this.tileY = tileY;
+    public Tile (){
+        tileX = 0;
+        tileY = 0;
     }
 
-    public double getTileX(){
+
+
+    public int getTileX(){
         return tileX;
     }
 
-    public double getTileY(){
+    public int getTileY(){
         return tileY;
     }
 
@@ -25,4 +25,4 @@ public class Tile {
     public void setTileY(int tileY){
         this.tileY = tileY;
     }
-    }
+}
