@@ -1,6 +1,6 @@
 package towerdefense.game.model;
 
-import java.awt.geom.Point2D;
+import towerdefense.game.map.Position;
 
 public abstract class NPC implements Hittable{
     protected Position position;

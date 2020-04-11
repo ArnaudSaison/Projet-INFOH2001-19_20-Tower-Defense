@@ -1,31 +1,22 @@
 package towerdefense.game.map;
 
 public class Tile {
-    private int tileX;
-    private int tileY;
+    private Position tileMetricPosition; // stocke la position du coin supérieur gauche de la case
 
-    private
 
-    public Tile (){
-        tileX = 0;
-        tileY = 0;
+    //***** Contructeur *****
+    public Tile(){
+        tileMetricPosition = new Position();
+    }
+
+    //***** Getters et setters *****
+    public Position getTileMetricPosition(){
+        return tileMetricPosition;
+    }
+
+    public void setTileMetricPosition(Position position){
+        this.tileMetricPosition = position;
     }
 
 
-
-    public int getTileX(){
-        return tileX;
-    }
-
-    public int getTileY(){
-        return tileY;
-    }
-
-    public void setTileX(int tileX){
-        this.tileX = tileX;
-    }
-
-    public void setTileY(int tileY){
-        this.tileY = tileY;
-    }
 }

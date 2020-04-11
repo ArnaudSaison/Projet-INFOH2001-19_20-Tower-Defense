@@ -1,6 +1,6 @@
 package towerdefense.game.model;
 
-import java.awt.geom.Point2D;
+import towerdefense.game.map.Position;
 
 public class MainModelTester {
     public static void main(String args[]) {

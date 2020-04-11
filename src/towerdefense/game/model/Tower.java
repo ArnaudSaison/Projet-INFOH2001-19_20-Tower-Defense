@@ -1,6 +1,6 @@
 package towerdefense.game.model;
 
-import javafx.util.Pair;
+import towerdefense.game.map.Position;
 
 import java.util.ArrayList;
 
