@@ -16,6 +16,7 @@ public class Map {
         this.pixelsPerMeter = pixelsPerMeter;
         this.mapTileSizeX = mapTileSizeX;
         this.mapTileSizeY = mapTileSizeY;
+        this.mapName = mapName;
     }
 
     //***** Getters et Setters *****

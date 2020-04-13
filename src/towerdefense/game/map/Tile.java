@@ -1,6 +1,6 @@
 package towerdefense.game.map;
 
-public class Tile {
+public abstract class Tile {
     private Position tileMetricPosition; // stocke la position du coin supérieur gauche de la case
 
 
