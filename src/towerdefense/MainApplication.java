@@ -4,8 +4,10 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-import towerdefense.gui.gui.GUIController;
+import towerdefense.gui.confirmwindow.ConfirmWindow;
+import towerdefense.gui.generic.GUIController;
 
 import java.io.IOException;
 import java.util.Properties;
@@ -13,10 +15,14 @@ import java.util.Properties;
 
 public class MainApplication extends Application {
     private static Properties settings;
+    private int windowWidth = 1280;
+    private int windowHeight = 720;
 
-    public enum SceneType {MENU, EDITOR, GAME}
+    public enum SceneType {MENU, EDITOR, GAME, SELECTOR}
+
     private Stage mainWindow;
     private Parent currentPane;
+    private Scene currentScene;
     private GUIController currentController;
 
     /*
@@ -27,7 +33,9 @@ public class MainApplication extends Application {
     @Override
     public void start(Stage stage) throws Exception {
         mainWindow = stage;
+        currentScene = new Scene(new Pane());
         setCurrentSceneTo(SceneType.MENU);
+        mainWindow.setScene(currentScene);
         mainWindow.setTitle("Tower Defense");
         mainWindow.show();
     }
@@ -47,6 +55,9 @@ public class MainApplication extends Application {
             case EDITOR:
                 sceneTypePath = "gui/map/editor/MapEditorFXML.fxml";
                 break;
+            case SELECTOR:
+                sceneTypePath = "gui/map/selector/MapSelectorFXML.fxml";
+                break;
             default:
                 throw new IllegalStateException("Unexpected value: " + sceneType);
         }
@@ -55,12 +66,15 @@ public class MainApplication extends Application {
 
         loader.setLocation(getClass().getResource(sceneTypePath)); // Initialisation du loader avec le bon chemin
         currentPane = loader.load(); // On récupère le contenu de la scène
-
+        
         currentController = loader.getController(); // On récupère le controlleur associé au FXML
         currentController.setMainApplication(this);
 
-        Scene scene = new Scene(currentPane);
-        mainWindow.setScene(scene);
+        currentScene.setRoot(currentPane);
+    }
+
+    public boolean confirmWindow(String msg, String msgYES, String msgNO, String windowTitle){
+        return ConfirmWindow.askUser(msg, msgYES, msgNO, windowTitle, mainWindow);
     }
 
 //    private static void loadSettings() throws IOException{
@@ -70,6 +84,11 @@ public class MainApplication extends Application {
 //        } catch (IOException) {
 //            ex.printStackTrace();
 //        }
+//    }
+//
+//
+//    public static void setupProperties(){
+//
 //    }
 
     /*

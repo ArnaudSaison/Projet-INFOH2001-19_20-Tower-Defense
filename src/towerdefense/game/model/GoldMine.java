@@ -1,5 +1,7 @@
 package towerdefense.game.model;
 
+import towerdefense.game.map.Position;
+
 public class GoldMine extends Game implements  ProducesGold, Buyable, UpgradeLevel {
     private Position position;
     private int level;

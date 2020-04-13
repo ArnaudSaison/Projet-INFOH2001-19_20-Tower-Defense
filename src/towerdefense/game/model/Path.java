@@ -1,6 +1,6 @@
 package towerdefense.game.model;
 
-import java.awt.geom.Point2D;
+import towerdefense.game.map.Position;
 
 public class Path {
     private Position position;
