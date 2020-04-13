@@ -1,6 +1,8 @@
 package towerdefense.game.model;
 
 import towerdefense.game.map.Position;
+import towerdefense.game.model.npcs.Generic;
+import towerdefense.game.model.towers.ArcherTower;
 
 public class MainModelTester {
     public static void main(String args[]) {

@@ -1,4 +1,4 @@
-package towerdefense.game.model;
+package towerdefense.game.model.interfaces;
 
 public interface ProducesGold {
     final int gold = 1;
@@ -7,7 +7,7 @@ public interface ProducesGold {
 
     public int getProductionRate();
 
-    public void increaseProductionRate(int increment);
+    public int retrievesGold();
 
     //public int retrieveGold(); ?
 }

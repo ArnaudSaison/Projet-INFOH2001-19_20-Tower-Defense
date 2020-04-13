@@ -1,6 +1,6 @@
 package towerdefense.game.map;
 
-import towerdefense.game.model.Map;
+import towerdefense.game.model.position.Map;
 
 public class Position{
     private double x;

@@ -1,14 +1,16 @@
 package towerdefense.game.model;
 
 import towerdefense.game.map.Position;
+import towerdefense.game.model.interfaces.*;
 
-public class GoldMine extends Game implements  ProducesGold, Buyable, UpgradeLevel {
+public class GoldMine implements ProducesGold, Buyable, Upgradable, Placeable, Drawable {
     private Position position;
     private int level;
     private int price;
     private int productionRate;
     private int goldStorage;
     private int maxGoldStorage;
+    private int maxLevel;
     //private int health; (optionnel)
 
     public GoldMine() {
@@ -22,31 +24,49 @@ public class GoldMine extends Game implements  ProducesGold, Buyable, UpgradeLev
 
     //*********Getteurs***********
 
-    public int getLevel() {return level;}
+    public int getLevel() {
+        return level;
+    }
 
-    public int getPrice() {return price;}
+    public int getPrice() {
+        return price;
+    }
 
-    public int getProductionRate() {return productionRate;}
+    public int getProductionRate() {
+        return productionRate;
+    }
 
-    public int getMaxGoldStorage() {return maxGoldStorage;}
+    public Position getPos(){
+        return position;
+    }
 
-    public int getGoldStorage() {return goldStorage;}
+    //******Increasers*******
 
-    //******Settteurs*******
+    private void increaseMaxGoldStorage(int increment){
+        maxGoldStorage += increment;
+    }
 
-    public void setPosition(Position position){this.position = position;}
+    private void increasePrice(int increment){
+        price += increment;
+    }
 
-    //*********Autres***********
+    public void increaseProductionRate(int increment) {
+        productionRate += increment;
+    }
 
-    public void increaseProductionRate(int increment) {productionRate += increment;}
+    //******Getstion de l'or*******
 
-    public void increasePrice(int increment) {price += increment;}
+    private void storeGold(){}
 
     public void produceGold() {
         if (goldStorage <= maxGoldStorage) {
-            goldStorage += gold *productionRate;
+            goldStorage += gold * productionRate;
         }
     }
+
+    public int retrieveGold(){}
+
+    //*******Passage niveau*******
 
     public boolean canBeLevelUp(int maxLevel) {
         if (level < maxLevel) {
@@ -56,21 +76,22 @@ public class GoldMine extends Game implements  ProducesGold, Buyable, UpgradeLev
         }
     }
 
+    public int getNextUpgradePrice(){}
+
     public void levelUp(GoldMine mine) {
         if (mine.canBeLevelUp(10)) {
             level++;
             maxGoldStorage += 50;
             mine.increaseProductionRate(10);
-            mine.increasePrice(5*level);
+            mine.increasePrice(5 * level);
         }
     }
 
-    @Override
-    public void levelUp(Tower tower) {
+    //******Autres*******
+    public void run(){}
 
-    }
+    public void updateDrawing(){}
 
-    //private void storeGold() {} ?
-    //public String toString(){} ?
+    public String toSring(){}
 }
 

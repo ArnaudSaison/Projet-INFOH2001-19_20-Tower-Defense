@@ -1,4 +1,4 @@
-package towerdefense.game.model;
+package towerdefense.game.model.position;
 
 import towerdefense.game.map.Position;
 
