@@ -11,7 +11,7 @@ public interface Upgradable {
 
     public int getNextUpgradePrice();
 
-    public boolean canBeLeveledUp(int maxLevel);
+    public boolean canBeLeveledUp();
 
     //public int getUpgradeLevel(); ?
 }

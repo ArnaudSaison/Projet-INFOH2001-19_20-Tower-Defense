@@ -10,7 +10,7 @@ import java.util.ArrayList;
 public abstract class Tower implements Buyable, Upgradable, Placeable, Drawable, ProducesGold {
     protected Position position;
     protected int level;
-    protected  int maxLevel;
+    static  int maxLevel;
     protected int price;
     protected double range;
     protected int fireRate;
@@ -18,6 +18,8 @@ public abstract class Tower implements Buyable, Upgradable, Placeable, Drawable,
     protected ArrayList<NPC> targets;
     protected int maxTargetNumber;
     //private int health; (optionnel)
+
+    //NOTE: les valeurs mises ici le sont à titre d'exemple, à modifier si besoin.
 
     public Tower(){
         level = 1;
@@ -44,25 +46,59 @@ public abstract class Tower implements Buyable, Upgradable, Placeable, Drawable,
 
     //*******Passage de niveau*******
 
-    public boolean canBeLeveledUp(int maxLevel){}
+    public boolean canBeLeveledUp(){
+        if (level < maxLevel) {
+            return true;
+        } else {
+            return false;
+        }
+    }
 
-    public int levelUp(){}
+    public int levelUp(Tower tower){
+        if (tower.canBeLeveledUp()) {
+            level++;
+        }
+    }
 
     //******Traitement des cibles*******
 
-    public void hit(int damageDeal){}
+    public void hit(){
+        String res;
+        for (NPC target : targets){
+            res = target.decreaseHealth(damageDeal);
+            if (res == "is dead"){
+                targets.remove(target);
+            }
+        }
+    }
+
+    //ne fonctionne pas : si deux targets sont mortes, seule la première sera retirée de la liste /!\ voir diagramme de séquence pour une autre méthode.
 
     //*******Production d'or*******
 
-    public int retrievesGold(){}
+    public int retrievesGold(){
+        int res = (int) Math.floor(0.5*price);
+        return res;
+    }
 
-    public int producesGold(){}
+    public int producesGold(){} //récupére le goldLoot de chaque ennemi tué, comment connait-elle cette information ?
+
     //*******Autres*******
 
     public void run(){}
 
     public void updateDrawing(){}
 
-    public String toString(){}
+    public String toString(){
+        return "Tour :\n - position: " + position + "\n" +
+                "- level: " + level + "\n"+
+                "- maxLevel: " + maxLevel + "\n"+
+                "- range: " + range + "\n"+
+                "- fireRate: " + fireRate + "\n"+
+                "- damageDeal: " + damageDeal + "\n"+
+                "- maxTargetNumber: " + maxTargetNumber + "\n"+
+                "- Nombre de cibles attaquées: " + targets.size() + "\n"+
+                "- price: " + price + ".";
+    }
 
 }

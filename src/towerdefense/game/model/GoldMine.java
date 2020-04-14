@@ -75,7 +75,7 @@ public class GoldMine implements ProducesGold, Buyable, Upgradable, Placeable, D
 
     //*******Passage niveau*******
 
-    public boolean canBeLevelUp() {
+    public boolean canBeLeveledUp() {
         if (level < maxLevel) {
             return true;
         } else {
@@ -86,7 +86,7 @@ public class GoldMine implements ProducesGold, Buyable, Upgradable, Placeable, D
     public int getNextUpgradePrice(){return price+200;}
 
     public void levelUp(GoldMine mine) {
-        if (mine.canBeLevelUp()) {
+        if (mine.canBeLeveledUp()) {
             level++;
             maxGoldStorage += 50;
             mine.increaseProductionRate(10);
@@ -100,7 +100,7 @@ public class GoldMine implements ProducesGold, Buyable, Upgradable, Placeable, D
     public void updateDrawing(){}
 
     public String toSring(){
-        return "Mine d'or : - position: " + position + "\n" +
+        return "Mine d'or :\n - position: " + position + "\n" +
                 "- level: " + level + "\n"+
                 "- maxLevel: " + maxLevel + "\n"+
                 "- maxGoldStorage: " + maxGoldStorage + "\n"+
