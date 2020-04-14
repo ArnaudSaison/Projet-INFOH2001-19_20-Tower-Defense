@@ -10,8 +10,11 @@ public class GoldMine implements ProducesGold, Buyable, Upgradable, Placeable, D
     private int productionRate;
     private int goldStorage;
     private int maxGoldStorage;
-    private int maxLevel;
-    //private int health; (optionnel)
+    static int maxLevel;
+    //static int health = 1000; (optionnel)
+
+
+    //NOTE: les valeurs mises ici le sont à titre d'exemple, à modifier si besoin.
 
     public GoldMine() {
         Position position = new Position();
@@ -20,6 +23,7 @@ public class GoldMine implements ProducesGold, Buyable, Upgradable, Placeable, D
         productionRate = 10;
         goldStorage = 0;
         maxGoldStorage = 200;
+        maxLevel = 5;
     }
 
     //*********Getteurs***********
@@ -54,21 +58,24 @@ public class GoldMine implements ProducesGold, Buyable, Upgradable, Placeable, D
         productionRate += increment;
     }
 
-    //******Getstion de l'or*******
+    //******Gestion de l'or*******
 
-    private void storeGold(){}
-
-    public void produceGold() {
-        if (goldStorage <= maxGoldStorage) {
-            goldStorage += gold * productionRate;
+    private void storeGold(){
+        if (goldStorage < maxGoldStorage){
+            goldStorage += productionRate;
         }
     }
 
-    public int retrieveGold(){}
+    //public int produceGold(){}  Je ne vois pas à quoi cette méthode servirait.
+
+    public int retrieveGold(){
+        int res = (int) Math.floor(0.5*price);
+        return res;
+    }
 
     //*******Passage niveau*******
 
-    public boolean canBeLevelUp(int maxLevel) {
+    public boolean canBeLevelUp() {
         if (level < maxLevel) {
             return true;
         } else {
@@ -76,10 +83,10 @@ public class GoldMine implements ProducesGold, Buyable, Upgradable, Placeable, D
         }
     }
 
-    public int getNextUpgradePrice(){}
+    public int getNextUpgradePrice(){return price+200;}
 
     public void levelUp(GoldMine mine) {
-        if (mine.canBeLevelUp(10)) {
+        if (mine.canBeLevelUp()) {
             level++;
             maxGoldStorage += 50;
             mine.increaseProductionRate(10);
@@ -92,6 +99,14 @@ public class GoldMine implements ProducesGold, Buyable, Upgradable, Placeable, D
 
     public void updateDrawing(){}
 
-    public String toSring(){}
+    public String toSring(){
+        return "Mine d'or : - position: " + position + "\n" +
+                "- level: " + level + "\n"+
+                "- maxLevel: " + maxLevel + "\n"+
+                "- maxGoldStorage: " + maxGoldStorage + "\n"+
+                "- goldStorage: " + goldStorage + "\n"+
+                "- productionRate: " + productionRate + "\n"+
+                "- price: " + price + ".";
+    }
 }
 

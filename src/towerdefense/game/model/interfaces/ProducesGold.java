@@ -7,7 +7,7 @@ public interface ProducesGold {
 
     public int getProductionRate();
 
-    public int retrievesGold();
+    public int retrieveGold();
 
     //public int retrieveGold(); ?
 }

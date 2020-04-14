@@ -9,7 +9,7 @@ import java.util.ArrayList;
 
 public abstract class Tower implements Buyable, Upgradable, Placeable, Drawable, ProducesGold {
     protected Position position;
-    static int level;
+    protected int level;
     protected  int maxLevel;
     protected int price;
     protected double range;
