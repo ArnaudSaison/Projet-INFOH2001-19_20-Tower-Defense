@@ -29,6 +29,8 @@ public class GameModel implements Lootable, Placeable, Drawable, Upgradable, Buy
     public GameModel() {
     }
 
+    public ArrayList<NPC> getNPCs(){return NPCs;}
+
     public void initializeLevel(){}
 
     public void run(){}

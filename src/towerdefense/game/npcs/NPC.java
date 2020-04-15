@@ -41,7 +41,7 @@ public abstract class NPC implements Lootable, Drawable, Placeable {
     //*******Gestion de la vie******
 
     public String decreaseHealth(int damage){
-        String res = "still alive";
+        String res = "alive";
         if (health <= 0) {
             res = "is dead";
         } else {
