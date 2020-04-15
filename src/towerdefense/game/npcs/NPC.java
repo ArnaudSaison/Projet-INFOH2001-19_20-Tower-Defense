@@ -1,11 +1,10 @@
-package towerdefense.game.model.npcs;
+package towerdefense.game.npcs;
 
 import towerdefense.game.map.Position;
-import towerdefense.game.model.interfaces.Drawable;
-import towerdefense.game.model.interfaces.Lootable;
-import towerdefense.game.model.interfaces.Placeable;
-import towerdefense.game.model.position.PathFinding;
-import towerdefense.game.model.towers.Tower;
+import towerdefense.game.interfaces.Drawable;
+import towerdefense.game.interfaces.Lootable;
+import towerdefense.game.interfaces.Placeable;
+import towerdefense.game.position.Path;
 
 public abstract class NPC implements Lootable, Drawable, Placeable {
     protected Position position;
@@ -17,7 +16,7 @@ public abstract class NPC implements Lootable, Drawable, Placeable {
     //NOTE: les valeurs mises ici le sont à titre d'exemple, à modifier si besoin.
 
     public NPC (){
-        Position position = new Position;
+        Position position = new Position();
         health =30;
         goldLoot = 1;
         speed = 2;
@@ -35,7 +34,7 @@ public abstract class NPC implements Lootable, Drawable, Placeable {
 
     //******Déplacement*******
 
-    public Path pathFinding(){}
+    public Path pathFinding(){return new Path();}
 
     public void move(){}
 

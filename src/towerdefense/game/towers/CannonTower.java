@@ -1,4 +1,4 @@
-package towerdefense.game.model.towers;
+package towerdefense.game.towers;
 
 public class CannonTower extends Tower{
 

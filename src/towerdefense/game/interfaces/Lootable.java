@@ -1,4 +1,4 @@
-package towerdefense.game.model.interfaces;
+package towerdefense.game.interfaces;
 
 public interface Lootable {
 

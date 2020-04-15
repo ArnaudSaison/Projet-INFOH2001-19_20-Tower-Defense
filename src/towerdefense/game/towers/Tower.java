@@ -1,8 +1,8 @@
-package towerdefense.game.model.towers;
+package towerdefense.game.towers;
 
 import towerdefense.game.map.Position;
-import towerdefense.game.model.interfaces.*;
-import towerdefense.game.model.npcs.NPC;
+import towerdefense.game.interfaces.*;
+import towerdefense.game.npcs.NPC;
 
 import java.util.ArrayList;
 

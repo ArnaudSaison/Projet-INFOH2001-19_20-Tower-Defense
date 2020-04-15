@@ -1,7 +1,7 @@
-package towerdefense.game.model;
+package towerdefense.game.goldmine;
 
 import towerdefense.game.map.Position;
-import towerdefense.game.model.interfaces.*;
+import towerdefense.game.interfaces.*;
 
 public class GoldMine implements ProducesGold, Buyable, Upgradable, Placeable, Drawable {
     private Position position;

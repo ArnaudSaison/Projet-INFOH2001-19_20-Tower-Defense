@@ -1,7 +1,6 @@
-package towerdefense.game.model.interfaces;
+package towerdefense.game.interfaces;
 
 import towerdefense.game.model.GoldMine;
-import towerdefense.game.model.towers.Tower;
 
 public interface Upgradable {
 

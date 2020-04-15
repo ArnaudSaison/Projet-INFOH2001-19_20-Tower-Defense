@@ -1,7 +1,7 @@
 package towerdefense.game.model;
 
 import towerdefense.game.map.Position;
-import towerdefense.game.model.interfaces.Buyable;
+import towerdefense.game.interfaces.Buyable;
 import java.util.ArrayList;
 
 public class Shop {

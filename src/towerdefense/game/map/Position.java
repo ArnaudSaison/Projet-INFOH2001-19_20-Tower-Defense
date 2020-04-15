@@ -1,22 +1,22 @@
 package towerdefense.game.map;
 
-import towerdefense.game.model.position.Map;
-
 public class Position{
+    // x et y sont en coordonnées métriques, cela permet de changer l'échelle à volonté par la suite
     private double x;
     private double y;
 
+    // Cette classe indique la postion sur la map :
+    private Map map;
+
+    private double tileMetricWidth;
+
     //***** Initialisation de la classe *****
-    private static void initializePositionSystem(){
-
-    }
-
-    private static void changePositionSystem(){
-
+    public void attachMap(Map map){
+        this.map = map;
+        this.tileMetricWidth = map.getTileMetricWidth();
     }
 
     //***** Construteurs *****
-
     public Position(){
         x = 0;
         y = 0;
@@ -27,24 +27,37 @@ public class Position{
         this.y = y;
     }
 
+    // Créer une position à partir de coordonnées de cases
+    public Position(int x, int y, double tileMetricWidth){
+        this.tileMetricWidth = tileMetricWidth;
+        this.x = x * tileMetricWidth;
+        this.y = y * tileMetricWidth;
+    }
+
     //***** Setters *******
+    public void setPositionX(double x){
+        this.x = x;
+    }
 
-    public void setPositionX(double x){this.x = x;}
-
-    public void setPositionY(double y){this.y = y;}
+    public void setPositionY(double y){
+        this.y = y;
+    }
 
     //***** Getters *******
+    public double getMetricPositionX(){
+        return x;
+    }
 
-    public double getPositionX(){return x;}
-
-    public double getPositionY(){return y;}
+    public double getMetricPositionY(){
+        return y;
+    }
 
     public int getPixelPositionX(){
-        return (int) Math.round(x * Map.getPixelsPerMeter());
+        return (int) Math.round(x * map.getPixelsPerMeter());
     }
 
     public int getPixelPositionY(){
-        return (int) Math.round(y * Map.getPixelsPerMeter());
+        return (int) Math.round(y * map.getPixelsPerMeter());
     }
 
     public double getNorm(){
@@ -61,10 +74,9 @@ public class Position{
     //}
 
     //***** Autres *****
-
     public double getDistance(Position p){
-        double varX = x - p.getPositionX();
-        double varY = y - p.getPositionY();
+        double varX = x - p.getMetricPositionX();
+        double varY = y - p.getMetricPositionY();
         return getNorm(varX, varY);
     }
 

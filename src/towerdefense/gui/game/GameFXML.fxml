@@ -9,6 +9,7 @@
 <?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
@@ -16,50 +17,10 @@
 <?import javafx.scene.text.Text?>
 
 <BorderPane fx:id="borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="towerdefense.gui.game.GameController">
-   <top>
-      <HBox alignment="CENTER" styleClass="menubar" BorderPane.alignment="CENTER">
-         <children>
-            <Label alignment="CENTER" contentDisplay="CENTER" styleClass="pagelabel" text="Tower Defense">
-               <padding>
-                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-               </padding>
-               <font>
-                  <Font size="16.0" />
-               </font></Label>
-            <Button fx:id="quitGameButton" mnemonicParsing="false" onMouseClicked="#handleQuitGameButtonClicked" styleClass="menubarbutton" text="Quit Game">
-               <padding>
-                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-               </padding>
-               <font>
-                  <Font size="16.0" />
-               </font></Button>
-            <Region HBox.hgrow="ALWAYS" />
-            <Button mnemonicParsing="false" styleClass="menubarbutton" text="Pause Game">
-               <graphic>
-                  <ImageView fitHeight="17.0" fitWidth="17.0" pickOnBounds="true" preserveRatio="true">
-                     <image>
-                        <Image url="@../../../resources/graphics/pause.png" />
-                     </image>
-                     <viewport>
-                        <Rectangle2D />
-                     </viewport>
-                  </ImageView>
-               </graphic>
-               <padding>
-                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-               </padding>
-               <font>
-                  <Font size="16.0" />
-               </font></Button>
-         </children>
-      </HBox>
-   </top>
-   <right>
-      <VBox prefWidth="300.0" styleClass="sidebar" BorderPane.alignment="CENTER" />
-   </right>
    <center>
-      <StackPane prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+      <StackPane fx:id="gameBox" prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
+            <Pane fx:id="mapPlaceHolder" onScroll="#handleZoomScroll" prefHeight="200.0" prefWidth="200.0" />
             <HBox fx:id="gameInfoBar" maxHeight="30.0" minHeight="30.0" prefHeight="30.0" spacing="30.0" StackPane.alignment="TOP_LEFT">
                <StackPane.margin>
                   <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
@@ -119,10 +80,51 @@
                   </HBox>
                </children>
             </HBox>
-            <StackPane fx:id="mapPlaceHolder" />
          </children>
       </StackPane>
    </center>
+   <top>
+      <HBox alignment="CENTER" styleClass="menubar" BorderPane.alignment="CENTER">
+         <children>
+            <Label alignment="CENTER" contentDisplay="CENTER" styleClass="pagelabel" text="Tower Defense">
+               <padding>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </padding>
+               <font>
+                  <Font size="16.0" />
+               </font></Label>
+            <Button fx:id="quitGameButton" mnemonicParsing="false" onMouseClicked="#handleQuitGameButtonClicked" styleClass="menubarbutton" text="Quit Game">
+               <padding>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </padding>
+               <font>
+                  <Font size="16.0" />
+               </font></Button>
+            <Region HBox.hgrow="ALWAYS" />
+            <Button mnemonicParsing="false" styleClass="menubarbutton" text="Pause Game">
+               <graphic>
+                  <ImageView fitHeight="17.0" fitWidth="17.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../resources/graphics/pause.png" />
+                     </image>
+                     <viewport>
+                        <Rectangle2D />
+                     </viewport>
+                  </ImageView>
+               </graphic>
+               <padding>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </padding>
+               <font>
+                  <Font size="16.0" />
+               </font></Button>
+         </children>
+      </HBox>
+   </top>
+   <right>
+      <VBox fx:id="sidebar" prefWidth="300.0" styleClass="sidebar" BorderPane.alignment="CENTER" />
+   </right>
+
    <stylesheets>
       <URL value="@../generic/GenericStylesheet.css" />
       <URL value="@GameStylesheet.css" />

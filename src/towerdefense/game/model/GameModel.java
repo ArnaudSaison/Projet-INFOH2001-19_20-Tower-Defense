@@ -1,9 +1,10 @@
 package towerdefense.game.model;
 
+import towerdefense.game.goldmine.GoldMine;
 import towerdefense.game.map.Map;
-import towerdefense.game.model.interfaces.*;
-import towerdefense.game.model.npcs.NPC;
-import towerdefense.game.model.towers.Tower;
+import towerdefense.game.interfaces.*;
+import towerdefense.game.npcs.NPC;
+import towerdefense.game.towers.Tower;
 import java.util.ArrayList;
 
 public class GameModel implements Lootable, Placeable, Drawable, Upgradable, Buyable, ProducesGold {
