@@ -7,7 +7,6 @@ import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
-
 import javafx.scene.layout.VBox;
 import towerdefense.MainApplication;
 import towerdefense.game.map.Map;
@@ -35,6 +34,9 @@ public class GameController implements Initializable, GUIController {
     private MapFactory mapFactory;
     private Map map;
 
+    private double deltaXDrag;
+    private double deltaYDrag;
+
     // Initialisation du controller
     public GameController() {
         isGameFinished = false;
@@ -59,7 +61,7 @@ public class GameController implements Initializable, GUIController {
         this.mainApplication = main;
     }
 
-    // Gestion des éléments FXML
+    //***** Gestion des éléments FXML *****
     @FXML
     public void handleQuitGameButtonClicked(MouseEvent event) throws IOException {
         if (!isGameFinished) {
@@ -73,7 +75,31 @@ public class GameController implements Initializable, GUIController {
     }
 
     @FXML
-    public void handleZoomScroll(ScrollEvent event) throws IOException {
+    public void handleZoomScroll(ScrollEvent event) {
         map.updateZoomLevel(event.getDeltaY());
+    }
+
+    // Gestion du déplacement de la carte
+    @FXML
+    public void handleMousePressedDelta(MouseEvent event) {
+        if (event.isSecondaryButtonDown()){
+            deltaXDrag = map.getLayoutX() - event.getX();
+            deltaYDrag = map.getLayoutY() - event.getY();
+        }
+    }
+
+    @FXML
+    public void handleMouseDraggedMap(MouseEvent event) {
+        if (event.isSecondaryButtonDown()){
+            map.setLayoutX(event.getX() + deltaXDrag);
+            map.setLayoutY(event.getY() + deltaYDrag);
+        }
+    }
+
+    @FXML
+    public void handleResetViewButton(MouseEvent event) {
+        map.setLayoutX(0);
+        map.setLayoutY(0);
+        map.resetPixelsPerMeter();
     }
 }

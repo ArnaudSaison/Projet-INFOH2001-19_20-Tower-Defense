@@ -7,8 +7,9 @@ import javafx.scene.shape.Rectangle;
 public class Tile {
     private Position tileMetricPosition; // stocke la position du coin supérieur gauche de la case
     private Rectangle tileShape;
-
     private Map map;
+
+    private boolean isBlocked;
 
     //***** Contructeur *****
     public Tile(int x, int y, double tileMetricWidth){
@@ -31,12 +32,22 @@ public class Tile {
         this.tileMetricPosition = position;
     }
 
+    // Forme javafx associée
     public void setShapeFill(Color color){
         tileShape.setFill(color);
     }
 
     public Node getTileShape(){
         return tileShape;
+    }
+
+    // attributs associés à la case
+    public boolean getBlockedState(){
+        return isBlocked;
+    }
+
+    public void setBlocked(boolean blocked){
+        this.isBlocked = blocked;
     }
 
     //***** Représentation de la case par un élément javafx

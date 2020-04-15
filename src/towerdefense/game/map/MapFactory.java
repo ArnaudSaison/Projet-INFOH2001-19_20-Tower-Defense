@@ -46,6 +46,9 @@ public class MapFactory {
                     case 'E': // sortie (exit)
                         tiles.add((Tile) new ExitPathTile(columnCounter, rowCounter, tileMetricWidth));
                         break;
+                    default:
+                        tiles.add((Tile) new EmptyTile(columnCounter, rowCounter, tileMetricWidth));
+                        break;
                 }
                 columnCounter ++;
             }

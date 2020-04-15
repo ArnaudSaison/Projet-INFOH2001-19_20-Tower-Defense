@@ -1,8 +1,23 @@
 .gameInfoBarItem {
-	-fx-background-color: rgba(217, 217, 217, 0.5);
+	-fx-background-color: rgba(217, 217, 217, 0.7);
 	-fx-background-radius: 10;
 }
 
 .gameSideBar {
 	-fx-background-color: #cccccc;
+}
+
+.resetViewButton {
+	-fx-background-color: rgba(217, 217, 217, 0);
+	-fx-background-radius: 7;
+	-fx-border-width: 0;
+	-fx-background-insets: 0;
+}
+
+.resetViewButton:focused {
+	-fx-background-color: rgba(217, 217, 217, 0);
+}
+
+.resetViewButton:hover {
+	-fx-background-color: rgba(150, 150, 150, 1);
 }

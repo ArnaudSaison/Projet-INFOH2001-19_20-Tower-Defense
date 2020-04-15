@@ -7,14 +7,12 @@ import java.util.ArrayList;
 
 public class Map extends Pane {
     private int pixelsPerMeter;
+    private int settingsPixelsPerMeter;
     private double tileMetricWidth;
 
     private String mapName;
     private int mapTileSizeX;
     private int mapTileSizeY;
-
-    private double originX;
-    private double originY;
 
     private ArrayList<Tile> tiles;
     private ArrayList<PathTile> gates;
@@ -26,6 +24,7 @@ public class Map extends Pane {
         // Initialisation de tous les attributs
         this.tiles = tiles;
         this.pixelsPerMeter = pixelsPerMeter;
+        this.settingsPixelsPerMeter = pixelsPerMeter;
         this.tileMetricWidth = tileMetricWidth;
         this.mapTileSizeX = mapTileSizeX;
         this.mapTileSizeY = mapTileSizeY;
@@ -75,6 +74,11 @@ public class Map extends Pane {
 
     public void setPixelsPerMeter(int pixelsPerMeter){
         this.pixelsPerMeter = pixelsPerMeter;
+    }
+
+    public void resetPixelsPerMeter(){
+        this.pixelsPerMeter = settingsPixelsPerMeter;
+        updateZoomLevel(0);
     }
 
     public double getTileMetricWidth(){
