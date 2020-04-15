@@ -76,7 +76,7 @@ public class GameController implements Initializable, GUIController {
 
     @FXML
     public void handleZoomScroll(ScrollEvent event) {
-        map.updateZoomLevel(event.getDeltaY());
+        map.updateZoomLevel(event);
     }
 
     // Gestion du déplacement de la carte

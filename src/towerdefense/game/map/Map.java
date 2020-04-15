@@ -1,13 +1,15 @@
 package towerdefense.game.map;
 
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 public class Map extends Pane {
-    private int pixelsPerMeter;
-    private int settingsPixelsPerMeter;
+    private double pixelsPerMeter;
+    private double settingsPixelsPerMeter;
     private double tileMetricWidth;
 
     private String mapName;
@@ -18,7 +20,7 @@ public class Map extends Pane {
     private ArrayList<PathTile> gates;
 
     //***** Constructeur *****
-    public Map(ArrayList<Tile> tiles, int pixelsPerMeter, double tileMetricWidth, int mapTileSizeX, int mapTileSizeY, String mapName){
+    public Map(ArrayList<Tile> tiles, double pixelsPerMeter, double tileMetricWidth, int mapTileSizeX, int mapTileSizeY, String mapName){
         super();
 
         // Initialisation de tous les attributs
@@ -68,7 +70,7 @@ public class Map extends Pane {
     }
 
     //***** Niveau de zoom de la carte et échelle *****
-    public int getPixelsPerMeter() {
+    public double getPixelsPerMeter() {
         return pixelsPerMeter;
     }
 
@@ -78,7 +80,9 @@ public class Map extends Pane {
 
     public void resetPixelsPerMeter(){
         this.pixelsPerMeter = settingsPixelsPerMeter;
-        updateZoomLevel(0);
+        for (Tile t: tiles){
+            t.update();
+        }
     }
 
     public double getTileMetricWidth(){
@@ -89,10 +93,51 @@ public class Map extends Pane {
         tileMetricWidth = width;
     }
 
-    public void updateZoomLevel(double zoom){
-        pixelsPerMeter += zoom * 0.2;
+    public void updateZoomLevel(ScrollEvent event){
+        double zoomFact = 0.2;
+
+        // zoom mesuré par le ScrollEvent
+        double zoom = event.getDeltaY();
+        double deltaPPM = zoom * zoomFact;
+        double oldPPM = pixelsPerMeter;
+
+        // Modification du niveau de zoom
+        pixelsPerMeter += deltaPPM; // 0.2 correspond à la vitesse de zoom
+        if (pixelsPerMeter < 1){
+            pixelsPerMeter = 1;
+        }
+
+        // origine
+        double x0 = this.getLayoutX();
+        double y0 = this.getLayoutY();
+
+        // distance originale entre l'origne de map et la souris
+        double distanceX = event.getX() - x0;
+        double distanceY = event.getY() - y0;
+        System.out.println("\np0: " + x0 + " " + y0);
+        System.out.println("event: " + event.getX() + " " + event.getY());
+        System.out.println("distance: " + distanceX + " " + distanceY);
+
+        // position de la souris par rapport à l'origine
+        Position pos1 = new Position(distanceX, distanceY, this);
+        Position deltaPos = pos1.getMultiplied((-1) * deltaPPM / oldPPM);
+        System.out.println(deltaPos);
+
+        // Mise à jour de toutes les Tiles
         for (Tile t: tiles){
             t.update();
         }
+
+        // Translation de Map
+        this.setLayoutX(this.getLayoutX() + deltaPos.getX());
+        this.setLayoutY(this.getLayoutY() + deltaPos.getY());
+
+//        if (this.getScaleX() + zoom * 0.01 > 0){
+//            this.setScaleX(this.getScaleX() + zoom * 0.01);
+//            this.setScaleY(this.getScaleY() + zoom * 0.01);
+//        }
+//        for (Tile t: tiles){
+//            t.update();
+//        }
     }
 }

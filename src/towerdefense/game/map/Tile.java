@@ -54,8 +54,8 @@ public class Tile {
     public void update(){
         tileShape.setX(tileMetricPosition.getPixelPositionX());
         tileShape.setY(tileMetricPosition.getPixelPositionY());
-        tileShape.setHeight(map.getTileMetricWidth() * map.getPixelsPerMeter());
-        tileShape.setWidth(map.getTileMetricWidth() * map.getPixelsPerMeter());
+        tileShape.setHeight(map.getTileMetricWidth() * map.getPixelsPerMeter() + 1);
+        tileShape.setWidth(map.getTileMetricWidth() * map.getPixelsPerMeter() + 1);
         //System.out.println(tileShape);
         //System.out.println(tileMetricPosition.getPixelPositionX() + " " + tileMetricPosition.getPixelPositionY());
     }
