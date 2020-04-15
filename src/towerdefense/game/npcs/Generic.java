@@ -1,4 +1,6 @@
-package towerdefense.game.model;
+package towerdefense.game.npcs;
+
+import towerdefense.game.position.Path;
 
 public class Generic extends NPC {
 

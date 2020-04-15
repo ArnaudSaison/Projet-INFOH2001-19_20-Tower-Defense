@@ -1,22 +1,45 @@
 package towerdefense.game.map;
 
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
+
 import java.util.ArrayList;
 
-public class Map {
+public class Map extends Pane {
+    private int pixelsPerMeter;
+    private int settingsPixelsPerMeter;
+    private double tileMetricWidth;
+
     private String mapName;
-    private static double pixelsPerMeter;
     private int mapTileSizeX;
     private int mapTileSizeY;
 
     private ArrayList<Tile> tiles;
+    private ArrayList<PathTile> gates;
 
     //***** Constructeur *****
-    public Map(ArrayList<Tile> tiles, double pixelsPerMeter, int mapTileSizeX, int mapTileSizeY){
+    public Map(ArrayList<Tile> tiles, int pixelsPerMeter, double tileMetricWidth, int mapTileSizeX, int mapTileSizeY, String mapName){
+        super();
+
+        // Initialisation de tous les attributs
         this.tiles = tiles;
         this.pixelsPerMeter = pixelsPerMeter;
+        this.settingsPixelsPerMeter = pixelsPerMeter;
+        this.tileMetricWidth = tileMetricWidth;
         this.mapTileSizeX = mapTileSizeX;
         this.mapTileSizeY = mapTileSizeY;
         this.mapName = mapName;
+
+        //System.out.println(tileMetricWidth);
+
+        for (Tile t: tiles){
+            // Initialisation de la forme
+            t.attachMap(this);
+            t.update();
+
+            // On ajoute la forme
+            this.getChildren().add(t.getTileShape());
+        }
     }
 
     //***** Getters et Setters *****
@@ -29,12 +52,47 @@ public class Map {
         return mapTileSizeY;
     }
 
-    //***** Niveau de zoom de la carte *****
-    public static double getPixelsPerMeter() {
+    // Récupérer les cases
+    public ArrayList<Tile> getTiles(){
+        return tiles;
+    }
+
+    public Tile getTile(int x, int y){
+        // calcul permettant de retrouver une case dans l'index à partir de ses coordonnées
+        return tiles.get((y-1) * mapTileSizeX + (x-1));
+    }
+
+    // Récupérer les infos sur la carte
+    public String getMapName(){
+        return mapName;
+    }
+
+    //***** Niveau de zoom de la carte et échelle *****
+    public int getPixelsPerMeter() {
         return pixelsPerMeter;
     }
 
-    public static void updateZoomLevel(double pixelsPerMeter){
-        Map.pixelsPerMeter = pixelsPerMeter;
+    public void setPixelsPerMeter(int pixelsPerMeter){
+        this.pixelsPerMeter = pixelsPerMeter;
+    }
+
+    public void resetPixelsPerMeter(){
+        this.pixelsPerMeter = settingsPixelsPerMeter;
+        updateZoomLevel(0);
+    }
+
+    public double getTileMetricWidth(){
+        return  tileMetricWidth;
+    }
+
+    public void setTileMetricWidth(double width){
+        tileMetricWidth = width;
+    }
+
+    public void updateZoomLevel(double zoom){
+        pixelsPerMeter += zoom * 0.2;
+        for (Tile t: tiles){
+            t.update();
+        }
     }
 }

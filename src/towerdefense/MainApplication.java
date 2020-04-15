@@ -81,8 +81,8 @@ public class MainApplication extends Application {
 //        Properties settings = new Properties();
 //        try {
 //
-//        } catch (IOException) {
-//            ex.printStackTrace();
+//        } catch (IOException excep) {
+//            excep.printStackTrace();
 //        }
 //    }
 //

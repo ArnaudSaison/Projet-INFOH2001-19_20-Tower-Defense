@@ -1,4 +1,4 @@
-package towerdefense.game.model;
+package towerdefense.game.interfaces;
 
 public interface DealsDamage {
 
