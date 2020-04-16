@@ -45,10 +45,14 @@ public class GameController implements Initializable, GUIController {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         // Initialisation du jeu
-        String path = "/Users/arnaudsaison/Library/Mobile Documents/com~apple~CloudDocs/Université/BA2/[INFOH2001] Programmation orientée objet/Projet-INFOH2001-19_20-Tower-Defense/resources/maps/map1";
+        String workDirectory = "/Users/arnaudsaison/Library/Mobile Documents/com~apple~CloudDocs/Université/BA2/[INFOH2001] Programmation orientée objet/Projet-INFOH2001-19_20-Tower-Defense/resources/";
+        String mapPath = workDirectory + "maps/map1";
+        String graphicsPath = "towerdefense/gui/game/graphics.css";
+
         mapFactory = new MapFactory();
         try {
-            map = mapFactory.getMap(path);
+            map = mapFactory.getMap(mapPath);
+            map.getStylesheets().add(graphicsPath);
         } catch (IOException exception) {
             exception.printStackTrace();
         }

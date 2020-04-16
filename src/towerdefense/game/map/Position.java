@@ -41,7 +41,7 @@ public class Position{
     }
 
     // Créer une position à partir de coordonnées de cases
-    /** Méthode réservée à l'appel par MapFactory
+    /** Méthode est réservée à l'appel par MapFactory
      * */
     public Position(int x, int y, double tileMetricWidth){
         this.tileMetricWidth = tileMetricWidth;
@@ -59,14 +59,6 @@ public class Position{
     }
 
     //***** Getters *******
-    public double getMetricPositionX(){
-        return x;
-    }
-
-    public double getMetricPositionY(){
-        return y;
-    }
-
     public double getX(){
         return x;
     }
@@ -75,11 +67,19 @@ public class Position{
         return y;
     }
 
-    public double getPixelPositionX(){
+    public double getMetricX(){
+        return x;
+    }
+
+    public double getMetricY(){
+        return y;
+    }
+
+    public double getPixelX(){
         return Math.round(x * map.getPixelsPerMeter());
     }
 
-    public double getPixelPositionY(){
+    public double getPixelY(){
         return Math.round(y * map.getPixelsPerMeter());
     }
 
@@ -140,8 +140,10 @@ public class Position{
     // Représentation dans la console
     @Override
     public String toString() {
-        return "Position: " +
-                "x= " + x +
-                ", y= " + y;
+        return "(" + x + " ; " + y + ")";
+    }
+
+    public String toString(String txt) {
+        return txt + " (" + x + " ; " + y + ")";
     }
 }

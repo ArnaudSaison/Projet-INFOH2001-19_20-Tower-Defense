@@ -1,0 +1,32 @@
+.map {
+}
+
+.tile {
+-fx-stroke-width: 0;
+-fx-stroke: white;
+-fx-stroke-type: inside;
+}
+
+.tile:hover {
+-fx-stroke-width: 2;
+}
+
+.empty-tile {
+-fx-fill: #33cc33;
+}
+
+.obstacle-tile {
+-fx-fill: #666666;
+}
+
+.path-tile {
+-fx-fill: #e6e6e6;
+}
+
+.cannot-be-built-on:hover {
+-fx-stroke: red;
+}
+
+.can-be-built-on:hover {
+-fx-stroke: black;
+}

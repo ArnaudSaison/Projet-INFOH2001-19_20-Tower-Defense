@@ -42,6 +42,9 @@ public class Map extends Pane {
             // On ajoute la forme
             this.getChildren().add(t.getTileShape());
         }
+
+        // Stylesheet
+        this.getStyleClass().add("map");
     }
 
     //***** Getters et Setters *****
@@ -93,35 +96,33 @@ public class Map extends Pane {
         tileMetricWidth = width;
     }
 
-    public void updateZoomLevel(ScrollEvent event){
+    public void updateZoomLevel(ScrollEvent event) {
         double zoomFact = 0.2;
+        double minPixelsPerMeter = 1;
+        double maxPixelsPerMeter = 200;
 
         // zoom mesuré par le ScrollEvent
         double zoom = event.getDeltaY();
         double deltaPPM = zoom * zoomFact;
         double oldPPM = pixelsPerMeter;
 
-        // Modification du niveau de zoom
-        pixelsPerMeter += deltaPPM; // 0.2 correspond à la vitesse de zoom
-        if (pixelsPerMeter < 1){
-            pixelsPerMeter = 1;
+        // Vérification de la validité du zoom et la cas échéant, mise à la valeur par défaut
+        if (pixelsPerMeter + deltaPPM < minPixelsPerMeter) {
+            deltaPPM = minPixelsPerMeter - pixelsPerMeter;
+        } else if (pixelsPerMeter + deltaPPM  > maxPixelsPerMeter){
+            deltaPPM = maxPixelsPerMeter - pixelsPerMeter;
         }
+
+        // Calcul de la nouvelle échelle
+        pixelsPerMeter += deltaPPM;
 
         // origine
         double x0 = this.getLayoutX();
         double y0 = this.getLayoutY();
 
-        // distance originale entre l'origne de map et la souris
-        double distanceX = event.getX() - x0;
-        double distanceY = event.getY() - y0;
-        System.out.println("\np0: " + x0 + " " + y0);
-        System.out.println("event: " + event.getX() + " " + event.getY());
-        System.out.println("distance: " + distanceX + " " + distanceY);
-
         // position de la souris par rapport à l'origine
-        Position pos1 = new Position(distanceX, distanceY, this);
+        Position pos1 = new Position(event.getX() - x0, event.getY() - y0, this);
         Position deltaPos = pos1.getMultiplied((-1) * deltaPPM / oldPPM);
-        System.out.println(deltaPos);
 
         // Mise à jour de toutes les Tiles
         for (Tile t: tiles){
@@ -131,13 +132,5 @@ public class Map extends Pane {
         // Translation de Map
         this.setLayoutX(this.getLayoutX() + deltaPos.getX());
         this.setLayoutY(this.getLayoutY() + deltaPos.getY());
-
-//        if (this.getScaleX() + zoom * 0.01 > 0){
-//            this.setScaleX(this.getScaleX() + zoom * 0.01);
-//            this.setScaleY(this.getScaleY() + zoom * 0.01);
-//        }
-//        for (Tile t: tiles){
-//            t.update();
-//        }
     }
 }

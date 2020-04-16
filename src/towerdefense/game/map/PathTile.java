@@ -7,6 +7,6 @@ public class PathTile extends Tile {
     // ***** Constructeur *****
     public PathTile(int x, int y, double tileMetricWidth){
         super(x, y, tileMetricWidth);
-        this.setShapeFill(Color.web("#e6e6e6"));
+        this.getTileShape().getStyleClass().addAll("path-tile", "cannot-be-built-on");
     }
 }

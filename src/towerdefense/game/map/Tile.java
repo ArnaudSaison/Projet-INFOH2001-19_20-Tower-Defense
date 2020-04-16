@@ -15,7 +15,7 @@ public class Tile {
     public Tile(int x, int y, double tileMetricWidth){
         tileMetricPosition = new Position(x, y, tileMetricWidth);
         tileShape = new Rectangle();
-        //System.out.println(tileMetricPosition.getMetricPositionX() + " " + tileMetricPosition.getMetricPositionY());
+        tileShape.getStyleClass().addAll("tile");
     }
 
     public void attachMap(Map map){
@@ -33,10 +33,6 @@ public class Tile {
     }
 
     // Forme javafx associée
-    public void setShapeFill(Color color){
-        tileShape.setFill(color);
-    }
-
     public Node getTileShape(){
         return tileShape;
     }
@@ -46,17 +42,17 @@ public class Tile {
         return isBlocked;
     }
 
-    public void setBlocked(boolean blocked){
+    public void setBlockedState(boolean blocked){
         this.isBlocked = blocked;
     }
 
-    //***** Représentation de la case par un élément javafx
+    //***** Représentation de la case par un élément javafx *****
     public void update(){
-        tileShape.setX(tileMetricPosition.getPixelPositionX());
-        tileShape.setY(tileMetricPosition.getPixelPositionY());
-        tileShape.setHeight(map.getTileMetricWidth() * map.getPixelsPerMeter() + 1);
-        tileShape.setWidth(map.getTileMetricWidth() * map.getPixelsPerMeter() + 1);
-        //System.out.println(tileShape);
-        //System.out.println(tileMetricPosition.getPixelPositionX() + " " + tileMetricPosition.getPixelPositionY());
+        double correctionAdd = 0;
+
+        tileShape.setX(tileMetricPosition.getPixelX());
+        tileShape.setY(tileMetricPosition.getPixelY());
+        tileShape.setHeight(map.getTileMetricWidth() * map.getPixelsPerMeter() + correctionAdd);
+        tileShape.setWidth(map.getTileMetricWidth() * map.getPixelsPerMeter() + correctionAdd);
     }
 }
