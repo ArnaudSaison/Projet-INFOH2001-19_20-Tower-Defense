@@ -45,8 +45,8 @@ public class GameController implements Initializable, GUIController {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         // Initialisation du jeu
-        String workDirectory = "/Users/arnaudsaison/Library/Mobile Documents/com~apple~CloudDocs/Université/BA2/[INFOH2001] Programmation orientée objet/Projet-INFOH2001-19_20-Tower-Defense/resources/";
-        String mapPath = workDirectory + "maps/map1";
+        String workingDirectory = "/Users/arnaudsaison/Library/Mobile Documents/com~apple~CloudDocs/Université/BA2/[INFOH2001] Programmation orientée objet/Projet-INFOH2001-19_20-Tower-Defense/resources/";
+        String mapPath = workingDirectory + "maps/map1";
         String graphicsPath = "towerdefense/gui/game/graphics.css";
 
         mapFactory = new MapFactory();
