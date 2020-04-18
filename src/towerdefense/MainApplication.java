@@ -68,7 +68,7 @@ public class MainApplication extends Application {
         currentPane = loader.load(); // On récupère le contenu de la scène
         
         currentController = loader.getController(); // On récupère le controlleur associé au FXML
-        currentController.setMainApplication(this);
+        currentController.setMainApplication(this); // On passe la référence de l'applicatin au controller
 
         currentScene.setRoot(currentPane);
     }

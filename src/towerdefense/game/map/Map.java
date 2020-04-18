@@ -97,13 +97,15 @@ public class Map extends Pane {
     }
 
     public void updateZoomLevel(ScrollEvent event) {
-        double zoomFact = 0.2;
+        double zoomFact = 0.2; // facteur multiplicatif du déplacement de la molette de la souris
+        double zoomExp = 2; // facteur qui détermine combien le zoom est exponentiel
         double minPixelsPerMeter = 1;
-        double maxPixelsPerMeter = 200;
+        double maxPixelsPerMeter = 300;
 
         // zoom mesuré par le ScrollEvent
         double zoom = event.getDeltaY();
-        double deltaPPM = zoom * zoomFact;
+        // double deltaPPM = zoom * zoomFact;
+        double deltaPPM = zoom * Math.pow(zoomFact, settingsPixelsPerMeter/pixelsPerMeter * 2);
         double oldPPM = pixelsPerMeter;
 
         // Vérification de la validité du zoom et la cas échéant, mise à la valeur par défaut
@@ -122,6 +124,7 @@ public class Map extends Pane {
 
         // position de la souris par rapport à l'origine
         Position pos1 = new Position(event.getX() - x0, event.getY() - y0, this);
+        // Changement de position après le zoom
         Position deltaPos = pos1.getMultiplied((-1) * deltaPPM / oldPPM);
 
         // Mise à jour de toutes les Tiles

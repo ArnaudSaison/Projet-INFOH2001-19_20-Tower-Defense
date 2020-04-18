@@ -76,11 +76,11 @@ public class Position{
     }
 
     public double getPixelX(){
-        return Math.round(x * map.getPixelsPerMeter());
+        return (x * map.getPixelsPerMeter());
     }
 
     public double getPixelY(){
-        return Math.round(y * map.getPixelsPerMeter());
+        return (y * map.getPixelsPerMeter());
     }
 
     public double getNorm(){

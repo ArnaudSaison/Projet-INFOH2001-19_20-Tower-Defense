@@ -16,7 +16,7 @@ public class MapFactory {
         int mapTileSizeX = Integer.parseInt(mapProperties.getProperty("mapTileSizeX"));
         int mapTileSizeY = Integer.parseInt(mapProperties.getProperty("mapTileSizeY"));
         double tileMetricWidth = Double.parseDouble(mapProperties.getProperty("tileMetricWidth"));
-        int pixelsPerMeter = Integer.parseInt(mapProperties.getProperty("pixelsPerMeter"));
+        double pixelsPerMeter = Integer.parseInt(mapProperties.getProperty("pixelsPerMeter"));
 
         // éléments qui constitueront la carte
         ArrayList<Tile> tiles = new ArrayList<>();

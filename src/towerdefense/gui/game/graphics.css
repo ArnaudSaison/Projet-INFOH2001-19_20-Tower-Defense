@@ -1,6 +1,15 @@
+/*########################################
+# Style de la map
+########################################*/
 .map {
+-fx-stroke-width: 1;
+-fx-stroke: black;
+-fx-stroke-type: outside;
 }
 
+/*########################################
+# style général des tiles
+########################################*/
 .tile {
 -fx-stroke-width: 0;
 -fx-stroke: white;
@@ -11,6 +20,9 @@
 -fx-stroke-width: 2;
 }
 
+/*########################################
+# style des différentes tiles
+########################################*/
 .empty-tile {
 -fx-fill: #33cc33;
 }
@@ -23,10 +35,17 @@
 -fx-fill: #e6e6e6;
 }
 
+/*########################################
+# gestion des hover
+########################################*/
 .cannot-be-built-on:hover {
 -fx-stroke: red;
 }
 
 .can-be-built-on:hover {
 -fx-stroke: black;
+}
+
+.can-be-built-on:pressed {
+-fx-stroke: white;
 }
