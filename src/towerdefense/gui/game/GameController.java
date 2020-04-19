@@ -51,7 +51,7 @@ public class GameController implements Initializable, GUIController {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         // Initialisation du jeu
-        String workingDirectory = "/Users/arnaudsaison/Library/Mobile Documents/com~apple~CloudDocs/Université/BA2/[INFOH2001] Programmation orientée objet/Projet-INFOH2001-19_20-Tower-Defense/resources/";
+        String workingDirectory = "resources/";
         String mapPath = workingDirectory + "maps/map1";
         String graphicsPath = "towerdefense/gui/game/graphics.css";
 
@@ -64,6 +64,8 @@ public class GameController implements Initializable, GUIController {
         }
 
         mapPlaceHolder.getChildren().add(0, map);
+
+
     }
 
     //Getters et Setters

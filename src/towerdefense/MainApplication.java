@@ -40,7 +40,7 @@ public class MainApplication extends Application {
         //========== Initialisation de javafx ==========
         mainWindow = stage;
         currentScene = new Scene(new Pane());
-        setCurrentSceneTo(SceneType.SELECTOR);
+        setCurrentSceneTo(SceneType.MENU);
         mainWindow.setScene(currentScene);
         mainWindow.setTitle("Tower Defense");
         //mainWindow.setWidth(windowWidth);
@@ -126,7 +126,6 @@ public class MainApplication extends Application {
     Charge le fichier de réglages (config.properties)
      */
     public static void main(String[] args) {
-
         launch(args);
     }
 }

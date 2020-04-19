@@ -24,7 +24,7 @@ public class MapSelectorController implements Initializable, GUIController {
     }
 
     public void initializeMaps(){
-        mainApplication.get
+        //mainApplication.get
     }
 
     //Getters et Setters
