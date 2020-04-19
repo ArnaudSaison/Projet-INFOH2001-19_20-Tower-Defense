@@ -26,14 +26,14 @@
                   <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
                </StackPane.margin>
                <children>
-                  <HBox fx:id="gameRoundInfoBar" alignment="CENTER" prefWidth="50.0" spacing="10.0" styleClass="gameInfoBarItem">
+                  <HBox fx:id="gameRoundInfoBar" alignment="CENTER" prefHeight="40.0" spacing="10.0" styleClass="gameInfoBarItem">
                      <children>
                         <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../../../resources/graphics/bank.png" />
                            </image>
                         </ImageView>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Round 1" HBox.hgrow="ALWAYS">
+                        <Text fx:id="gameRoundInfoBarText" strokeType="OUTSIDE" strokeWidth="0.0" text="Round 1" HBox.hgrow="ALWAYS">
                            <font>
                               <Font size="14.0" />
                            </font>
@@ -46,13 +46,13 @@
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                      </padding>
                   </HBox>
-                  <HBox fx:id="gameHealthInfoBar" alignment="CENTER" prefWidth="50.0" spacing="10.0" styleClass="gameInfoBarItem">
+                  <HBox fx:id="gameHealthInfoBar" alignment="CENTER" prefHeight="40.0" spacing="10.0" styleClass="gameInfoBarItem">
                      <children>
                         <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../../../resources/graphics/heart.png" />
                            </image></ImageView>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="654/1000" HBox.hgrow="ALWAYS">
+                        <Text fx:id="gameHealthInfoBarText" strokeType="OUTSIDE" strokeWidth="0.0" text="654/1000" HBox.hgrow="ALWAYS">
                            <font>
                               <Font size="14.0" />
                            </font></Text>
@@ -61,14 +61,14 @@
                         <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
                      </padding>
                   </HBox>
-                  <HBox fx:id="gameGoldInfoBar" alignment="CENTER" prefWidth="50.0" spacing="10.0" styleClass="gameInfoBarItem">
+                  <HBox fx:id="gameGoldInfoBar" alignment="CENTER" prefHeight="40.0" spacing="10.0" styleClass="gameInfoBarItem">
                      <children>
                         <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../../../resources/graphics/bank.png" />
                            </image>
                         </ImageView>
-                        <Text strokeType="OUTSIDE" strokeWidth="0.0" text="200" HBox.hgrow="ALWAYS">
+                        <Text fx:id="gameGoldInfoBarText" strokeType="OUTSIDE" strokeWidth="0.0" text="200" HBox.hgrow="ALWAYS">
                            <font>
                               <Font size="14.0" />
                            </font>
@@ -79,22 +79,18 @@
                      </padding>
                   </HBox>
                   <Region HBox.hgrow="ALWAYS" />
-                  <HBox fx:id="gameGoldInfoBar1" alignment="CENTER" spacing="10.0" styleClass="gameInfoBarItem">
-                     <children>
+                  <Button fx:id="ResetViewButton" minHeight="40.0" mnemonicParsing="false" onMouseClicked="#handleResetViewButton" styleClass="resetViewButton" text="Reset View">
+                     <font>
+                        <Font size="14.0" />
+                     </font>
+                     <graphic>
                         <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                            <image>
                               <Image url="@../../../resources/graphics/bank.png" />
                            </image>
                         </ImageView>
-                        <Button mnemonicParsing="false" onMouseClicked="#handleResetViewButton" styleClass="resetViewButton" text="Reset View">
-                           <font>
-                              <Font size="14.0" />
-                           </font></Button>
-                     </children>
-                     <padding>
-                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                     </padding>
-                  </HBox>
+                     </graphic>
+                  </Button>
                </children>
             </HBox>
          </children>

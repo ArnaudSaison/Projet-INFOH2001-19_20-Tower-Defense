@@ -13,8 +13,8 @@ public class MapFactory {
         mapProperties.load(mapPropertiesFile);
 
         String mapName = mapProperties.getProperty("mapName");
-        int mapTileSizeX = Integer.parseInt(mapProperties.getProperty("mapTileSizeX"));
-        int mapTileSizeY = Integer.parseInt(mapProperties.getProperty("mapTileSizeY"));
+        //int mapTileSizeX = Integer.parseInt(mapProperties.getProperty("mapTileSizeX"));
+        //int mapTileSizeY = Integer.parseInt(mapProperties.getProperty("mapTileSizeY"));
         double tileMetricWidth = Double.parseDouble(mapProperties.getProperty("tileMetricWidth"));
         double pixelsPerMeter = Integer.parseInt(mapProperties.getProperty("pixelsPerMeter"));
 
@@ -27,8 +27,9 @@ public class MapFactory {
         // Lecture de chaque caractère du fichier et création des cases
         String line;
         int rowCounter = 0;
+        int columnCounter = 0;
         while ((line = mapFile.readLine()) != null) {
-            int columnCounter = 0;
+            columnCounter = 0;
             for (char c: line.toCharArray()){
                 switch (c) {
                     case 'X': // vide
@@ -57,7 +58,7 @@ public class MapFactory {
         mapFile.close(); // fermeture du fichier
 
         // Création et return de la carte créée
-        return new Map(tiles, pixelsPerMeter, tileMetricWidth, mapTileSizeX, mapTileSizeY, mapName);
+        return new Map(tiles, pixelsPerMeter, tileMetricWidth, columnCounter, rowCounter, mapName);
     }
 
     private void saveMap(Map map){

@@ -20,16 +20,29 @@ public class MapSelectorController implements Initializable, GUIController {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+
+    }
+
+    public void initializeMaps(){
+        mainApplication.get
     }
 
     //Getters et Setters
     public void setMainApplication(MainApplication main){
         this.mainApplication = main;
+
+        // On peut à présent initialiser tout ce qui requiert une référence à mainApplication
+        this.initializeMaps();
     }
-/*
+
     // Gestion des éléments FXML
     @FXML
     public void handleBackToMenuButtonClicked(MouseEvent event) throws IOException {
         mainApplication.setCurrentSceneTo(MainApplication.SceneType.MENU);
-    }*/
+    }
+
+    @FXML
+    public void handleRefreshButtonClicked(MouseEvent event) throws IOException {
+        mainApplication.setCurrentSceneTo(MainApplication.SceneType.SELECTOR);
+    }
 }
