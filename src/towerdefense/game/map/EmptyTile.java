@@ -7,6 +7,6 @@ public class EmptyTile extends Tile {
     // ***** Constructeur *****
     public EmptyTile(int x, int y, double tileMetricWidth){
         super(x, y, tileMetricWidth);
-        this.setShapeFill(Color.web("#33cc33"));
+        this.getTileShape().getStyleClass().addAll("empty-tile", "can-be-built-on");
     }
 }

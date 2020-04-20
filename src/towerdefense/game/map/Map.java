@@ -1,13 +1,15 @@
 package towerdefense.game.map;
 
+import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 
+import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 public class Map extends Pane {
-    private int pixelsPerMeter;
-    private int settingsPixelsPerMeter;
+    private double pixelsPerMeter;
+    private double settingsPixelsPerMeter;
     private double tileMetricWidth;
 
     private String mapName;
@@ -18,7 +20,7 @@ public class Map extends Pane {
     private ArrayList<PathTile> gates;
 
     //***** Constructeur *****
-    public Map(ArrayList<Tile> tiles, int pixelsPerMeter, double tileMetricWidth, int mapTileSizeX, int mapTileSizeY, String mapName){
+    public Map(ArrayList<Tile> tiles, double pixelsPerMeter, double tileMetricWidth, int mapTileSizeX, int mapTileSizeY, String mapName){
         super();
 
         // Initialisation de tous les attributs
@@ -40,6 +42,9 @@ public class Map extends Pane {
             // On ajoute la forme
             this.getChildren().add(t.getTileShape());
         }
+
+        // Stylesheet
+        this.getStyleClass().add("map");
     }
 
     //***** Getters et Setters *****
@@ -68,7 +73,7 @@ public class Map extends Pane {
     }
 
     //***** Niveau de zoom de la carte et échelle *****
-    public int getPixelsPerMeter() {
+    public double getPixelsPerMeter() {
         return pixelsPerMeter;
     }
 
@@ -78,7 +83,9 @@ public class Map extends Pane {
 
     public void resetPixelsPerMeter(){
         this.pixelsPerMeter = settingsPixelsPerMeter;
-        updateZoomLevel(0);
+        for (Tile t: tiles){
+            t.update();
+        }
     }
 
     public double getTileMetricWidth(){
@@ -89,10 +96,44 @@ public class Map extends Pane {
         tileMetricWidth = width;
     }
 
-    public void updateZoomLevel(double zoom){
-        pixelsPerMeter += zoom * 0.2;
+    public void updateZoomLevel(ScrollEvent event) {
+        double zoomFact = 0.2; // facteur multiplicatif du déplacement de la molette de la souris
+        double zoomExp = 2; // facteur qui détermine combien le zoom est exponentiel
+        double minPixelsPerMeter = 1;
+        double maxPixelsPerMeter = 300;
+
+        // zoom mesuré par le ScrollEvent
+        double zoom = event.getDeltaY();
+        // double deltaPPM = zoom * zoomFact;
+        double deltaPPM = zoom * Math.pow(zoomFact, settingsPixelsPerMeter/pixelsPerMeter * 2);
+        double oldPPM = pixelsPerMeter;
+
+        // Vérification de la validité du zoom et la cas échéant, mise à la valeur par défaut
+        if (pixelsPerMeter + deltaPPM < minPixelsPerMeter) {
+            deltaPPM = minPixelsPerMeter - pixelsPerMeter;
+        } else if (pixelsPerMeter + deltaPPM  > maxPixelsPerMeter){
+            deltaPPM = maxPixelsPerMeter - pixelsPerMeter;
+        }
+
+        // Calcul de la nouvelle échelle
+        pixelsPerMeter += deltaPPM;
+
+        // origine
+        double x0 = this.getLayoutX();
+        double y0 = this.getLayoutY();
+
+        // position de la souris par rapport à l'origine
+        Position pos1 = new Position(event.getX() - x0, event.getY() - y0, this);
+        // Changement de position après le zoom
+        Position deltaPos = pos1.getMultiplied((-1) * deltaPPM / oldPPM);
+
+        // Mise à jour de toutes les Tiles
         for (Tile t: tiles){
             t.update();
         }
+
+        // Translation de Map
+        this.setLayoutX(this.getLayoutX() + deltaPos.getX());
+        this.setLayoutY(this.getLayoutY() + deltaPos.getY());
     }
 }

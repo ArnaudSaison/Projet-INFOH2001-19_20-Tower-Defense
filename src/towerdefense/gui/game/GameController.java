@@ -2,12 +2,14 @@ package towerdefense.gui.game;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
 import towerdefense.MainApplication;
 import towerdefense.game.map.Map;
 import towerdefense.game.map.MapFactory;
@@ -24,11 +26,15 @@ public class GameController implements Initializable, GUIController {
 
     @FXML private HBox gameInfoBar;
     @FXML private HBox gameHealthInfoBar;
+    @FXML private Text gameHealthInfoBarText;
     @FXML private HBox gameGoldInfoBar;
+    @FXML private Text gameGoldInfoBarText;
     @FXML private HBox gameRoundInfoBar;
+    @FXML private Text gameRoundInfoBarText;
     @FXML private Pane mapPlaceHolder;
     @FXML private StackPane gameBox;
     @FXML private VBox sidebar;
+    @FXML private Button ResetViewButton;
 
     // Attributs nécessaires à la liaison avec le modèle
     private MapFactory mapFactory;
@@ -45,15 +51,9 @@ public class GameController implements Initializable, GUIController {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         // Initialisation du jeu
-        String path = "/Users/arnaudsaison/Library/Mobile Documents/com~apple~CloudDocs/Université/BA2/[INFOH2001] Programmation orientée objet/Projet-INFOH2001-19_20-Tower-Defense/resources/maps/map1";
-        mapFactory = new MapFactory();
-        try {
-            map = mapFactory.getMap(path);
-        } catch (IOException exception) {
-            exception.printStackTrace();
-        }
 
-        mapPlaceHolder.getChildren().add(0, map);
+
+
     }
 
     //Getters et Setters
@@ -76,7 +76,7 @@ public class GameController implements Initializable, GUIController {
 
     @FXML
     public void handleZoomScroll(ScrollEvent event) {
-        map.updateZoomLevel(event.getDeltaY());
+        map.updateZoomLevel(event);
     }
 
     // Gestion du déplacement de la carte

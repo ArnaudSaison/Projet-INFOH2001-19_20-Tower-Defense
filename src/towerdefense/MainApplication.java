@@ -9,14 +9,15 @@ import javafx.stage.Stage;
 import towerdefense.gui.confirmwindow.ConfirmWindow;
 import towerdefense.gui.generic.GUIController;
 
+import java.io.File;
 import java.io.IOException;
-import java.util.Properties;
+import java.util.*;
 
 
 public class MainApplication extends Application {
-    private static Properties settings;
-    private int windowWidth = 1280;
-    private int windowHeight = 720;
+    private final String defaultResourcesPath = "resources/";
+    private String AppTitle = "Tower Defense";
+    private Config config;
 
     public enum SceneType {MENU, EDITOR, GAME, SELECTOR}
 
@@ -25,23 +26,66 @@ public class MainApplication extends Application {
     private Scene currentScene;
     private GUIController currentController;
 
-    /*
+    /**
     Méthode appelée par JavaFX lors de l'ouverture de l'application.
     Par défaut, ouvre et active la scène "menu"
     Le reste du programme est géré par les controllers de chaque scène.
      */
     @Override
-    public void start(Stage stage) throws Exception {
+    public void start(Stage stage) throws IOException {
+        //========== Initialisation du modèle de la l'application ==========
+        assertDirectoryStructure();
+        Config config = new Config(defaultResourcesPath);
+
+        //========== Initialisation de javafx ==========
         mainWindow = stage;
         currentScene = new Scene(new Pane());
         setCurrentSceneTo(SceneType.MENU);
         mainWindow.setScene(currentScene);
         mainWindow.setTitle("Tower Defense");
+        //mainWindow.setWidth(windowWidth);
+        //mainWindow.setHeight(windowHeight);
         mainWindow.show();
     }
 
-    /*
-    Méthodes permettant de changer de scène
+    private void assertDirectoryStructure() throws IOException {
+        // Vérification que le dossier resources se trouve au bon endroit
+        File file = new File(defaultResourcesPath);
+        String errorMsg = "' directory/file missing";
+
+        // Liste des sous-dossiers supposés contenus dans le dossier "resources"
+        ArrayList<String> assumedFileStructure = new ArrayList<>();
+        assumedFileStructure.add("config");
+        assumedFileStructure.add("graphics");
+        assumedFileStructure.add("maps");
+
+        // On vérifie d'abord que le dossier 'resources' existe
+        if (file.isDirectory()) {
+            // On vérifie que ce dossier contient tous les sous-dossiers nécessaires
+            ArrayList<String> subFiles = new ArrayList<>(Arrays.asList(Objects.requireNonNull(file.list())));
+            for (String f: assumedFileStructure){
+                if (!(subFiles.contains(f))) {
+                    throw new IOException("'"+ f + errorMsg);
+                }
+            }
+
+            // On vérifie que le dossier config contient tout ce qu'il faut
+            File configDir = new File(defaultResourcesPath + "/config");
+            ArrayList<String> configDirFiles = new ArrayList<>(Arrays.asList(Objects.requireNonNull(configDir.list())));
+            if (!(configDirFiles.contains("config.properties"))) {
+                throw new IOException("'"+ "config.properties" + errorMsg);
+            }
+        } else {
+            throw new IOException(errorMsg);
+        }
+    }
+
+    public Config getConfig() {
+        return config;
+    }
+
+    /**
+    Méthode permettant de changer de scène
      */
     public void setCurrentSceneTo(SceneType sceneType) throws IOException {
         String sceneTypePath;
@@ -68,7 +112,7 @@ public class MainApplication extends Application {
         currentPane = loader.load(); // On récupère le contenu de la scène
         
         currentController = loader.getController(); // On récupère le controlleur associé au FXML
-        currentController.setMainApplication(this);
+        currentController.setMainApplication(this); // On passe la référence de l'applicatin au controller
 
         currentScene.setRoot(currentPane);
     }
@@ -77,26 +121,11 @@ public class MainApplication extends Application {
         return ConfirmWindow.askUser(msg, msgYES, msgNO, windowTitle, mainWindow);
     }
 
-//    private static void loadSettings() throws IOException{
-//        Properties settings = new Properties();
-//        try {
-//
-//        } catch (IOException excep) {
-//            excep.printStackTrace();
-//        }
-//    }
-//
-//
-//    public static void setupProperties(){
-//
-//    }
-
-    /*
-    Fonction main qui est exécutée par Java lors du démarrage du programme.
+    /**
+    Méthode main qui est exécutée par Java lors du démarrage du programme.
     Charge le fichier de réglages (config.properties)
      */
     public static void main(String[] args) {
-//        loadSettings();
         launch(args);
     }
 }
