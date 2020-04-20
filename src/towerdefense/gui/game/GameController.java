@@ -51,19 +51,7 @@ public class GameController implements Initializable, GUIController {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         // Initialisation du jeu
-        String workingDirectory = "resources/";
-        String mapPath = workingDirectory + "maps/map1";
-        String graphicsPath = "towerdefense/gui/game/graphics.css";
 
-        mapFactory = new MapFactory();
-        try {
-            map = mapFactory.getMap(mapPath);
-            map.getStylesheets().add(graphicsPath);
-        } catch (IOException exception) {
-            exception.printStackTrace();
-        }
-
-        mapPlaceHolder.getChildren().add(0, map);
 
 
     }
