@@ -1,57 +1,38 @@
 package towerdefense.game.goldmine;
 
-import towerdefense.game.map.Position;
 import towerdefense.game.interfaces.*;
+import towerdefense.game.map.Map;
+import towerdefense.game.map.Position;
 
 public class GoldMine implements ProducesGold, Buyable, Upgradable, Placeable, Drawable {
     private Position position;
     private int level;
     private int price;
+    private int priceIncrement;
     private int productionRate;
     private int goldStorage;
     private int maxGoldStorage;
     static int maxLevel;
-    //static int health = 1000; (optionnel)
 
 
     //NOTE: les valeurs mises ici le sont à titre d'exemple, à modifier si besoin.
 
-    public GoldMine() {
-        Position position = new Position();
+    public GoldMine(Map map) {
+        Position position = new Position(map);
         level = 1;
         price = 200;
+        priceIncrement = 5*level;
         productionRate = 10;
         goldStorage = 0;
         maxGoldStorage = 200;
         maxLevel = 5;
     }
 
-    //*********Getteurs***********
-
-    public int getLevel() {
-        return level;
-    }
-
-    public int getPrice() {
-        return price;
-    }
-
-    public int getProductionRate() {
-        return productionRate;
-    }
-
-    public Position getPos(){
-        return position;
-    }
 
     //******Increasers*******
 
     private void increaseMaxGoldStorage(int increment){
         maxGoldStorage += increment;
-    }
-
-    private void increasePrice(int increment){
-        price += increment;
     }
 
     public void increaseProductionRate(int increment) {
@@ -60,20 +41,19 @@ public class GoldMine implements ProducesGold, Buyable, Upgradable, Placeable, D
 
     //******Gestion de l'or*******
 
-    private void storeGold(){
+    public void produceGold(){
         if (goldStorage < maxGoldStorage){
             goldStorage += productionRate;
         }
     }
 
-    //public int produceGold(){}  Je ne vois pas à quoi cette méthode servirait.
-
     public int retrieveGold(){
-        int res = (int) Math.floor(0.5*price);
+        int res = goldStorage;
+        goldStorage = 0;
         return res;
     }
 
-    //*******Passage niveau*******
+    //*******Passage de niveau*******
 
     public boolean canBeLeveledUp() {
         if (level < maxLevel) {
@@ -83,22 +63,52 @@ public class GoldMine implements ProducesGold, Buyable, Upgradable, Placeable, D
         }
     }
 
-    public int getNextUpgradePrice(){return price+200;}
+    public int getCost(){
+        return price;
+    }
 
-    public void levelUp(GoldMine mine) {
-        if (mine.canBeLeveledUp()) {
+    public void levelUp() {
+        if (this.canBeLeveledUp()) {
             level++;
-            maxGoldStorage += 50;
-            mine.increaseProductionRate(10);
-            mine.increasePrice(5 * level);
+            price += priceIncrement;
+            this.increaseProductionRate(10);
+            this.increaseMaxGoldStorage(50);
         }
     }
 
+    //****** Getteurs & setteurs ******
+
+    public int getLevel(){
+        return level;
+    }
+
+    public int getPrice(){
+        return price;
+    }
+
+    public int getProductionRate(){
+        return level;
+    }
+
+    public int getGoldStorage(){
+        return goldStorage;
+    }
+
+    public int getMaxGoldStorage(){
+        return maxGoldStorage;
+    }
+
+    public int getMaxLevel(){
+        return maxLevel;
+    }
+
     //******Autres*******
-    public void run(){}
 
-    public void updateDrawing(){}
+    public void updateDrawing(){}//TODO : implémenter la représentation en JavaFX.
 
+    public Position getPos(){
+        return position;
+    }
     public String toSring(){
         return "Mine d'or :\n - position: " + position + "\n" +
                 "- level: " + level + "\n"+
@@ -109,4 +119,3 @@ public class GoldMine implements ProducesGold, Buyable, Upgradable, Placeable, D
                 "- price: " + price + ".";
     }
 }
-

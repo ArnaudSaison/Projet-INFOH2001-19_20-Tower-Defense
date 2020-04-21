@@ -1,33 +1,40 @@
 package towerdefense.game.towers;
 
-import towerdefense.game.map.Position;
 import towerdefense.game.interfaces.*;
+import towerdefense.game.map.Map;
+import towerdefense.game.map.Position;
 import towerdefense.game.npcs.NPC;
 
 import java.util.ArrayList;
 
 
-public abstract class Tower implements Buyable, Upgradable, Placeable, Drawable, ProducesGold {
-    protected Position position;
-    protected int level;
-    static  int maxLevel;
-    protected int price;
-    protected double range;
-    protected int fireRate;
-    protected int damageDeal;
-    protected ArrayList<NPC> targets;
-    protected int maxTargetNumber;
+public class Tower implements Buyable, Upgradable, Placeable, Drawable, ProducesGold {
+    private Position position;
+    private int level;
+    static  int maxLevel = 3;
+    private int price;
+    private int priceIncrement;
+    private double range;
+    private int fireRate;
+    private int damageDeal;
+    private ArrayList<NPC> targets;
+    private ArrayList<NPC> KIATargets;
+    private int maxTargetNumber;
+    private int totalGoldLoot;
     //private int health; (optionnel)
 
     //NOTE: les valeurs mises ici le sont à titre d'exemple, à modifier si besoin.
 
-    public Tower(){
+    public Tower(Map map){
+        Position position = new Position(map);
         level = 1;
         price = 10;
+        priceIncrement = 3*level;
         range = 3; //en mètre.
         fireRate = 3;// coups/seconde
         damageDeal = 1;// en point de vie
         targets = new ArrayList<NPC>();
+        KIATargets = new ArrayList<NPC>();
         maxTargetNumber = 5;
     }
 
@@ -35,7 +42,7 @@ public abstract class Tower implements Buyable, Upgradable, Placeable, Drawable,
 
     public int getLevel(){return level;}
 
-    public int getPrice(){return price;}
+    public int getCost(){return price;}
 
     public double getRange(){return range;}
 
@@ -54,39 +61,56 @@ public abstract class Tower implements Buyable, Upgradable, Placeable, Drawable,
         }
     }
 
-    public int levelUp(Tower tower){
-        if (tower.canBeLeveledUp()) {
+    public void levelUp(){
+        if (this.canBeLeveledUp()) {
             level++;
+            price += priceIncrement;
         }
     }
 
     //******Traitement des cibles*******
 
-    public void hit(){
-        String res;
-        for (NPC target : targets){
-            res = target.decreaseHealth(damageDeal);
-            if (res == "is dead"){
-                targets.remove(target);
+    public void targetAcquisition(ArrayList<NPC> npcs){
+        if (targets.size() < maxTargetNumber){
+            for (NPC npc : npcs){
+                if ((npc.getPos()).getDistance(position) <= range )
+                targets.add(npc);
             }
         }
     }
 
-    //ne fonctionne pas : si deux targets sont mortes, seule la première sera retirée de la liste /!\ voir diagramme de séquence pour une autre méthode.
+    /** A chacune des cibles applique un dommage, retire la cible de la liste des cibles dont la tour s'occupe si la cible meurt ou est hors de portée.
+     * Permet de savoir quelles cibles ont été détruites.**/
+    public ArrayList<NPC> hit(){
+        String res;
+        ArrayList<NPC> toRemove = new ArrayList<NPC>();
+        for (NPC target : targets){
+            res = target.decreaseHealth(damageDeal);
+            if (res == "is dead"){
+                toRemove.add(target);
+                KIATargets.add(target);
+            } else if ((target.getPos()).getDistance(position) >= range) {
+                toRemove.add(target);
+            }
+        }
+        targets.remove(toRemove);
+        return KIATargets;
+    }
 
     //*******Production d'or*******
 
-    public int retrievesGold(){
-        int res = (int) Math.floor(0.5*price);
-        return res;
+    public int retrieveGold(){
+        return totalGoldLoot;
     }
 
-    public int producesGold(){} //récupére le goldLoot de chaque ennemi tué, comment connait-elle cette information ?
+    public void produceGold(){
+        totalGoldLoot = 0;
+        for (NPC fallenSoldier : KIATargets){
+            totalGoldLoot = fallenSoldier.getGoldLoot();
+        }
+    }
 
     //*******Autres*******
-
-    public void run(){}
-
     public void updateDrawing(){}
 
     public String toString(){
