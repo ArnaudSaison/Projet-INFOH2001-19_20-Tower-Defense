@@ -16,7 +16,9 @@ public class Player {
 
     public void renitializeGold(){}
 
-    public void addGold(){}
+    public void addGold(int gold){
+        this.gold += gold;
+    }
 
     //******Gestion du score*******
 

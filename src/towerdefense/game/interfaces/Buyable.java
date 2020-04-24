@@ -2,6 +2,6 @@ package towerdefense.game.interfaces;
 
 public interface Buyable {
 
-    public int getPrice();
+    public int getCost();
 
 }

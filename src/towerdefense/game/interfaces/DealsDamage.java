@@ -1,6 +1,9 @@
 package towerdefense.game.interfaces;
 
-public interface DealsDamage {
+import towerdefense.game.npcs.NPC;
 
-    public void dealDamage(int damage);
+import java.util.ArrayList;
+
+public interface DealsDamage {
+    public ArrayList<NPC> hit();
 }

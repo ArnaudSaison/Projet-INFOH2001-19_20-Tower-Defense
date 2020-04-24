@@ -1,19 +1,28 @@
 package towerdefense.game.model;
 
 import towerdefense.MainApplication;
-import towerdefense.game.*;
+import towerdefense.game.goldmine.GoldMine;
+import towerdefense.game.interfaces.*;
+import towerdefense.game.npcs.NPC;
+import towerdefense.game.towers.Tower;
 import towerdefense.game.map.Map;
 import towerdefense.game.map.MapFactory;
 
 import java.io.IOException;
+import java.lang.Runnable;
 import java.util.ArrayList;
 
-public class GameModel implements runnable{
-    // fonctionnement des threads
+public class GameModel implements Runnable{
+    //****** Attributs ******
+
+    //Joueur
+    private Player player;
+
+    // Fonctionnement des threads
     private boolean isGameRunning;
     private Thread thread;
 
-    // attributs de la partie
+    // Attributs de la partie
     private int score;
     private int initHealth;
     private int health;
@@ -37,21 +46,45 @@ public class GameModel implements runnable{
     private ArrayList<Upgradable> upgradables;
     private ArrayList<Buyable> buyables;
     private ArrayList<ProducesGold> producesGolds;
+    private ArrayList<DealsDamage> dealsDamages;
+    private ArrayList<Movable> movables;
 
-    // Initialisations
+    //****** Initialisations ******
+
     public GameModel(MainApplication mainApplication) {
-        //========== Initilisation des attributs ==========
+        // Initialisation joueur
+        Player player = new Player();
+        // Initialisation des attributs
         isGameRunning = false;
+        score = 0;
+        initHealth = 2000;
+        health = initHealth;
+        level = 1;
+        round = 1;
 
-        //========== Initialisation des listes ==========
+        // Initialisation des listes
         ArrayList<NPC> NPCs = new ArrayList<NPC>();
+        ArrayList<Tower> towers = new ArrayList<Tower>();
+        ArrayList<GoldMine> goldMines = new ArrayList<GoldMine>();
 
+        // Initialisation des observeurs
+        ArrayList<Lootable> lootables = new ArrayList<Lootable>();
+        ArrayList<Placeable> placeables = new ArrayList<Placeable>();
+        ArrayList<Drawable> drawables = new ArrayList<Drawable>();
+        ArrayList<Upgradable> upgradables = new ArrayList<Upgradable>();
+        ArrayList<ProducesGold> producesGolds = new ArrayList<ProducesGold>();
+        ArrayList<DealsDamage> dealsDamages = new ArrayList<DealsDamage>();
+        ArrayList<Movable> movables = new ArrayList<Movable>();
+
+
+        // Initialisation d'un objet NPC factory
         NPCFactory npcFactory = new NPCFactory();
 
-        //========== Map ==========
+        // Initialisation de la map
         initializeMap();
 
-        //========== Shop ==========
+        // initialisation d'un objet Shop
+        Shop shop = new Shop();
 
     }
 
@@ -82,21 +115,84 @@ public class GameModel implements runnable{
     }
 
     public void run(){
-        // Lancement des threads des goldmines
+        for (Movable movable : movables){
+            movable.move();
+        }
 
-        // Lancement des tours (pas des threads)
+        for (Drawable drawable : drawables){
+            drawable.updateDrawing();
+        }
 
-        //
+        for (ProducesGold goldSource : producesGolds){
+            player.addGold(goldSource.retrieveGold());
+        }
+
+        for (DealsDamage dealsDamage : dealsDamages){
+            this.killNPC(dealsDamage.hit());
+        }
     }
 
-    public void killNPC(){}
+    //TODO: vérifier que la méthode est efficace : les NPCs mort doivent être géré par le ramasse miettes pour être suppprimés.
+    public void killNPC(ArrayList<NPC> NPCsToKill){
+        NPCs.remove(NPCsToKill);
+    }
 
-    public boolean isGameRunning() {
+    //****** Getteurs & setteurs ******
+
+    public boolean getIsGameRunning() {
         return isGameRunning;
     }
 
-    public void setGameRunning(boolean gameRunning) {
+    public void setIsGameRunning(boolean gameRunning) {
         isGameRunning = gameRunning;
+    }
+
+    public Thread getThread() {
+        return thread;
+    }
+
+    public void setThread(Thread thread) {
+        this.thread = thread;
+    }
+
+    public int getScore() {
+        return score;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
+    }
+
+    public int getInitHealth() {
+        return initHealth;
+    }
+
+    public void setInitHealth(int initHealth) {
+        this.initHealth = initHealth;
+    }
+
+    public int getHealth() {
+        return health;
+    }
+
+    public void setHealth(int health) {
+        this.health = health;
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public void setLevel(int level) {
+        this.level = level;
+    }
+
+    public int getRound() {
+        return round;
+    }
+
+    public void setRound(int round) {
+        this.round = round;
     }
 
     public Shop getShop() {
@@ -107,11 +203,47 @@ public class GameModel implements runnable{
         this.shop = shop;
     }
 
+    public Map getMap() {
+        return map;
+    }
+
+    public void setMap(Map map) {
+        this.map = map;
+    }
+
     public NPCFactory getNpcFactory() {
         return npcFactory;
     }
 
     public void setNpcFactory(NPCFactory npcFactory) {
         this.npcFactory = npcFactory;
+    }
+
+    public ArrayList<Tower> getTowers() {
+        return towers;
+    }
+
+    public ArrayList<GoldMine> getGoldMines() {
+        return goldMines;
+    }
+
+    public ArrayList<Lootable> getLootables() {
+        return lootables;
+    }
+
+    public ArrayList<Placeable> getPlaceables() {
+        return placeables;
+    }
+
+    public ArrayList<Drawable> getDrawables() {
+        return drawables;
+    }
+
+    public ArrayList<Upgradable> getUpgradables() {
+        return upgradables;
+    }
+
+    public ArrayList<Buyable> getBuyables() {
+        return buyables;
     }
 }
