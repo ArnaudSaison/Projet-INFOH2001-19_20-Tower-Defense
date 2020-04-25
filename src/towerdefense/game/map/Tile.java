@@ -14,49 +14,49 @@ public class Tile {
     private boolean isBlocked;
 
     //***** Contructeur *****
-    public Tile(int x, int y, double tileMetricWidth){
+    public Tile(int x, int y, double tileMetricWidth) {
         tilePosition = new Position(x, y, tileMetricWidth);
         tileShape = new Rectangle();
         tileShape.getStyleClass().addAll("tile");
         tileShape.setOnMouseClicked(new TileClickedListener(this));
     }
 
-    public void attachMap(Map map){
+    public void attachMap(Map map) {
         this.map = map;
         tilePosition.attachMap(map);
     }
 
     //***** Getters et setters *****
-    public Position getPosition(){
+    public Position getPosition() {
         return tilePosition;
     }
 
-    public void setPosition(Position position){
+    public void setPosition(Position position) {
         this.tilePosition = position;
     }
 
-    public Position getCenterPosition(){
+    public Position getCenterPosition() {
         double dx = map.getTileMetricWidth() / 2;
         double dy = dx;
         return tilePosition.getAdded(new Position(dx, dy, map));
     }
 
     // Forme javafx associée
-    public Node getTileShape(){
+    public Node getTileShape() {
         return tileShape;
     }
 
     // attributs associés à la case
-    public boolean getBlockedState(){
+    public boolean getBlockedState() {
         return isBlocked;
     }
 
-    public void setBlockedState(boolean blocked){
+    public void setBlockedState(boolean blocked) {
         this.isBlocked = blocked;
     }
 
     //***** Représentation de la case par un élément javafx *****
-    public void update(){
+    public void update() {
         double correctionAdd = 0;
 
         tileShape.setX(tilePosition.getPixelX());

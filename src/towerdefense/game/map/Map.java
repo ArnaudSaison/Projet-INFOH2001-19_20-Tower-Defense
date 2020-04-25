@@ -21,7 +21,7 @@ public class Map extends Pane {
     private ArrayList<Path> availablePaths;
 
     //***** Constructeur *****
-    public Map(ArrayList<Tile> tiles, double pixelsPerMeter, double tileMetricWidth, int mapTileSizeX, int mapTileSizeY, String mapName){
+    public Map(ArrayList<Tile> tiles, double pixelsPerMeter, double tileMetricWidth, int mapTileSizeX, int mapTileSizeY, String mapName) {
         super();
 
         // Initialisation de tous les attributs
@@ -36,13 +36,13 @@ public class Map extends Pane {
         gates = new ArrayList<>();
         availablePaths = new ArrayList<>();
 
-        for (Tile t: tiles){
+        for (Tile t : tiles) {
             // Initialisation de la forme
             t.attachMap(this);
             t.update();
 
             // création de liste des entrées de la carte
-            if (t instanceof GatePathTile){
+            if (t instanceof GatePathTile) {
                 gates.add(t);
             }
 
@@ -52,13 +52,13 @@ public class Map extends Pane {
 
         // Calcul des chemins valides
         PathFactory pathFactory = new PathFactory(this);
-        for (Tile gate: gates){
+        for (Tile gate : gates) {
             ArrayList<Path> computedPaths = pathFactory.getAllPaths(gate);
             availablePaths.addAll(computedPaths);
         }
 
         // test
-        for (Path path: availablePaths){
+        for (Path path : availablePaths) {
             System.out.println(path);
         }
 
@@ -77,28 +77,28 @@ public class Map extends Pane {
     }
 
     // Récupérer les cases
-    public ArrayList<Tile> getTiles(){
+    public ArrayList<Tile> getTiles() {
         return tiles;
     }
 
-    public ArrayList<Tile> getGates(){
+    public ArrayList<Tile> getGates() {
         return gates;
     }
 
-    public Tile getTile(int x, int y){
+    public Tile getTile(int x, int y) {
         Tile res = null;
-        if (x >= 0 && x < mapTileSizeX && y >= 0 && y < mapTileSizeY){
+        if (x >= 0 && x < mapTileSizeX && y >= 0 && y < mapTileSizeY) {
             res = tiles.get((y) * mapTileSizeX + (x));
         }
         return res;
     }
 
-    public Tile getTile(Position pos){
+    public Tile getTile(Position pos) {
         return getTile((int) pos.getX(), (int) pos.getY());
     }
 
     // Récupérer les infos sur la carte
-    public String getMapName(){
+    public String getMapName() {
         return mapName;
     }
 
@@ -107,22 +107,22 @@ public class Map extends Pane {
         return pixelsPerMeter;
     }
 
-    public void setPixelsPerMeter(int pixelsPerMeter){
+    public void setPixelsPerMeter(int pixelsPerMeter) {
         this.pixelsPerMeter = pixelsPerMeter;
     }
 
-    public void resetPixelsPerMeter(){
+    public void resetPixelsPerMeter() {
         this.pixelsPerMeter = settingsPixelsPerMeter;
-        for (Tile t: tiles){
+        for (Tile t : tiles) {
             t.update();
         }
     }
 
-    public double getTileMetricWidth(){
-        return  tileMetricWidth;
+    public double getTileMetricWidth() {
+        return tileMetricWidth;
     }
 
-    public void setTileMetricWidth(double width){
+    public void setTileMetricWidth(double width) {
         tileMetricWidth = width;
     }
 
@@ -135,13 +135,13 @@ public class Map extends Pane {
         // zoom mesuré par le ScrollEvent
         double zoom = event.getDeltaY();
         // double deltaPPM = zoom * zoomFact;
-        double deltaPPM = zoom * Math.pow(zoomFact, settingsPixelsPerMeter/pixelsPerMeter * 2);
+        double deltaPPM = zoom * Math.pow(zoomFact, settingsPixelsPerMeter / pixelsPerMeter * 2);
         double oldPPM = pixelsPerMeter;
 
         // Vérification de la validité du zoom et la cas échéant, mise à la valeur par défaut
         if (pixelsPerMeter + deltaPPM < minPixelsPerMeter) {
             deltaPPM = minPixelsPerMeter - pixelsPerMeter;
-        } else if (pixelsPerMeter + deltaPPM  > maxPixelsPerMeter){
+        } else if (pixelsPerMeter + deltaPPM > maxPixelsPerMeter) {
             deltaPPM = maxPixelsPerMeter - pixelsPerMeter;
         }
 
@@ -158,7 +158,7 @@ public class Map extends Pane {
         Position deltaPos = pos1.getMultiplied((-1) * deltaPPM / oldPPM);
 
         // Mise à jour de toutes les Tiles
-        for (Tile t: tiles){
+        for (Tile t : tiles) {
             t.update();
         }
 

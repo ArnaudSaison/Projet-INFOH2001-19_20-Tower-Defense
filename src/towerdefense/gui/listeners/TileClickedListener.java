@@ -7,7 +7,7 @@ import towerdefense.game.map.Tile;
 public class TileClickedListener implements EventHandler<MouseEvent> {
     private final Tile tile;
 
-    public TileClickedListener(Tile tile){
+    public TileClickedListener(Tile tile) {
         this.tile = tile;
     }
 

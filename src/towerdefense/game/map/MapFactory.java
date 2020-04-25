@@ -30,7 +30,7 @@ public class MapFactory {
         int columnCounter = 0;
         while ((line = mapFile.readLine()) != null) {
             columnCounter = 0;
-            for (char c: line.toCharArray()){
+            for (char c : line.toCharArray()) {
                 switch (c) {
                     case 'X': // vide
                         tiles.add((Tile) new EmptyTile(columnCounter, rowCounter, tileMetricWidth));
@@ -51,9 +51,9 @@ public class MapFactory {
                         tiles.add((Tile) new EmptyTile(columnCounter, rowCounter, tileMetricWidth));
                         break;
                 }
-                columnCounter ++;
+                columnCounter++;
             }
-            rowCounter ++;
+            rowCounter++;
         }
         mapFile.close(); // fermeture du fichier
 
@@ -61,7 +61,7 @@ public class MapFactory {
         return new Map(tiles, pixelsPerMeter, tileMetricWidth, columnCounter, rowCounter, mapName);
     }
 
-    private void saveMap(Map map){
+    private void saveMap(Map map) {
         System.out.println("Not implemented"); //TODO: implémenter la méthode saveMap pour l'éditeur de map
     }
 }

@@ -8,7 +8,7 @@ public class PathFactory {
 
     private enum dir {TOP, BOTTOM, RIGHT, LEFT}
 
-    public PathFactory(Map map){
+    public PathFactory(Map map) {
         this.map = map;
     }
 
@@ -26,7 +26,7 @@ public class PathFactory {
         ArrayList<Tile> adjacentTiles = getAdjacentTiles(positions.get(0));
         int index = adjacentTiles.indexOf(null); // la position dans la liste permet de déduire le côté
         dir fromSide = dir.TOP;
-        switch (index){
+        switch (index) {
             case 0:
                 fromSide = dir.TOP;
                 break;
@@ -47,25 +47,25 @@ public class PathFactory {
         return paths;
     }
 
-    private void searchForPaths(ArrayList<IntCoordinates> positions, ArrayList<IntCoordinates> visited, IntCoordinates currentCoords, dir fromSide){
+    private void searchForPaths(ArrayList<IntCoordinates> positions, ArrayList<IntCoordinates> visited, IntCoordinates currentCoords, dir fromSide) {
         ArrayList<Tile> adjacentTiles = getAdjacentTiles(currentCoords); // toutes les cases adjacentes à la case actuellement étudiée (qu'elles existent ou non)
 
-        for (Tile probedTile: adjacentTiles){
+        for (Tile probedTile : adjacentTiles) {
 
             if (probedTile instanceof PathTile && !(probedTile instanceof GatePathTile)) { // Si la case existe et n'est pas une entrée
                 IntCoordinates probedTileCoords = probedTile.getPosition().getTileCoords(); // Récupération des coordonnées de la case
 
-                if (!visited.contains(probedTileCoords)){ // Si la position n'appartient pas encore au chemin
+                if (!visited.contains(probedTileCoords)) { // Si la position n'appartient pas encore au chemin
                     dir toSide = getToSideDir(currentCoords, probedTileCoords); // côté par lequel on va arriver dans cette case
                     ArrayList<IntCoordinates> resPositions = new ArrayList<>(positions); // nouvelle liste de position pour ne pas influencer les autres chemins possibles
                     ArrayList<IntCoordinates> resVisited = new ArrayList<>(visited);
 
                     resVisited.add(probedTileCoords); // on marque la case comme visitée
-                    if (toSide != fromSide){ // Si changement de direction
+                    if (toSide != fromSide) { // Si changement de direction
                         resPositions.add(currentCoords); // Ajouter la case actuelle à la liste des positions
                     }
 
-                    if (probedTile instanceof ExitPathTile){ // Si la case est une sortie
+                    if (probedTile instanceof ExitPathTile) { // Si la case est une sortie
                         resPositions.add(probedTileCoords); // Ajouter la case de sortie
                         paths.add(new Path(resPositions)); // Comme il s'agit d'une sortie, on crée un chemin (condition de sortie de récurrence)
                     } else { // Sinon, la case était valide, mais pas une sortie, on va donc voir autour de celle-ci (récurrence)
@@ -78,30 +78,30 @@ public class PathFactory {
         }
     }
 
-    private void deadEnd(){
+    private void deadEnd() {
     }
 
-    private ArrayList<Tile> getAdjacentTiles(IntCoordinates tileCoords){
+    private ArrayList<Tile> getAdjacentTiles(IntCoordinates tileCoords) {
         ArrayList<Tile> adjacentTiles = new ArrayList<>();
         int x = tileCoords.getX();
         int y = tileCoords.getY();
-        adjacentTiles.add(map.getTile(x, y-1));
-        adjacentTiles.add(map.getTile(x+1, y));
-        adjacentTiles.add(map.getTile(x, y+1));
-        adjacentTiles.add(map.getTile(x-1, y));
+        adjacentTiles.add(map.getTile(x, y - 1));
+        adjacentTiles.add(map.getTile(x + 1, y));
+        adjacentTiles.add(map.getTile(x, y + 1));
+        adjacentTiles.add(map.getTile(x - 1, y));
 
         return adjacentTiles;
     }
 
-    private dir getToSideDir(IntCoordinates from, IntCoordinates to){
+    private dir getToSideDir(IntCoordinates from, IntCoordinates to) {
         dir res = dir.TOP;
-        if (from.getX() == to.getX() && from.getY() < to.getY()){
+        if (from.getX() == to.getX() && from.getY() < to.getY()) {
             res = dir.TOP;
-        } else if (from.getX() == to.getX() && from.getY() > to.getY()){
+        } else if (from.getX() == to.getX() && from.getY() > to.getY()) {
             res = dir.BOTTOM;
-        } else if (from.getX() < to.getX() && from.getY() == to.getY()){
+        } else if (from.getX() < to.getX() && from.getY() == to.getY()) {
             res = dir.LEFT;
-        } else if (from.getX() > to.getX() && from.getY() == to.getY()){
+        } else if (from.getX() > to.getX() && from.getY() == to.getY()) {
             res = dir.RIGHT;
         }
         return res;
