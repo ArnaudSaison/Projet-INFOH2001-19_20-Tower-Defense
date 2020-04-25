@@ -4,7 +4,7 @@ import towerdefense.game.map.Map;
 import towerdefense.game.map.Position;
 
 public class ArmoredNPC extends NPC {
-    public ArmoredNPC(Map map, int health, int goldloot, int speed) {
+    public ArmoredNPC(Map map, int health, int goldloot, int speed) { // TODO: régler constrcuteur
         Position position = new Position(map);
         this.health = health;
         this.goldLoot = goldloot;

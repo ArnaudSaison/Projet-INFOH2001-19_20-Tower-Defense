@@ -22,15 +22,6 @@ public class CanonTower extends Tower {
 
     //******traitement des cibles*******
 
-    private void targetAcquisition(ArrayList<NPC> npcs) {
-        if (targets.size() < maxTargetNumber) {
-            for (NPC npc : npcs) {
-                if ((npc.getPos()).getDistance(position) <= range)
-                    targets.add(npc);
-            }
-        }
-    }
-
     public ArrayList<NPC> hit(ArrayList<NPC> npcs) {
         this.targetAcquisition(npcs);
         for (NPC target : targets) {

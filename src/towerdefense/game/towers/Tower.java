@@ -23,7 +23,7 @@ public abstract class Tower implements Buyable, Upgradable, Placeable, Drawable,
     //private int health; (optionnel)
 
 
-    public Tower(){
+    public Tower(){ //TODO: lancer les threads
         maxLevel = 3;
     }
 
@@ -43,20 +43,29 @@ public abstract class Tower implements Buyable, Upgradable, Placeable, Drawable,
     //*******Passage de niveau*******
 
     public boolean canBeLeveledUp(){
-    boolean res = false;
-    if (level< maxLevel){
-        res = true;
-    }
-    return res;
+        boolean res = false;
+        if (level< maxLevel){
+            res = true;
+        }
+        return res;
     }
 
     public abstract void levelUp();
 
     //******Traitement des cibles*******
 
+    public void targetAcquisition(ArrayList<NPC> npcs) {
+        if (targets.size() < maxTargetNumber) {
+            for (NPC npc : npcs) {
+                if ((npc.getPos()).getDistance(position) <= range)
+                    targets.add(npc);
+            }
+        }
+    }
+
     public abstract ArrayList<NPC> hit(ArrayList<NPC> npcs);
 
-    //*******Production d'or*******
+    //*******Production d'or******* // TODO:
 
     public int retrieveGold(){
         return totalGoldLoot;

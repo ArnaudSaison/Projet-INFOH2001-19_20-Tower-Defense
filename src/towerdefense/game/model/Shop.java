@@ -8,6 +8,7 @@ import towerdefense.game.towers.CanonTower;
 import towerdefense.game.towers.GlueTower;
 
 public class Shop {
+    public enum Type {GENERIC_TOWER, GLUE_TOWER, CANON_TOWER}
 
     public Buyable buy(String type, Map map) {
         Buyable res = null;
@@ -17,9 +18,9 @@ public class Shop {
         return res;
     }
 
-    public Buyable getInstance(String type, Map map) {
+    public Buyable getInstance(Type type, Map map) {
         Buyable res = null;
-        switch (type.toLowerCase()){
+        switch (type){
             //Tower
             case "standardtower": res = new GenericTower(map, 3, 10,2); break;
             case "rapidtower": res = new GenericTower(map,2,10,5); break;

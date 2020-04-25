@@ -5,10 +5,7 @@ import towerdefense.game.map.Position;
 
 public class GenericNPC extends NPC {
     public GenericNPC(Map map, int health, int goldloot, int speed) {
-        Position position = new Position(map);
-        this.health = health;
-        this.goldLoot = goldloot;
-        this.speed = speed;
+        super(Map map, int health, int goldloot, int speed); // TODO: régler constrcuteur
     }
 
     public String getType(){return "Generic";}
