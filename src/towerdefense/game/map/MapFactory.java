@@ -13,8 +13,6 @@ public class MapFactory {
         mapProperties.load(mapPropertiesFile);
 
         String mapName = mapProperties.getProperty("mapName");
-        //int mapTileSizeX = Integer.parseInt(mapProperties.getProperty("mapTileSizeX"));
-        //int mapTileSizeY = Integer.parseInt(mapProperties.getProperty("mapTileSizeY"));
         double tileMetricWidth = Double.parseDouble(mapProperties.getProperty("tileMetricWidth"));
         double pixelsPerMeter = Integer.parseInt(mapProperties.getProperty("pixelsPerMeter"));
 
