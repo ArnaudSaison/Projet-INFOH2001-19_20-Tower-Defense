@@ -16,16 +16,29 @@ public class Shop {
 
     public Buyable getInstance(String type) {
         Buyable res = null;
-        switch (type.toLowerCase()){
+        switch (type.toLowerCase()) {
             //Tower
-            case "tower1": res = new Tower(); break;
-            case "tower2": res = new Tower(); break;
-            case "tower3": res = new Tower(); break;
-            case "tower4": res = new Tower(); break;
-            case "tower5": res = new Tower(); break;
+            case "tower1":
+                res = new Tower();
+                break;
+            case "tower2":
+                res = new Tower();
+                break;
+            case "tower3":
+                res = new Tower();
+                break;
+            case "tower4":
+                res = new Tower();
+                break;
+            case "tower5":
+                res = new Tower();
+                break;
             //Goldmine
-            case "goldmine": res = new GoldMine(); break;
-            default : System.out.println("Invalid Buyable type");
+            case "goldmine":
+                res = new GoldMine();
+                break;
+            default:
+                System.out.println("Invalid Buyable type");
         }
         return res;
     }

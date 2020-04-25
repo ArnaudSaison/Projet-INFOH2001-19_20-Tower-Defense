@@ -3,6 +3,7 @@ package towerdefense.game.map;
 import javafx.scene.Node;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
+import towerdefense.gui.listeners.TileClickedListener;
 
 public class Tile {
     // /!\ La position de la case est stockée sous forme de mètres et donne la position de son coin supérieur gauche
@@ -17,6 +18,7 @@ public class Tile {
         tilePosition = new Position(x, y, tileMetricWidth);
         tileShape = new Rectangle();
         tileShape.getStyleClass().addAll("tile");
+        tileShape.setOnMouseClicked(new TileClickedListener(this));
     }
 
     public void attachMap(Map map){
@@ -61,5 +63,10 @@ public class Tile {
         tileShape.setY(tilePosition.getPixelY());
         tileShape.setHeight(map.getTileMetricWidth() * map.getPixelsPerMeter() + correctionAdd);
         tileShape.setWidth(map.getTileMetricWidth() * map.getPixelsPerMeter() + correctionAdd);
+    }
+
+    @Override
+    public String toString() {
+        return "Tile" + tilePosition.getTileCoords();
     }
 }

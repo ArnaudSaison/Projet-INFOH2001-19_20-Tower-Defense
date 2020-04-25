@@ -34,6 +34,7 @@ public class Map extends Pane {
         this.mapName = mapName;
 
         gates = new ArrayList<>();
+        availablePaths = new ArrayList<>();
 
         for (Tile t: tiles){
             // Initialisation de la forme
@@ -50,8 +51,16 @@ public class Map extends Pane {
         }
 
         // Calcul des chemins valides
-        availablePaths = new ArrayList<>();
+        PathFactory pathFactory = new PathFactory(this);
+        for (Tile gate: gates){
+            ArrayList<Path> computedPaths = pathFactory.getAllPaths(gate);
+            availablePaths.addAll(computedPaths);
+        }
 
+        // test
+        for (Path path: availablePaths){
+            System.out.println(path);
+        }
 
         // Stylesheet
         this.getStyleClass().add("map");
@@ -77,18 +86,15 @@ public class Map extends Pane {
     }
 
     public Tile getTile(int x, int y){
-        Tile res;
-        try {
-            // calcul permettant de retrouver une case dans l'index à partir de ses coordonnées
-            res = tiles.get((y-1) * mapTileSizeX + (x-1));
-        } catch (Exception e){
-            res = null;
+        Tile res = null;
+        if (x >= 0 && x < mapTileSizeX && y >= 0 && y < mapTileSizeY){
+            res = tiles.get((y) * mapTileSizeX + (x));
         }
         return res;
     }
 
     public Tile getTile(Position pos){
-        return getTile(pos.getX());
+        return getTile((int) pos.getX(), (int) pos.getY());
     }
 
     // Récupérer les infos sur la carte

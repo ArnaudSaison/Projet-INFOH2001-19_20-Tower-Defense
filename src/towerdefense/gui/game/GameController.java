@@ -63,6 +63,8 @@ public class GameController implements Initializable, GUIController {
             exception.printStackTrace();
         }
 
+
+
         mapPlaceHolder.getChildren().add(0, map);
     }
 

@@ -89,7 +89,7 @@ public class Position{
     }
 
     public IntCoordinates getTileCoords(){
-        return new IntCoordinates(getTileX(), getTileY()));
+        return new IntCoordinates(getTileX(), getTileY());
     }
 
     // Norme

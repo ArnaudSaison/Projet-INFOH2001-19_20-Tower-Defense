@@ -27,6 +27,11 @@ public class IntCoordinates {
 
     @Override
     public String toString() {
-        return "Coordinates (" + x + ", " + y + ")";
+        return "(" + x + ", " + y + ")";
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        return (x == ((IntCoordinates)obj).getX() && y == ((IntCoordinates)obj).getY());
     }
 }
