@@ -49,12 +49,17 @@ public class Position{
         this.y = y * tileMetricWidth;
     }
 
+    public Position(int x, int y){
+        this.x = x * tileMetricWidth;
+        this.y = y * tileMetricWidth;
+    }
+
     //***** Setters *******
-    public void setPositionX(double x){
+    public void setX(double x){
         this.x = x;
     }
 
-    public void setPositionY(double y){
+    public void setY(double y){
         this.y = y;
     }
 
@@ -67,14 +72,6 @@ public class Position{
         return y;
     }
 
-    public double getMetricX(){
-        return x;
-    }
-
-    public double getMetricY(){
-        return y;
-    }
-
     public double getPixelX(){
         return (x * map.getPixelsPerMeter());
     }
@@ -83,6 +80,19 @@ public class Position{
         return (y * map.getPixelsPerMeter());
     }
 
+    public int getTileX(){
+        return (int) Math.round(x / map.getTileMetricWidth());
+    }
+
+    public int getTileY(){
+        return (int) Math.round(y / map.getTileMetricWidth());
+    }
+
+    public IntCoordinates getTileCoords(){
+        return new IntCoordinates(getTileX(), getTileY()));
+    }
+
+    // Norme
     public double getNorm(){
         return Math.sqrt(Math.pow(x,2)+Math.pow(y,2));
     }
@@ -104,37 +114,37 @@ public class Position{
     }
 
     public void normalize(){
-        double norm = this.getNorm();
+        double norm = getNorm();
         x /= norm;
         y /= norm;
     }
 
     // Opérateurs
     public void multiply(double fact){
-        this.x *= fact;
-        this.y *= fact;
+        x *= fact;
+        y *= fact;
     }
 
     public Position getMultiplied(double fact){
-        return new Position(this.getX() * fact, this.getY() * fact, map);
+        return new Position(x * fact, y * fact, map);
     }
 
     public void add(Position pos2){
-        this.x += pos2.getX();
-        this.y += pos2.getY();
+        x += pos2.getX();
+        y += pos2.getY();
     }
 
     public Position getAdded(Position pos2){
-        return new Position(this.x + pos2.getX(), this.y + pos2.getY(), map);
+        return new Position(x + pos2.getX(), y + pos2.getY(), map);
     }
 
     public void substract(Position pos2){
-        this.x -= pos2.getX();
-        this.y -= pos2.getY();
+        x -= pos2.getX();
+        y -= pos2.getY();
     }
 
     public Position getSubstracted(Position pos2){
-        return new Position(this.x - pos2.getX(), this.y - pos2.getY(), map);
+        return new Position(x - pos2.getX(), y - pos2.getY(), map);
     }
 
     // Représentation dans la console

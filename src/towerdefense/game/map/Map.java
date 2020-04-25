@@ -17,7 +17,8 @@ public class Map extends Pane {
     private int mapTileSizeY;
 
     private ArrayList<Tile> tiles;
-    private ArrayList<PathTile> gates;
+    private ArrayList<Tile> gates;
+    private ArrayList<Path> availablePaths;
 
     //***** Constructeur *****
     public Map(ArrayList<Tile> tiles, double pixelsPerMeter, double tileMetricWidth, int mapTileSizeX, int mapTileSizeY, String mapName){
@@ -32,16 +33,25 @@ public class Map extends Pane {
         this.mapTileSizeY = mapTileSizeY;
         this.mapName = mapName;
 
-        //System.out.println(tileMetricWidth);
+        gates = new ArrayList<>();
 
         for (Tile t: tiles){
             // Initialisation de la forme
             t.attachMap(this);
             t.update();
 
+            // création de liste des entrées de la carte
+            if (t instanceof GatePathTile){
+                gates.add(t);
+            }
+
             // On ajoute la forme
             this.getChildren().add(t.getTileShape());
         }
+
+        // Calcul des chemins valides
+        availablePaths = new ArrayList<>();
+
 
         // Stylesheet
         this.getStyleClass().add("map");
@@ -62,9 +72,23 @@ public class Map extends Pane {
         return tiles;
     }
 
+    public ArrayList<Tile> getGates(){
+        return gates;
+    }
+
     public Tile getTile(int x, int y){
-        // calcul permettant de retrouver une case dans l'index à partir de ses coordonnées
-        return tiles.get((y-1) * mapTileSizeX + (x-1));
+        Tile res;
+        try {
+            // calcul permettant de retrouver une case dans l'index à partir de ses coordonnées
+            res = tiles.get((y-1) * mapTileSizeX + (x-1));
+        } catch (Exception e){
+            res = null;
+        }
+        return res;
+    }
+
+    public Tile getTile(Position pos){
+        return getTile(pos.getX());
     }
 
     // Récupérer les infos sur la carte
