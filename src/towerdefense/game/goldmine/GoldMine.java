@@ -68,7 +68,7 @@ public class GoldMine implements ProducesGold, Buyable, Upgradable, Placeable, D
     }
 
     public void levelUp() {
-        if (this.canBeLeveledUp()) {
+        if (canBeLeveledUp()) {
             level++;
             price += priceIncrement;
             this.increaseProductionRate(10);

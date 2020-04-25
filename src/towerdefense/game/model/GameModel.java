@@ -46,7 +46,6 @@ public class GameModel implements Runnable{
     private ArrayList<Upgradable> upgradables;
     private ArrayList<Buyable> buyables;
     private ArrayList<ProducesGold> producesGolds;
-    private ArrayList<DealsDamage> dealsDamages;
     private ArrayList<Movable> movables;
 
     //****** Initialisations ******
@@ -64,16 +63,15 @@ public class GameModel implements Runnable{
 
         // Initialisation des listes
         ArrayList<NPC> NPCs = new ArrayList<NPC>();
-        ArrayList<Tower> towers = new ArrayList<Tower>();
         ArrayList<GoldMine> goldMines = new ArrayList<GoldMine>();
 
         // Initialisation des observeurs
+        ArrayList<Tower> towers = new ArrayList<Tower>();
         ArrayList<Lootable> lootables = new ArrayList<Lootable>();
         ArrayList<Placeable> placeables = new ArrayList<Placeable>();
         ArrayList<Drawable> drawables = new ArrayList<Drawable>();
         ArrayList<Upgradable> upgradables = new ArrayList<Upgradable>();
         ArrayList<ProducesGold> producesGolds = new ArrayList<ProducesGold>();
-        ArrayList<DealsDamage> dealsDamages = new ArrayList<DealsDamage>();
         ArrayList<Movable> movables = new ArrayList<Movable>();
 
 
@@ -127,12 +125,12 @@ public class GameModel implements Runnable{
             player.addGold(goldSource.retrieveGold());
         }
 
-        for (DealsDamage dealsDamage : dealsDamages){
-            this.killNPC(dealsDamage.hit());
+        for (Tower tower : towers){
+            this.killNPC(tower.hit(NPCs));
         }
     }
 
-    //TODO: vérifier que la méthode est efficace : les NPCs mort doivent être géré par le ramasse miettes pour être suppprimés.
+    //TODO: vérifier que la méthode est efficace : les NPCs morts doivent être gérés par le ramasse miettes pour être suppprimés.
     public void killNPC(ArrayList<NPC> NPCsToKill){
         NPCs.remove(NPCsToKill);
     }
