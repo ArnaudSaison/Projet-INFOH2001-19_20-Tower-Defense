@@ -14,12 +14,6 @@ public class Tile {
     private Rectangle tileShape;
     private Map map;
 
-    private boolean[] connect;
-    public ImageView angle;
-    public ImageView straight;
-    public ImageView TConnector;
-    public ImageView XConnector;
-
     protected boolean isBlocked;
 
     //***** Contructeur *****
@@ -50,11 +44,6 @@ public class Tile {
         return tilePosition.getAdded(new Position(dx, dy, map));
     }
 
-    public void setConnection(boolean[] connect) {
-        this.connect = connect;
-
-    }
-
     // Forme javafx associée
     public Node getTileShape() {
         return tileShape;
@@ -79,7 +68,7 @@ public class Tile {
         tileShape.setWidth(map.getTileMetricWidth() * map.getPixelsPerMeter() + correctionAdd);
     }
 
-    public void updateConnection(){
+    public void updateConnection(int index, ){
 
     }
 
