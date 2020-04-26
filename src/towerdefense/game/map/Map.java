@@ -7,7 +7,9 @@ import javafx.scene.layout.StackPane;
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
-public class Map extends Pane {
+public class Map {
+    private Pane mapPane;
+
     private double pixelsPerMeter;
     private double settingsPixelsPerMeter;
     private double tileMetricWidth;
@@ -22,8 +24,6 @@ public class Map extends Pane {
 
     //***** Constructeur *****
     public Map(ArrayList<Tile> tiles, double pixelsPerMeter, double tileMetricWidth, int mapTileSizeX, int mapTileSizeY, String mapName) {
-        super();
-
         // Initialisation de tous les attributs
         this.tiles = tiles;
         this.pixelsPerMeter = pixelsPerMeter;
@@ -36,6 +36,8 @@ public class Map extends Pane {
         gates = new ArrayList<>();
         availablePaths = new ArrayList<>();
 
+        mapPane = new Pane();
+
         for (Tile t : tiles) {
             // Initialisation de la forme
             t.attachMap(this);
@@ -47,7 +49,7 @@ public class Map extends Pane {
             }
 
             // On ajoute la forme
-            this.getChildren().add(t.getTileShape());
+            mapPane.getChildren().add(t.getTileShape());
         }
 
         // Calcul des chemins valides
@@ -63,7 +65,7 @@ public class Map extends Pane {
         }
 
         // Stylesheet
-        this.getStyleClass().add("map");
+        mapPane.getStyleClass().add("map");
     }
 
     //***** Getters et Setters *****
@@ -100,6 +102,11 @@ public class Map extends Pane {
     // Récupérer les infos sur la carte
     public String getMapName() {
         return mapName;
+    }
+
+    // Récupérer l'objet javafx qui définit la vue de la carte
+    public Pane getMapPane(){
+        return mapPane;
     }
 
     //***** Niveau de zoom de la carte et échelle *****
@@ -149,8 +156,8 @@ public class Map extends Pane {
         pixelsPerMeter += deltaPPM;
 
         // origine
-        double x0 = this.getLayoutX();
-        double y0 = this.getLayoutY();
+        double x0 = mapPane.getLayoutX();
+        double y0 = mapPane.getLayoutY();
 
         // position de la souris par rapport à l'origine
         Position pos1 = new Position(event.getX() - x0, event.getY() - y0, this);
@@ -163,7 +170,7 @@ public class Map extends Pane {
         }
 
         // Translation de Map
-        this.setLayoutX(this.getLayoutX() + deltaPos.getX());
-        this.setLayoutY(this.getLayoutY() + deltaPos.getY());
+        mapPane.setLayoutX(mapPane.getLayoutX() + deltaPos.getX());
+        mapPane.setLayoutY(mapPane.getLayoutY() + deltaPos.getY());
     }
 }

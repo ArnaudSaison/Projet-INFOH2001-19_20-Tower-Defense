@@ -39,6 +39,7 @@ public class GameController implements Initializable, GUIController {
     // Attributs nécessaires à la liaison avec le modèle
     private MapFactory mapFactory;
     private Map map;
+    private Pane mapPane;
 
     private double deltaXDrag;
     private double deltaYDrag;
@@ -50,7 +51,7 @@ public class GameController implements Initializable, GUIController {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        // Initialisation du jeu
+        // Initialisation de la map
         String workingDirectory = "resources/";
         String mapPath = workingDirectory + "maps/map1";
         String graphicsPath = "towerdefense/gui/game/graphics.css";
@@ -58,14 +59,13 @@ public class GameController implements Initializable, GUIController {
         mapFactory = new MapFactory();
         try {
             map = mapFactory.getMap(mapPath);
-            map.getStylesheets().add(graphicsPath);
+            mapPane = map.getMapPane();
+            mapPane.getStylesheets().add(graphicsPath);
         } catch (IOException exception) {
             exception.printStackTrace();
         }
 
-
-
-        mapPlaceHolder.getChildren().add(0, map);
+        mapPlaceHolder.getChildren().add(0, mapPane);
     }
 
     //Getters et Setters
@@ -95,23 +95,23 @@ public class GameController implements Initializable, GUIController {
     @FXML
     public void handleMousePressedDelta(MouseEvent event) {
         if (event.isSecondaryButtonDown()){
-            deltaXDrag = map.getLayoutX() - event.getX();
-            deltaYDrag = map.getLayoutY() - event.getY();
+            deltaXDrag = mapPane.getLayoutX() - event.getX();
+            deltaYDrag = mapPane.getLayoutY() - event.getY();
         }
     }
 
     @FXML
     public void handleMouseDraggedMap(MouseEvent event) {
         if (event.isSecondaryButtonDown()){
-            map.setLayoutX(event.getX() + deltaXDrag);
-            map.setLayoutY(event.getY() + deltaYDrag);
+            mapPane.setLayoutX(event.getX() + deltaXDrag);
+            mapPane.setLayoutY(event.getY() + deltaYDrag);
         }
     }
 
     @FXML
     public void handleResetViewButton(MouseEvent event) {
-        map.setLayoutX(0);
-        map.setLayoutY(0);
+        mapPane.setLayoutX(0);
+        mapPane.setLayoutY(0);
         map.resetPixelsPerMeter();
     }
 }

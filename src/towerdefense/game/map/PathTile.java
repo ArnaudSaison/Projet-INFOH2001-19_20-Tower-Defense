@@ -8,5 +8,6 @@ public class PathTile extends Tile {
     public PathTile(int x, int y, double tileMetricWidth){
         super(x, y, tileMetricWidth);
         this.getTileShape().getStyleClass().addAll("path-tile", "cannot-be-built-on");
+        isBlocked = true;
     }
 }

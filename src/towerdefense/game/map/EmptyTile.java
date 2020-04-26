@@ -8,5 +8,6 @@ public class EmptyTile extends Tile {
     public EmptyTile(int x, int y, double tileMetricWidth){
         super(x, y, tileMetricWidth);
         this.getTileShape().getStyleClass().addAll("empty-tile", "can-be-built-on");
+        isBlocked = false;
     }
 }
