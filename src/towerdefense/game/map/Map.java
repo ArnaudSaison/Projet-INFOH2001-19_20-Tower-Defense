@@ -59,10 +59,10 @@ public class Map {
             availablePaths.addAll(computedPaths);
         }
 
-        // test
-        for (Path path : availablePaths) {
-            System.out.println(path);
-        }
+//        // test
+//        for (Path path : availablePaths) {
+//            System.out.println(path);
+//        }
 
         // Stylesheet
         mapPane.getStyleClass().add("map");

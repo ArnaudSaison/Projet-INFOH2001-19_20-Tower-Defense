@@ -1,0 +1,17 @@
+.mapelement {
+	-fx-border-width: 0;
+	-fx-background-color: #a6a6a6;
+	-fx-padding: 10;
+}
+
+.mapelement:hover {
+	-fx-background-color: #949494;
+}
+
+.maplistvbox {
+}
+
+.scrollpane {
+	-fx-border-width: 0;
+	-fx-background-insets: 0;
+}

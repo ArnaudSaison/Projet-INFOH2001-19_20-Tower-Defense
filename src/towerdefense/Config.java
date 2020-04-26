@@ -37,10 +37,6 @@ public class Config {
 
         goldminesProductionRate = Integer.parseInt(settings.getProperty("goldminesProductionRate"));
         goldminesCost = Integer.parseInt(settings.getProperty("goldminesCost"));
-
-        wavesTimeBeforeFirstWave = Integer.parseInt(settings.getProperty("wavesTimeBeforeFirstWave"));
-        wavesNewEnemiesPerWave = Integer.parseInt(settings.getProperty("wavesNewEnemiesPerWave"));
-
     }
 
     // getters

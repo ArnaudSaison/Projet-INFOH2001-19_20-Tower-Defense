@@ -68,10 +68,6 @@ public class Tile {
         tileShape.setWidth(map.getTileMetricWidth() * map.getPixelsPerMeter() + correctionAdd);
     }
 
-    public void updateConnection(int index, ){
-
-    }
-
     @Override
     public String toString() {
         return "Tile" + tilePosition.getTileCoords();

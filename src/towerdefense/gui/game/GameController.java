@@ -51,9 +51,14 @@ public class GameController implements Initializable, GUIController {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+    }
+
+    //Getters et Setters
+    public void setMainApplication(MainApplication main){
+        this.mainApplication = main;
+
         // Initialisation de la map
-        String workingDirectory = "resources/";
-        String mapPath = workingDirectory + "maps/map1";
+        String mapPath = mainApplication.getSelectedMapPath();
         String graphicsPath = "towerdefense/gui/game/graphics.css";
 
         mapFactory = new MapFactory();
@@ -66,11 +71,6 @@ public class GameController implements Initializable, GUIController {
         }
 
         mapPlaceHolder.getChildren().add(0, mapPane);
-    }
-
-    //Getters et Setters
-    public void setMainApplication(MainApplication main){
-        this.mainApplication = main;
     }
 
     //***** Gestion des éléments FXML *****

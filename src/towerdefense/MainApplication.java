@@ -16,10 +16,12 @@ import java.util.*;
 
 public class MainApplication extends Application {
     private final String defaultResourcesPath = "resources/";
-    private String AppTitle = "Tower Defense";
+    private String appTitle = "Tower Defense";
     private Config config;
 
     public enum SceneType {MENU, EDITOR, GAME, SELECTOR}
+    private String selectedMapPath;
+    private SceneType nextScene;
 
     private Stage mainWindow;
     private Parent currentPane;
@@ -42,7 +44,7 @@ public class MainApplication extends Application {
         currentScene = new Scene(new Pane());
         setCurrentSceneTo(SceneType.MENU);
         mainWindow.setScene(currentScene);
-        mainWindow.setTitle("Tower Defense");
+        mainWindow.setTitle(appTitle);
         //mainWindow.setWidth(windowWidth);
         //mainWindow.setHeight(windowHeight);
         mainWindow.show();
@@ -82,6 +84,26 @@ public class MainApplication extends Application {
 
     public Config getConfig() {
         return config;
+    }
+
+    public String getDefaultResourcesPath(){
+        return defaultResourcesPath;
+    }
+
+    public String getSelectedMapPath() {
+        return selectedMapPath;
+    }
+
+    public void setSelectedMapPath(String selectedMap) {
+        this.selectedMapPath = selectedMap;
+    }
+
+    public SceneType getNextScene() {
+        return nextScene;
+    }
+
+    public void setNextScene(SceneType nextScene) {
+        this.nextScene = nextScene;
     }
 
     /**
