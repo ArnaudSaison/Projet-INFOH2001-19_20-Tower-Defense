@@ -1,46 +1,35 @@
 package towerdefense.game.towers;
 
 import towerdefense.game.interfaces.*;
-import towerdefense.game.map.Map;
 import towerdefense.game.map.Position;
 import towerdefense.game.npcs.NPC;
 
 import java.util.ArrayList;
 
 
-public class Tower implements Buyable, Upgradable, Placeable, Drawable, ProducesGold {
-    private Position position;
-    private int level;
-    static  int maxLevel = 3;
-    private int price;
-    private int priceIncrement;
-    private double range;
-    private int fireRate;
-    private int damageDeal;
-    private ArrayList<NPC> targets;
-    private ArrayList<NPC> KIATargets;
-    private int maxTargetNumber;
-    private int totalGoldLoot;
+public abstract class Tower implements Buyable, Upgradable, Placeable, Drawable, ProducesGold {
+    protected Position position;
+    protected int level;
+    static int maxLevel;
+    protected int price;
+    protected int priceIncrement;
+    protected double range;
+    protected int fireRate;
+    protected int damageDeal;
+    protected ArrayList<NPC> targets;
+    protected ArrayList<NPC> KIATargets;
+    protected int maxTargetNumber;
+    protected int totalGoldLoot;
     //private int health; (optionnel)
 
-    //NOTE: les valeurs mises ici le sont à titre d'exemple, à modifier si besoin.
 
-    public Tower(Map map){
-        Position position = new Position(map);
-        level = 1;
-        price = 10;
-        priceIncrement = 3*level;
-        range = 3; //en mètre.
-        fireRate = 3;// coups/seconde
-        damageDeal = 1;// en point de vie
-        targets = new ArrayList<NPC>();
-        KIATargets = new ArrayList<NPC>();
-        maxTargetNumber = 5;
+    public Tower(){ //TODO: lancer les threads
+        maxLevel = 3;
     }
 
     //******Getteurs******
 
-    public int getLevel(){return level;}
+    public int getLevel(){return level;};
 
     public int getCost(){return price;}
 
@@ -54,50 +43,29 @@ public class Tower implements Buyable, Upgradable, Placeable, Drawable, Produces
     //*******Passage de niveau*******
 
     public boolean canBeLeveledUp(){
-        if (level < maxLevel) {
-            return true;
-        } else {
-            return false;
+        boolean res = false;
+        if (level< maxLevel){
+            res = true;
         }
+        return res;
     }
 
-    public void levelUp(){
-        if (this.canBeLeveledUp()) {
-            level++;
-            price += priceIncrement;
-        }
-    }
+    public abstract void levelUp();
 
     //******Traitement des cibles*******
 
-    public void targetAcquisition(ArrayList<NPC> npcs){
-        if (targets.size() < maxTargetNumber){
-            for (NPC npc : npcs){
-                if ((npc.getPos()).getDistance(position) <= range )
-                targets.add(npc);
+    public void targetAcquisition(ArrayList<NPC> npcs) {
+        if (targets.size() < maxTargetNumber) {
+            for (NPC npc : npcs) {
+                if ((npc.getPos()).getDistance(position) <= range)
+                    targets.add(npc);
             }
         }
     }
 
-    /** A chacune des cibles applique un dommage, retire la cible de la liste des cibles dont la tour s'occupe si la cible meurt ou est hors de portée.
-     * Permet de savoir quelles cibles ont été détruites.**/
-    public ArrayList<NPC> hit(){
-        String res;
-        ArrayList<NPC> toRemove = new ArrayList<NPC>();
-        for (NPC target : targets){
-            res = target.decreaseHealth(damageDeal);
-            if (res == "is dead"){
-                toRemove.add(target);
-                KIATargets.add(target);
-            } else if ((target.getPos()).getDistance(position) >= range) {
-                toRemove.add(target);
-            }
-        }
-        targets.remove(toRemove);
-        return KIATargets;
-    }
+    public abstract ArrayList<NPC> hit(ArrayList<NPC> npcs);
 
-    //*******Production d'or*******
+    //*******Production d'or******* // TODO:
 
     public int retrieveGold(){
         return totalGoldLoot;

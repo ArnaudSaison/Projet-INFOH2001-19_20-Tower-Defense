@@ -3,13 +3,13 @@ package towerdefense.game.model;
 import towerdefense.MainApplication;
 import towerdefense.game.goldmine.GoldMine;
 import towerdefense.game.interfaces.*;
-import towerdefense.game.npcs.NPC;
-import towerdefense.game.towers.Tower;
 import towerdefense.game.map.Map;
 import towerdefense.game.map.MapFactory;
+import towerdefense.game.npcs.NPC;
+import towerdefense.game.npcs.NPCFactory;
+import towerdefense.game.towers.Tower;
 
 import java.io.IOException;
-import java.lang.Runnable;
 import java.util.ArrayList;
 
 public class GameModel implements Runnable{
@@ -46,11 +46,9 @@ public class GameModel implements Runnable{
     private ArrayList<Upgradable> upgradables;
     private ArrayList<Buyable> buyables;
     private ArrayList<ProducesGold> producesGolds;
-    private ArrayList<DealsDamage> dealsDamages;
     private ArrayList<Movable> movables;
 
     //****** Initialisations ******
-
     public GameModel(MainApplication mainApplication) {
         // Initialisation joueur
         Player player = new Player();
@@ -64,18 +62,16 @@ public class GameModel implements Runnable{
 
         // Initialisation des listes
         ArrayList<NPC> NPCs = new ArrayList<NPC>();
-        ArrayList<Tower> towers = new ArrayList<Tower>();
         ArrayList<GoldMine> goldMines = new ArrayList<GoldMine>();
 
         // Initialisation des observeurs
+        ArrayList<Tower> towers = new ArrayList<Tower>();
         ArrayList<Lootable> lootables = new ArrayList<Lootable>();
         ArrayList<Placeable> placeables = new ArrayList<Placeable>();
         ArrayList<Drawable> drawables = new ArrayList<Drawable>();
         ArrayList<Upgradable> upgradables = new ArrayList<Upgradable>();
         ArrayList<ProducesGold> producesGolds = new ArrayList<ProducesGold>();
-        ArrayList<DealsDamage> dealsDamages = new ArrayList<DealsDamage>();
         ArrayList<Movable> movables = new ArrayList<Movable>();
-
 
         // Initialisation d'un objet NPC factory
         NPCFactory npcFactory = new NPCFactory();
@@ -85,7 +81,7 @@ public class GameModel implements Runnable{
 
         // initialisation d'un objet Shop
         Shop shop = new Shop();
-
+        shop.getInstance(Shop.Type.CANON_TOWER, );
     }
 
     public void initializeMap(){
@@ -93,7 +89,7 @@ public class GameModel implements Runnable{
         String mapPath = workingDirectory + "maps/map1";
         String graphicsPath = "towerdefense/gui/game/graphics.css";
 
-        mapFactory = new MapFactory();
+        MapFactory mapFactory = new MapFactory();
         try {
             map = mapFactory.getMap(mapPath);
             map.getStylesheets().add(graphicsPath);
@@ -116,23 +112,20 @@ public class GameModel implements Runnable{
 
     public void run(){
         for (Movable movable : movables){
-            movable.move();
+            movable.move(); // TODO: séparer en plein de treads, car ennemis ne dépenent pas les uns des autres pour se déplacer
         }
 
-        for (Drawable drawable : drawables){
-            drawable.updateDrawing();
+//        for (ProducesGold goldSource : producesGolds){
+//            player.addGold(goldSource.retrieveGold());
+//        }
+
+        for (Tower tower : towers){
+            killNPC(tower.hit(NPCs));
         }
 
-        for (ProducesGold goldSource : producesGolds){
-            player.addGold(goldSource.retrieveGold());
-        }
-
-        for (DealsDamage dealsDamage : dealsDamages){
-            this.killNPC(dealsDamage.hit());
-        }
     }
 
-    //TODO: vérifier que la méthode est efficace : les NPCs mort doivent être géré par le ramasse miettes pour être suppprimés.
+    //TODO: vérifier que la méthode est efficace : les NPCs morts doivent être gérés par le ramasse miettes pour être suppprimés.
     public void killNPC(ArrayList<NPC> NPCsToKill){
         NPCs.remove(NPCsToKill);
     }

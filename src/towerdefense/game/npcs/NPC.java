@@ -5,21 +5,22 @@ import towerdefense.game.interfaces.Lootable;
 import towerdefense.game.interfaces.Movable;
 import towerdefense.game.map.Map;
 import towerdefense.game.map.Position;
+import towerdefense.game.model.GameModel;
 
-public class NPC implements Lootable, Drawable, Movable {
+public abstract class NPC implements Lootable, Drawable, Movable {
     protected Position position;
     protected int health;
-    private int goldLoot;
+    protected int goldLoot;
     protected float speed;
     //protected ArrayList<Weapon> inventaire ; (optionnel)
 
     //NOTE: les valeurs mises ici le sont à titre d'exemple, à modifier si besoin.
 
-    public NPC (Map map){
+    public NPC (Map map, int health, int goldloot, int speed){ // TODO: ajouter référence au gameModel
         Position position = new Position(map);
-        health =30;
-        goldLoot = 1;
-        speed = 2;
+        this.health = health;
+        this.goldLoot = goldloot;
+        this.speed = speed;
     }
 
     //******Getteurs******
@@ -32,18 +33,27 @@ public class NPC implements Lootable, Drawable, Movable {
 
     public float getSpeed(){return speed;}
 
+    public abstract String getType(); // TODO: utiliser une récupération d'instance
+
     //******Déplacement*******
+
+
 
     ///TODO : pathfinding
 
     public void move(){}
 
-    //*******Gestion de la vie******
+    public void glued(){
+        speed = speed/4; // TODO: if pour vérifier su glueresistant
+    } // TODO: utiliser verbe + utiliser arguments
 
+    //*******Gestion de la vie******
+    // TODO: rajouter méthode hit car la tour ne sait pas ce qui va arriver au NPC
     public String decreaseHealth(int damage){
-        String res = "still alive";
+        String res = "alive"; // TODO: utiliser boolean
         if (health <= 0) {
             res = "is dead";
+            gemaModel.killNPC(this);
         } else {
             health -= damage;
         }
