@@ -1,0 +1,11 @@
+========================================================================================================================
+                                     QUESTIONS A POSER AUX ASSISTANTS
+========================================================================================================================
+
+1) Utilisation des assets disponibles sur internet, possible ou non ?
+
+   C'est difficile d'en trouver qui nous correspondent, on voudrait éviter de perdre du temps là-dessus.
+
+2) Comment synchroniser les différents treads entre-eux, l'utilisation d'un objet horloge est-elle une bonne idée ?
+
+3) Persistance : utilisation de fichier properties, autorisé ?
