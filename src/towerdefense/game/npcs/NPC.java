@@ -16,8 +16,9 @@ import towerdefense.game.Drawable;
 import towerdefense.game.Movable;
 import towerdefense.game.map.Position;
 import towerdefense.game.model.GameModel;
-import towerdefense.game.towers.CanonTower;
-import towerdefense.game.towers.GlueTower;
+import towerdefense.game.projectiles.Bullet;
+import towerdefense.game.projectiles.Glue;
+import towerdefense.game.projectiles.Shell;
 
 public abstract class NPC implements Drawable, Movable {
     protected Position position;
@@ -46,51 +47,44 @@ public abstract class NPC implements Drawable, Movable {
     public float getSpeed(){return speed;}
 
     //******Gestion des attaques*******
-
-    /**Associe à la tour qui attaque le type de dégâts que subit le NPC**/
-    public void hit(Class<?> objectClass, int damageDeal){
-        if (objectClass == GlueTower.class){
-            glue(damageDeal);
-        }else if (objectClass == CanonTower.class) {
-            explode(damageDeal);
-        }else{
-            decreaseHealth(damageDeal);
-        }
+    public void hit(Shell shell){
+        explode(shell);
     }
 
-
-    //******Déplacement*******
-
-    public void move(){}
-
-    public void glue(int damageDeal){
-        if (getClass() != GlueResistantNPC.class){
-            speed = speed/damageDeal;
-        }
+    public void hit(Glue glue){
+        stick(glue);
     }
 
-    //*******Gestion de la vie******
-
-    //Pas nécessaire mais fixe les idées.
-    public void explode(int damageDeal){
-        if (getClass() != ArmoredNPC.class){
-            decreaseHealth(damageDeal);
-        }
+    public void hit(Bullet bullet){
+        injure(bullet);
     }
 
-    public void decreaseHealth(int damageDeal){
+    //*******Gestion des dégâts*********
+
+    public abstract void stick(Glue glue);
+
+    public abstract void explode(Shell shell);
+
+    public abstract void injure(Bullet bullet);
+
+    public void decreaseHealth(int damage){
         if (health <= 0) {
             gameModel.killNPC(this);
         } else {
-            health -= damageDeal;
+            health -= damage;
         }
     }
 
+    //******Déplacement*******
+    @Override
+    public void move(){}
 
     //*******Autres*******
+    @Override
     public void updateDrawing(){}
 
-    public String toStringNPC(){
+    @Override
+    public String toString(){
         return "NPC :\n - position: " + position + "\n" +
                 "- health: " + health + "\n"+
                 "- goldLoot: " + goldLoot + "\n"+

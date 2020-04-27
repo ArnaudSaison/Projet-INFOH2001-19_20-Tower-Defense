@@ -7,11 +7,6 @@ Ce package comporte une classe mère "Tower" abstraite qui contient les méthode
 sous-classes.
 L'idée est de pouvoir modifier les attributs mis en avant dans chacune des sous-classe via le constructeur associé (voir
 la classe "Shop").
-
-Méthode "levelUP": elle est implémentée directement dans chaque sous-classe. Il n'est pas possible de choisir
-                   l'amplitude d'augmentation des attributs car il faudrait pour ça surcharger la méthode "levelUP", ce
-                   qui entraînerait l'implémentation de méthodes inutiles pour les autres classes implémentant
-                   l'interface "Upgradable".
 */
 
 package towerdefense.game.towers;
@@ -35,7 +30,7 @@ public abstract class Tower implements Buyable, Upgradable, Placeable, Drawable{
     protected int priceIncrement;
     protected double range;
     protected int fireRate;
-    protected int damageDeal;  //TODO: utiliser damgeCoefficient pour être plus générique ?
+    protected int damageDeal;
     protected ArrayList<NPC> targets;
     protected ArrayList<NPC> KIATargets;
     protected int maxTargetNumber;
@@ -64,20 +59,26 @@ public abstract class Tower implements Buyable, Upgradable, Placeable, Drawable{
     //******Getteurs******
 
     public int getLevel(){return level;};
-
+    @Override
     public int getCost(){return price;}
 
     public double getRange(){return range;}
 
     public int getDamageDeal(){return damageDeal;}
-
+    @Override
     public Position getPos(){return position;}
 
 
     //*******Passage de niveau*******
-
+    @Override
     public boolean canBeLeveledUp(){
         return level < maxLevel;
+    }
+
+    @Override
+    public void levelUp(){
+        level++;
+        price += priceIncrement;
     }
 
     //******Traitement des cibles*******
@@ -104,17 +105,15 @@ public abstract class Tower implements Buyable, Upgradable, Placeable, Drawable{
 
     /**Permet à une tour, peut importe son type, d'attaquer n'importe quel ennemi.**/
     //*******Attaque*******
-    public void Attack(){
-        for (NPC target : targets){
-            target.hit(getClass(),damageDeal);
-        }
-    }
+    public abstract void attack();
 
 
     //*******Autres*******
+    @Override
     public void updateDrawing(){}
 
-    public String toStringTower(){
+    @Override
+    public String toString(){
         return "Tour :\n - position: " + position + "\n" +
                 "- level: " + level + "\n"+
                 "- maxLevel: " + maxLevel + "\n"+

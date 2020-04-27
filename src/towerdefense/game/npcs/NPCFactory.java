@@ -13,7 +13,7 @@ public class NPCFactory {
             case GENERIC_NPC: res = new GenericNPC(map,gameModel); break;
             case RAPID_NPC: res = new RapidNPC(map,gameModel,5 ); break;
             case SUPER_HEALTH_NPC: res = new SuperHealthNPC(map,gameModel,150 ); break;
-            case ARMORED_NPC: res = new ArmoredNPC(map,gameModel,5 ); break;
+            case ARMORED_NPC: res = new ExplosiveResistantNPC(map,gameModel,5 ); break;
             case GLUE_RESISTANT_NPC: res = new GlueResistantNPC(map,gameModel,7 ); break;
 
             default : System.out.println("Invalid NPC type");

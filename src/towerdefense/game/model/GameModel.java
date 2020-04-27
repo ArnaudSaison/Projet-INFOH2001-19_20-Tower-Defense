@@ -97,7 +97,7 @@ public class GameModel implements Runnable{
             exception.printStackTrace();
         }
 
-        //mapPlaceHolder.getChildren().add(0, map);
+        mapPlaceHolder.getChildren().add(0, map);
     }
 
     /** Démarre le thread du jeu dans lequel vont être démarrés tous les autres threads

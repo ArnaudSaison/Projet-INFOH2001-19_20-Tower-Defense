@@ -18,7 +18,7 @@ public class TestGameModel {
 
         //test sur un objet generic tower
         GenericTower t = new GenericTower(map);
-        System.out.println(t.toStringTower());
+        System.out.println(t.toString());
     }
 }
 //TODO: faire les tests pour vérifier le fonctionnement du GameModel.

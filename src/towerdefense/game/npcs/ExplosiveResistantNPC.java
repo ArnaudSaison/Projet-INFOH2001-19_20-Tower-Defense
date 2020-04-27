@@ -7,10 +7,11 @@ import towerdefense.game.projectiles.Bullet;
 import towerdefense.game.projectiles.Glue;
 import towerdefense.game.projectiles.Shell;
 
-public class GenericNPC extends NPC {
-    public GenericNPC(Map map, GameModel gameModel) {
+public class ExplosiveResistantNPC extends NPC {
+    public ExplosiveResistantNPC(Map map, GameModel gameModel, int goldLoot){
         super();
         super.gameModel = gameModel;
+        super.goldLoot = goldLoot;
         super.position = new Position(map);
     }
 
@@ -20,13 +21,10 @@ public class GenericNPC extends NPC {
     }
 
     @Override
-    public void explode(Shell shell){
-        decreaseHealth(shell.getDamage());
-    }
+    public void explode(Shell shell){}
 
     @Override
     public void injure(Bullet bullet){
         decreaseHealth(bullet.getDamage());
     }
-
 }
