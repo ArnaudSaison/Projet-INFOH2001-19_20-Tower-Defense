@@ -1,38 +1,28 @@
 package towerdefense.game.model;
 
+import towerdefense.game.Buyable;
 import towerdefense.game.goldmine.GoldMine;
-import towerdefense.game.interfaces.Buyable;
 import towerdefense.game.map.Map;
-import towerdefense.game.towers.GenericTower;
-import towerdefense.game.towers.CanonTower;
-import towerdefense.game.towers.GlueTower;
+import towerdefense.game.towers.*;
 
 public class Shop {
-    public enum Type {GENERIC_TOWER, GLUE_TOWER, CANON_TOWER}
-
-    public Buyable buy(String type, Map map) {
-        Buyable res = null;
-        if (!type.equals("Tower")) {
-            res = (Buyable) getInstance(type, map);
-        }
-        return res;
-    }
+    public enum Type {GENERIC_TOWER,RAPID_FIRE_TOWER, LONG_RANGE_TOWER,STRONG_ATTACK_TOWER, GLUE_TOWER, CANON_TOWER, GOLDMINE}
 
     public Buyable getInstance(Type type, Map map) {
         Buyable res = null;
         switch (type){
-            //Tower
-            case "standardtower": res = new GenericTower(map, 3, 10,2); break;
-            case "rapidtower": res = new GenericTower(map,2,10,5); break;
-            case "longrangetower": res = new GenericTower(map,5,30,1); break;
-            case "canontower": res = new CanonTower(map, 200, 10); break;
-            case "gluetower": res = new GlueTower(map,300); break;
+            //Towers
+            case GENERIC_TOWER: res = new GenericTower(map); break;
+            case RAPID_FIRE_TOWER: res = new RapidFireTower(map,5,110); break;
+            case LONG_RANGE_TOWER: res = new LongRangeTower(map,20,120); break;
+            case STRONG_ATTACK_TOWER: res = new StrongAttackTower(map,10,130); break;
+            case CANON_TOWER: res = new CanonTower(map,3,5,200 ); break;
+            case GLUE_TOWER: res = new GlueTower(map,3,2,250); break;
 
             //Goldmine
-            case "goldmine": res = new GoldMine(map); break;
+            case GOLDMINE: res = new GoldMine(map,1,2,3,4); break;
             default : System.out.println("Invalid Buyable type");
         }
         return res;
     }
-
 }

@@ -1,6 +1,6 @@
 package towerdefense.game.goldmine;
 
-import towerdefense.game.interfaces.*;
+import towerdefense.game.*;
 import towerdefense.game.map.Map;
 import towerdefense.game.map.Position;
 
@@ -17,14 +17,14 @@ public class GoldMine implements ProducesGold, Buyable, Upgradable, Placeable, D
 
     //NOTE: les valeurs mises ici le sont à titre d'exemple, à modifier si besoin.
 
-    public GoldMine(Map map) {
+    public GoldMine(Map map, int price, int priceIncrement, int productionRate, int maxGoldStorage) {
         Position position = new Position(map);
+        this.price = price;
+        this.priceIncrement = priceIncrement;
+        this.productionRate = productionRate;
+        this.maxGoldStorage = maxGoldStorage;
         level = 1;
-        price = 200;
-        priceIncrement = 5*level;
-        productionRate = 10;
         goldStorage = 0;
-        maxGoldStorage = 200;
         maxLevel = 5;
     }
 
@@ -56,11 +56,7 @@ public class GoldMine implements ProducesGold, Buyable, Upgradable, Placeable, D
     //*******Passage de niveau*******
 
     public boolean canBeLeveledUp() {
-        if (level < maxLevel) {
-            return true;
-        } else {
-            return false;
-        }
+        return level < maxLevel;
     }
 
     public int getCost(){
@@ -109,7 +105,7 @@ public class GoldMine implements ProducesGold, Buyable, Upgradable, Placeable, D
     public Position getPos(){
         return position;
     }
-    public String toSring(){
+    public String toSringGoldMine(){
         return "Mine d'or :\n - position: " + position + "\n" +
                 "- level: " + level + "\n"+
                 "- maxLevel: " + maxLevel + "\n"+

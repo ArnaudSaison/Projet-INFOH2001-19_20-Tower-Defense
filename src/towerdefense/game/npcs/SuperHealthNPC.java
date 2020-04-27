@@ -4,10 +4,10 @@ import towerdefense.game.map.Map;
 import towerdefense.game.map.Position;
 import towerdefense.game.model.GameModel;
 
-public class ArmoredNPC extends NPC {
-    public ArmoredNPC(Map map, GameModel gameModel, int goldLoot){
+public class SuperHealthNPC extends NPC {
+    public SuperHealthNPC(Map map, GameModel gameModel, int health) {
         Position position = new Position(map);
-        super.gameModel = gameModel;
-        super.goldLoot = goldLoot;
+        super.gameModel =gameModel;
+        super.health = health;
     }
 }

@@ -1,5 +1,8 @@
-package towerdefense.game.interfaces;
+package towerdefense.game;
 
 public interface Drawable {
     public void updateDrawing();
+
+    interface Lootable {
+    }
 }

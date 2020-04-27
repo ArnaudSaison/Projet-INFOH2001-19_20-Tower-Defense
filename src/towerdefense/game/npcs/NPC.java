@@ -1,26 +1,38 @@
+/*
+========================================================================================================================
+                         COMMENTAIRES SUR LE CODAGE DES CLASSES DU PACKAGE NPC
+========================================================================================================================
+
+De même que pour les sous classes de la super classe "TOWER", la création de sous classes "NPC" est artificielle et se
+justifie par l'implémentation de "l'image" au sein même de la classe.
+L'idée est de pouvoir modifier les attributs mis en avant dans chacune des sous-classe via le constructeur associé (voir
+la classe "NPCFactory").
+*/
+
+
 package towerdefense.game.npcs;
 
-import towerdefense.game.interfaces.Drawable;
-import towerdefense.game.interfaces.Lootable;
-import towerdefense.game.interfaces.Movable;
-import towerdefense.game.map.Map;
+import towerdefense.game.Drawable;
+import towerdefense.game.Movable;
 import towerdefense.game.map.Position;
 import towerdefense.game.model.GameModel;
+import towerdefense.game.towers.CanonTower;
+import towerdefense.game.towers.GlueTower;
 
-public abstract class NPC implements Lootable, Drawable, Movable {
+public abstract class NPC implements Drawable, Movable {
     protected Position position;
     protected int health;
     protected int goldLoot;
     protected float speed;
+    protected GameModel gameModel;
     //protected ArrayList<Weapon> inventaire ; (optionnel)
 
-    //NOTE: les valeurs mises ici le sont à titre d'exemple, à modifier si besoin.
 
-    public NPC (Map map, int health, int goldloot, int speed){ // TODO: ajouter référence au gameModel
-        Position position = new Position(map);
-        this.health = health;
-        this.goldLoot = goldloot;
-        this.speed = speed;
+    //Même remarque que pour la classe "Tower": une classe abstraite ne s'instancie pas.
+    public NPC (){
+        health = 40;//..............en point de vie.
+        goldLoot = 1;//.............en pièce d'or.
+        speed = 1;//................en mètre par seconde.
     }
 
     //******Getteurs******
@@ -33,37 +45,52 @@ public abstract class NPC implements Lootable, Drawable, Movable {
 
     public float getSpeed(){return speed;}
 
-    public abstract String getType(); // TODO: utiliser une récupération d'instance
+    //******Gestion des attaques*******
+
+    /**Associe à la tour qui attaque le type de dégâts que subit le NPC**/
+    public void hit(Class<?> objectClass, int damageDeal){
+        if (objectClass == GlueTower.class){
+            glue(damageDeal);
+        }else if (objectClass == CanonTower.class) {
+            explode(damageDeal);
+        }else{
+            decreaseHealth(damageDeal);
+        }
+    }
+
 
     //******Déplacement*******
 
-
-
-    ///TODO : pathfinding
-
     public void move(){}
 
-    public void glued(){
-        speed = speed/4; // TODO: if pour vérifier su glueresistant
-    } // TODO: utiliser verbe + utiliser arguments
+    public void glue(int damageDeal){
+        if (getClass() != GlueResistantNPC.class){
+            speed = speed/damageDeal;
+        }
+    }
 
     //*******Gestion de la vie******
-    // TODO: rajouter méthode hit car la tour ne sait pas ce qui va arriver au NPC
-    public String decreaseHealth(int damage){
-        String res = "alive"; // TODO: utiliser boolean
-        if (health <= 0) {
-            res = "is dead";
-            gemaModel.killNPC(this);
-        } else {
-            health -= damage;
+
+    //Pas nécessaire mais fixe les idées.
+    public void explode(int damageDeal){
+        if (getClass() != ArmoredNPC.class){
+            decreaseHealth(damageDeal);
         }
-        return res;
     }
+
+    public void decreaseHealth(int damageDeal){
+        if (health <= 0) {
+            gameModel.killNPC(this);
+        } else {
+            health -= damageDeal;
+        }
+    }
+
 
     //*******Autres*******
     public void updateDrawing(){}
 
-    public String toString(){
+    public String toStringNPC(){
         return "NPC :\n - position: " + position + "\n" +
                 "- health: " + health + "\n"+
                 "- goldLoot: " + goldLoot + "\n"+

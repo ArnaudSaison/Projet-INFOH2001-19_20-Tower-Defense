@@ -1,4 +1,4 @@
-package towerdefense.game.interfaces;
+package towerdefense.game;
 
 
 public interface Upgradable {

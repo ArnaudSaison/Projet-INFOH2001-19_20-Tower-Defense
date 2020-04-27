@@ -2,15 +2,12 @@ package towerdefense.game.npcs;
 
 import towerdefense.game.map.Map;
 import towerdefense.game.map.Position;
+import towerdefense.game.model.GameModel;
 
 public class GlueResistantNPC extends NPC {
-    public GlueResistantNPC(Map map, int health, int goldloot, int speed) { // TODO: régler constrcuteur
+    public GlueResistantNPC(Map map, GameModel gameModel, int goldLoot) {
         Position position = new Position(map);
-        this.health = health;
-        this.goldLoot = goldloot;
-        this.speed = speed;
+        super.gameModel =gameModel;
+        super.goldLoot = goldLoot;
     }
-
-    public String getType(){return "GlueResistant";}
-
 }

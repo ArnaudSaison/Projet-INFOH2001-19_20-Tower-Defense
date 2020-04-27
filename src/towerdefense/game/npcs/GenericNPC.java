@@ -2,11 +2,11 @@ package towerdefense.game.npcs;
 
 import towerdefense.game.map.Map;
 import towerdefense.game.map.Position;
+import towerdefense.game.model.GameModel;
 
 public class GenericNPC extends NPC {
-    public GenericNPC(Map map, int health, int goldloot, int speed) {
-        super(Map map, int health, int goldloot, int speed); // TODO: régler constrcuteur
+    public GenericNPC(Map map, GameModel gameModel) {
+        Position position = new Position(map);
+        super.gameModel = gameModel;
     }
-
-    public String getType(){return "Generic";}
 }

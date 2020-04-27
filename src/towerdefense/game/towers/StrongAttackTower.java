@@ -3,23 +3,21 @@ package towerdefense.game.towers;
 import towerdefense.game.map.Map;
 import towerdefense.game.map.Position;
 
+public class StrongAttackTower extends Tower {
 
-public class CanonTower extends Tower {
-    public CanonTower(Map map, int maxTargetNumber, int damageDeal, int price) {
+    public StrongAttackTower(Map map, int damageDeal, int price){
         Position position = new Position(map);
-        super.maxTargetNumber = maxTargetNumber;
-        super.price = price;
         super.damageDeal = damageDeal;
+        super.price = price;
     }
 
-
-    //*******Passage de niveau******
+    //******Passage de niveau******
     public void levelUp() {
         if (canBeLeveledUp()) {
             level++;
-            price += priceIncrement;
-            maxTargetNumber++;
+            price = +priceIncrement;
             damageDeal++;
         }
     }
 }
+

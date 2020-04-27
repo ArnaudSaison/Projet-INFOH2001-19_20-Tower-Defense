@@ -4,10 +4,11 @@ import towerdefense.game.map.Map;
 import towerdefense.game.map.Position;
 import towerdefense.game.model.GameModel;
 
-public class ArmoredNPC extends NPC {
-    public ArmoredNPC(Map map, GameModel gameModel, int goldLoot){
+public class RapidNPC extends NPC {
+    public RapidNPC(Map map, GameModel gameModel, int speed) {
         Position position = new Position(map);
-        super.gameModel = gameModel;
-        super.goldLoot = goldLoot;
+        super.gameModel =gameModel;
+        super.speed = speed;
     }
 }
+

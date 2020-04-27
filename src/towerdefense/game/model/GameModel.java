@@ -1,8 +1,8 @@
 package towerdefense.game.model;
 
 import towerdefense.MainApplication;
+import towerdefense.game.*;
 import towerdefense.game.goldmine.GoldMine;
-import towerdefense.game.interfaces.*;
 import towerdefense.game.map.Map;
 import towerdefense.game.map.MapFactory;
 import towerdefense.game.npcs.NPC;
@@ -40,7 +40,7 @@ public class GameModel implements Runnable{
     private ArrayList<GoldMine> goldMines;
 
     // Liste des interfaces
-    private ArrayList<Lootable> lootables;
+    private ArrayList<Drawable.Lootable> lootables;
     private ArrayList<Placeable> placeables;
     private ArrayList<Drawable> drawables;
     private ArrayList<Upgradable> upgradables;
@@ -66,7 +66,7 @@ public class GameModel implements Runnable{
 
         // Initialisation des observeurs
         ArrayList<Tower> towers = new ArrayList<Tower>();
-        ArrayList<Lootable> lootables = new ArrayList<Lootable>();
+        ArrayList<Drawable.Lootable> lootables = new ArrayList<Drawable.Lootable>();
         ArrayList<Placeable> placeables = new ArrayList<Placeable>();
         ArrayList<Drawable> drawables = new ArrayList<Drawable>();
         ArrayList<Upgradable> upgradables = new ArrayList<Upgradable>();
@@ -81,7 +81,7 @@ public class GameModel implements Runnable{
 
         // initialisation d'un objet Shop
         Shop shop = new Shop();
-        shop.getInstance(Shop.Type.CANON_TOWER, );
+        //shop.getInstance(Shop.Type.CANON_TOWER, );
     }
 
     public void initializeMap(){
@@ -97,7 +97,7 @@ public class GameModel implements Runnable{
             exception.printStackTrace();
         }
 
-        mapPlaceHolder.getChildren().add(0, map);
+        //mapPlaceHolder.getChildren().add(0, map);
     }
 
     /** Démarre le thread du jeu dans lequel vont être démarrés tous les autres threads
@@ -114,20 +114,11 @@ public class GameModel implements Runnable{
         for (Movable movable : movables){
             movable.move(); // TODO: séparer en plein de treads, car ennemis ne dépenent pas les uns des autres pour se déplacer
         }
-
-//        for (ProducesGold goldSource : producesGolds){
-//            player.addGold(goldSource.retrieveGold());
-//        }
-
-        for (Tower tower : towers){
-            killNPC(tower.hit(NPCs));
-        }
-
     }
 
-    //TODO: vérifier que la méthode est efficace : les NPCs morts doivent être gérés par le ramasse miettes pour être suppprimés.
-    public void killNPC(ArrayList<NPC> NPCsToKill){
-        NPCs.remove(NPCsToKill);
+
+    public void killNPC(NPC NPCToKill){
+        NPCs.remove(NPCToKill);
     }
 
     //****** Getteurs & setteurs ******
@@ -220,7 +211,7 @@ public class GameModel implements Runnable{
         return goldMines;
     }
 
-    public ArrayList<Lootable> getLootables() {
+    public ArrayList<Drawable.Lootable> getLootables() {
         return lootables;
     }
 

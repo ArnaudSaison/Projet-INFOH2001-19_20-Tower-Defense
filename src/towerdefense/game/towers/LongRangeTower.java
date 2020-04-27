@@ -3,12 +3,13 @@ package towerdefense.game.towers;
 import towerdefense.game.map.Map;
 import towerdefense.game.map.Position;
 
-public class GenericTower extends Tower{
+public class LongRangeTower extends Tower{
 
-    public GenericTower(Map map){
+    public LongRangeTower(Map map,int range, int price){
         Position position = new Position(map);
+        super.range = range;
+        super.price = price;
     }
-
 
     //******Passage de niveau******
     public void levelUp() {
@@ -16,8 +17,7 @@ public class GenericTower extends Tower{
             level++;
             price = +priceIncrement;
             range++;
-            damageDeal++;
-            fireRate++;
         }
     }
 }
+
