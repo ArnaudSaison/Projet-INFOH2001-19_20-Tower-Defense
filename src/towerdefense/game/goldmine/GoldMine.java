@@ -4,28 +4,33 @@ import towerdefense.game.*;
 import towerdefense.game.map.Map;
 import towerdefense.game.map.Position;
 
-public class GoldMine implements ProducesGold, Buyable, Upgradable, Placeable, Drawable {
+import java.lang.Runnable;
+
+public class GoldMine implements ProducesGold, Buyable, Upgradable, Placeable, Drawable, Runnable {
     private Position position;
     private int level;
     private int price;
     private int priceIncrement;
-    private int productionRate;
+    private int productionRate; //temps de pause du thread.
     private int goldStorage;
     private int maxGoldStorage;
     static int maxLevel;
 
+    private Thread tGoldMine;
 
-    //NOTE: les valeurs mises ici le sont à titre d'exemple, à modifier si besoin.
 
     public GoldMine(Map map, int price, int priceIncrement, int productionRate, int maxGoldStorage) {
-        Position position = new Position(map);
+        position = new Position(map);
         this.price = price;
         this.priceIncrement = priceIncrement;
-        this.productionRate = productionRate;
+        this.productionRate = productionRate; // en milliseconde.
         this.maxGoldStorage = maxGoldStorage;
         level = 1;
         goldStorage = 0;
         maxLevel = 5;
+        //Initialisation du thread.
+        tGoldMine = new Thread(this);
+        tGoldMine.start();
     }
 
 
@@ -35,15 +40,19 @@ public class GoldMine implements ProducesGold, Buyable, Upgradable, Placeable, D
         maxGoldStorage += increment;
     }
 
-    public void increaseProductionRate(int increment) {
-        productionRate += increment;
+    /**
+     * Prend comme argument la réduction du temps nécessaire à la production d'une quantité d'or.
+     * Au plus l'argument (en milliseconde) est important, au plus la production d'or sera importante.
+     * */
+    public void increaseProductionRate(int decrement) {
+        productionRate -= decrement;
     }
 
     //******Gestion de l'or*******
 
     public void produceGold(){
-        if (goldStorage < maxGoldStorage){
-            goldStorage += productionRate;
+        if(goldStorage < maxGoldStorage){
+            goldStorage++;
         }
     }
 
@@ -72,40 +81,26 @@ public class GoldMine implements ProducesGold, Buyable, Upgradable, Placeable, D
         }
     }
 
-    //****** Getteurs & setteurs ******
-
-    public int getLevel(){
-        return level;
-    }
-
-    public int getPrice(){
-        return price;
-    }
-
-    public int getProductionRate(){
-        return level;
-    }
-
-    public int getGoldStorage(){
-        return goldStorage;
-    }
-
-    public int getMaxGoldStorage(){
-        return maxGoldStorage;
-    }
-
-    public int getMaxLevel(){
-        return maxLevel;
-    }
-
     //******Autres*******
+    @Override
+    public void run(){
+        try {
+            while(true){
+                produceGold();
+                Thread.sleep(productionRate);
+                System.out.println(toString());
+            }
+        }catch (Exception e){};
+    }
 
     public void updateDrawing(){}//TODO : implémenter la représentation en JavaFX.
 
     public Position getPos(){
         return position;
     }
-    public String toSringGoldMine(){
+
+    @Override
+    public String toString(){
         return "Mine d'or :\n - position: " + position + "\n" +
                 "- level: " + level + "\n"+
                 "- maxLevel: " + maxLevel + "\n"+

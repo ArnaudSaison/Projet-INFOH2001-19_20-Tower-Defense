@@ -2,11 +2,9 @@ package towerdefense.game.towers;
 
 import towerdefense.game.map.Map;
 import towerdefense.game.map.Position;
-import towerdefense.game.npcs.NPC;
 import towerdefense.game.projectiles.Bullet;
 
-public class RapidFireTower extends Tower {
-    private Bullet bullet;
+public class RapidFireTower extends GenericTower {
 
     public RapidFireTower(Map map, int fireRate, int price){
         super();
@@ -19,16 +17,11 @@ public class RapidFireTower extends Tower {
     //******Passage de niveau******
     @Override
     public void levelUp() {
-        if (canBeLeveledUp()) {
-            super.levelUp();
-            fireRate++;
-        }
+        super.levelUp();
+        fireRate++;
     }
-
     @Override
-    public void attack(){
-        for (NPC target: targets){
-            target.hit(bullet);
-        }
+    public String toString(){
+        return (getClass().getName() + "\n") + super.toString();
     }
 }

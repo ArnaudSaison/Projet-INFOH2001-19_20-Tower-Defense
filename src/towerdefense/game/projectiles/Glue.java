@@ -6,4 +6,8 @@ public class Glue extends Projectile{
         super();
         super.damage = damage;
     }
+    @Override
+    public String toString(){
+        return getClass().getName() +super.toString();
+    }
 }

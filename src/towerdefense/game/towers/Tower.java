@@ -16,13 +16,14 @@ import towerdefense.game.Drawable;
 import towerdefense.game.Placeable;
 import towerdefense.game.Upgradable;
 import towerdefense.game.map.Position;
+import towerdefense.game.model.GameModel;
 import towerdefense.game.npcs.NPC;
 
 import java.util.ArrayList;
 import java.util.Iterator;
 
 
-public abstract class Tower implements Buyable, Upgradable, Placeable, Drawable{
+public abstract class Tower implements Buyable, Upgradable, Placeable, Drawable, Runnable{
     protected Position position;
     protected int level;
     static int maxLevel;
@@ -31,9 +32,11 @@ public abstract class Tower implements Buyable, Upgradable, Placeable, Drawable{
     protected double range;
     protected int fireRate;
     protected int damageDeal;
+    protected GameModel gameModel;
     protected ArrayList<NPC> targets;
     protected ArrayList<NPC> KIATargets;
     protected int maxTargetNumber;
+    protected Thread tTower;
     //private int health; (optionnel)
 
     //TODO: lancer les treads
@@ -54,6 +57,11 @@ public abstract class Tower implements Buyable, Upgradable, Placeable, Drawable{
         targets = new ArrayList<NPC>();
         KIATargets = new ArrayList<NPC>();
         maxTargetNumber = 1;//...............traite une seule cible.
+
+        //Initialisation thread //TODO : à mettre dans le constructeur des sous-classes ?
+
+        tTower = new Thread(this);
+        tTower.start();
     }
 
     //******Getteurs******
@@ -68,6 +76,9 @@ public abstract class Tower implements Buyable, Upgradable, Placeable, Drawable{
     @Override
     public Position getPos(){return position;}
 
+    //********Setteur********
+
+    public void setGameModel(GameModel gameModel){this.gameModel =gameModel;}
 
     //*******Passage de niveau*******
     @Override
@@ -77,8 +88,10 @@ public abstract class Tower implements Buyable, Upgradable, Placeable, Drawable{
 
     @Override
     public void levelUp(){
+        if(canBeLeveledUp()){
         level++;
         price += priceIncrement;
+        }
     }
 
     //******Traitement des cibles*******
@@ -109,6 +122,18 @@ public abstract class Tower implements Buyable, Upgradable, Placeable, Drawable{
 
 
     //*******Autres*******
+    @Override
+    public void run(){
+        try {
+            while(true){
+                targetAcquisition(gameModel.getNPCs());
+                attack();
+                Thread.sleep(10000);
+                System.out.println(toString());
+            }
+        }catch (Exception e){};
+    }
+
     @Override
     public void updateDrawing(){}
 

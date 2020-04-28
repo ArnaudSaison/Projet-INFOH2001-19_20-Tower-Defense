@@ -31,4 +31,8 @@ public class GlueTower extends Tower {
             target.hit(glue);
         }
     }
+    @Override
+    public String toString(){
+        return (getClass().getName() + "\n") + super.toString();
+    }
 }

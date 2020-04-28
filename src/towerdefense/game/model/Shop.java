@@ -6,13 +6,13 @@ import towerdefense.game.map.Map;
 import towerdefense.game.towers.*;
 
 public class Shop {
-    public enum Type {GENERIC_TOWER,RAPID_FIRE_TOWER, LONG_RANGE_TOWER,STRONG_ATTACK_TOWER, GLUE_TOWER, CANON_TOWER, GOLDMINE}
+    public enum Type {STANDARD_TOWER,RAPID_FIRE_TOWER, LONG_RANGE_TOWER,STRONG_ATTACK_TOWER, GLUE_TOWER, CANON_TOWER, GOLDMINE}
 
     public Buyable getInstance(Type type, Map map) {
         Buyable res = null;
         switch (type){
             //Towers
-            case GENERIC_TOWER: res = new GenericTower(map); break;
+            case STANDARD_TOWER: res = new StandardTower(map); break;
             case RAPID_FIRE_TOWER: res = new RapidFireTower(map,5,110); break;
             case LONG_RANGE_TOWER: res = new LongRangeTower(map,20,120); break;
             case STRONG_ATTACK_TOWER: res = new StrongAttackTower(map,10,130); break;

@@ -27,4 +27,9 @@ public class ExplosiveResistantNPC extends NPC {
     public void injure(Bullet bullet){
         decreaseHealth(bullet.getDamage());
     }
+
+    @Override
+    public String toString(){
+        return super.toString() + ("\n"+ getClass().getName() +"\n.");
+    }
 }

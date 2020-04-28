@@ -1,17 +1,12 @@
 package towerdefense.game.npcs;
 
-import towerdefense.game.map.Map;
-import towerdefense.game.map.Position;
-import towerdefense.game.model.GameModel;
 import towerdefense.game.projectiles.Bullet;
 import towerdefense.game.projectiles.Glue;
 import towerdefense.game.projectiles.Shell;
 
-public class GenericNPC extends NPC {
-    public GenericNPC(Map map, GameModel gameModel) {
+public abstract class GenericNPC extends NPC {
+    public GenericNPC() {
         super();
-        super.gameModel = gameModel;
-        super.position = new Position(map);
     }
 
     @Override

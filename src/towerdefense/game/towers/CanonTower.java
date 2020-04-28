@@ -33,4 +33,8 @@ public class CanonTower extends Tower {
             target.hit(shell);
         }
     }
+    @Override
+    public String toString(){
+        return (getClass().getName() + "\n") + super.toString();
+    }
 }

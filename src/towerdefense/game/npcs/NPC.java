@@ -20,12 +20,13 @@ import towerdefense.game.projectiles.Bullet;
 import towerdefense.game.projectiles.Glue;
 import towerdefense.game.projectiles.Shell;
 
-public abstract class NPC implements Drawable, Movable {
+public abstract class NPC implements Drawable, Movable, Runnable {
     protected Position position;
     protected int health;
     protected int goldLoot;
-    protected float speed;
+    protected int speed;
     protected GameModel gameModel;
+    protected Thread tNPC;
     //protected ArrayList<Weapon> inventaire ; (optionnel)
 
 
@@ -33,7 +34,10 @@ public abstract class NPC implements Drawable, Movable {
     public NPC (){
         health = 40;//..............en point de vie.
         goldLoot = 1;//.............en pièce d'or.
-        speed = 1;//................en mètre par seconde.
+        speed = 10000;//................en milliseconde.
+        //Initilisation du thread
+        tNPC = new Thread(this);
+        tNPC.start();
     }
 
     //******Getteurs******
@@ -45,6 +49,10 @@ public abstract class NPC implements Drawable, Movable {
     public int getGoldLoot(){return goldLoot;}
 
     public float getSpeed(){return speed;}
+
+    //********Setteur*********
+
+    public void setGameModel(GameModel gameModel){this.gameModel = gameModel;}
 
     //******Gestion des attaques*******
     public void hit(Shell shell){
@@ -81,11 +89,22 @@ public abstract class NPC implements Drawable, Movable {
 
     //*******Autres*******
     @Override
+    public void run(){
+        try {
+            while(true){
+                move();
+                Thread.sleep(speed);
+                System.out.println(toString());
+            }
+        }catch (Exception e){};
+    }
+
+    @Override
     public void updateDrawing(){}
 
     @Override
     public String toString(){
-        return "NPC :\n - position: " + position + "\n" +
+        return "- position: " + position + "\n" +
                 "- health: " + health + "\n"+
                 "- goldLoot: " + goldLoot + "\n"+
                 "- speed: " + speed + ".";

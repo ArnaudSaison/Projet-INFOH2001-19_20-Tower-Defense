@@ -12,7 +12,7 @@ import towerdefense.game.towers.Tower;
 import java.io.IOException;
 import java.util.ArrayList;
 
-public class GameModel implements Runnable{
+public class GameModel implements Runnable {
     //****** Attributs ******
 
     //Joueur
@@ -48,6 +48,9 @@ public class GameModel implements Runnable{
     private ArrayList<ProducesGold> producesGolds;
     private ArrayList<Movable> movables;
 
+    //Thread
+    private Thread tGameModel;
+
     //****** Initialisations ******
     public GameModel(MainApplication mainApplication) {
         // Initialisation joueur
@@ -82,6 +85,7 @@ public class GameModel implements Runnable{
         // initialisation d'un objet Shop
         Shop shop = new Shop();
         //shop.getInstance(Shop.Type.CANON_TOWER, );
+
     }
 
     public void initializeMap(){
@@ -102,11 +106,13 @@ public class GameModel implements Runnable{
 
     /** Démarre le thread du jeu dans lequel vont être démarrés tous les autres threads
     * */
-    public void initializeLevel(String t){
+    public void initializeLevel(){
         //========== Autres initilisations ==========
 
 
         //========== Lancement du thread ==========
+        tGameModel = new Thread(this);
+        tGameModel.start();
 
     }
 
@@ -230,4 +236,6 @@ public class GameModel implements Runnable{
     public ArrayList<Buyable> getBuyables() {
         return buyables;
     }
+
+    public ArrayList<NPC> getNPCs(){return NPCs;}
 }

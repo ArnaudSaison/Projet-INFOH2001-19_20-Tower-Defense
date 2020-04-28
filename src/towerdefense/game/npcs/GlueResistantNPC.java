@@ -15,10 +15,6 @@ public class GlueResistantNPC extends NPC {
         super.position = new Position(map);
     }
 
-    public boolean isGlueResistant() {
-        return true;
-    }
-
     @Override
     public void stick(Glue glue){}
 
@@ -30,5 +26,10 @@ public class GlueResistantNPC extends NPC {
     @Override
     public void injure(Bullet bullet){
         decreaseHealth(bullet.getDamage());
+    }
+
+    @Override
+    public String toString(){
+        return super.toString() + ("\n"+ getClass().getName() +"\n.");
     }
 }

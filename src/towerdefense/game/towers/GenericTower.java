@@ -1,16 +1,13 @@
 package towerdefense.game.towers;
 
-import towerdefense.game.map.Map;
-import towerdefense.game.map.Position;
 import towerdefense.game.npcs.NPC;
 import towerdefense.game.projectiles.Bullet;
 
-public class GenericTower extends Tower{
-    private Bullet bullet;
+public abstract class GenericTower extends Tower{
+    protected Bullet bullet;
 
-    public GenericTower(Map map){
+    public GenericTower(){
         super();
-        super.position = new Position(map);
         bullet = new Bullet(damageDeal);
     }
 
@@ -20,9 +17,6 @@ public class GenericTower extends Tower{
     public void levelUp() {
         if (canBeLeveledUp()) {
             super.levelUp();
-            range++;
-            damageDeal++;
-            fireRate++;
         }
     }
 
