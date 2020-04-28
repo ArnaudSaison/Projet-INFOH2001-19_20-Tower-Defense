@@ -64,7 +64,7 @@ public class GameController implements Initializable, GUIController {
         mapFactory = new MapFactory();
         try {
             map = mapFactory.getMap(mapPath);
-            mapPane = map.getMapPane();
+            mapPane = map.getDrawing();
             mapPane.getStylesheets().add(graphicsPath);
         } catch (IOException exception) {
             exception.printStackTrace();

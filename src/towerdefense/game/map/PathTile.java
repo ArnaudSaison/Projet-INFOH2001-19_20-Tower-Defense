@@ -6,26 +6,72 @@ import javafx.scene.paint.Color;
 import java.util.ArrayList;
 
 public class PathTile extends Tile {
-    enum Connector {TOP, BOTTOM, RIGHT, LEFT}
-    private ArrayList<Connector> connect;
+    public enum Connections {TOP, BOTTOM, LEFT, RIGHT}
+
+    protected boolean top;
+    protected boolean bottom;
+    protected boolean left;
+    protected boolean right;
 
     // ***** Constructeur *****
-    public PathTile(int x, int y, double tileMetricWidth){
+    public PathTile(int x, int y, double tileMetricWidth) {
         super(x, y, tileMetricWidth);
         this.getTileShape().getStyleClass().addAll("path-tile", "cannot-be-built-on");
 
-        boolean[] connect = {};
-        isBlocked = true;
+        top = false;
+        bottom = false;
+        left = false;
+        right = false;
     }
 
-    public void addConnection(Connector co) {
-        this.connect.add(co);
+    public void setConnection(Connections connection, boolean value) {
+        switch (connection) {
+            case TOP:
+                top = value;
+                break;
+            case BOTTOM:
+                bottom = value;
+                break;
+            case RIGHT:
+                right = value;
+                break;
+            case LEFT:
+                left = value;
+                break;
+        }
     }
 
-    public void removeConnection(Connector co) {
-        this.connect.remove(co);
+    public void reinitializeConnections() {
+        top = false;
+        bottom = false;
+        left = false;
+        right = false;
     }
 
-    public void updateConnection(){
+    public boolean getConnection(Connections connection) {
+        boolean res = false;
+        switch (connection) {
+            case TOP:
+                res = top;
+                break;
+            case BOTTOM:
+                res = bottom;
+                break;
+            case RIGHT:
+                res = right;
+                break;
+            case LEFT:
+                res = left;
+                break;
+        }
+        return res;
+    }
+
+    @Override
+    public void updateDrawing() {
+        super.updateDrawing();
+    }
+
+    public void updateConnection() {
     }
 }

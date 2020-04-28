@@ -3,6 +3,7 @@ package towerdefense.game.map;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
+import towerdefense.game.interfaces.Drawable;
 
 import java.awt.event.MouseEvent;
 import java.util.ArrayList;
@@ -19,10 +20,15 @@ public class Map {
     private int mapTileSizeY;
 
     private ArrayList<Tile> tiles;
+    private ArrayList<ObstacleTile> obstacles;
     private ArrayList<Tile> gates;
     private ArrayList<Path> availablePaths;
 
-    //***** Constructeur *****
+    // Eléments qui se trouvent sur la carte
+    private ArrayList<Drawable> elementsOnMap;
+//    private double mapZoom = 1;
+
+    // ==================== Constructeur ====================
     public Map(ArrayList<Tile> tiles, double pixelsPerMeter, double tileMetricWidth, int mapTileSizeX, int mapTileSizeY, String mapName) {
         // Initialisation de tous les attributs
         this.tiles = tiles;
@@ -33,23 +39,29 @@ public class Map {
         this.mapTileSizeY = mapTileSizeY;
         this.mapName = mapName;
 
+        elementsOnMap = new ArrayList<>();
+
         gates = new ArrayList<>();
         availablePaths = new ArrayList<>();
+
+        obstacles = new ArrayList<>();
 
         mapPane = new Pane();
 
         for (Tile t : tiles) {
             // Initialisation de la forme
             t.attachMap(this);
-            t.update();
+            t.updateDrawing();
 
             // création de liste des entrées de la carte
             if (t instanceof GatePathTile) {
                 gates.add(t);
+            } else if (t instanceof ObstacleTile) {
+                obstacles.add((ObstacleTile)t);
             }
 
             // On ajoute la forme
-            mapPane.getChildren().add(t.getTileShape());
+            mapPane.getChildren().add(t.getTileShapeContainer());
         }
 
         // Calcul des chemins valides
@@ -57,6 +69,10 @@ public class Map {
         for (Tile gate : gates) {
             ArrayList<Path> computedPaths = pathFactory.getAllPaths(gate);
             availablePaths.addAll(computedPaths);
+        }
+
+        for (ObstacleTile obstacle : obstacles) {
+            obstacle.initObstacle();
         }
 
 //        // test
@@ -68,7 +84,7 @@ public class Map {
         mapPane.getStyleClass().add("map");
     }
 
-    //***** Getters et Setters *****
+    // ==================== Getters et Setters ====================
     // Récupérer la taille de la carte
     public int getMapTileSizeX() {
         return mapTileSizeX;
@@ -104,12 +120,7 @@ public class Map {
         return mapName;
     }
 
-    // Récupérer l'objet javafx qui définit la vue de la carte
-    public Pane getMapPane(){
-        return mapPane;
-    }
-
-    //***** Niveau de zoom de la carte et échelle *****
+    // Niveau de zoom de la carte et échelle
     public double getPixelsPerMeter() {
         return pixelsPerMeter;
     }
@@ -120,9 +131,7 @@ public class Map {
 
     public void resetPixelsPerMeter() {
         this.pixelsPerMeter = settingsPixelsPerMeter;
-        for (Tile t : tiles) {
-            t.update();
-        }
+        updateTiles();
     }
 
     public double getTileMetricWidth() {
@@ -132,6 +141,8 @@ public class Map {
     public void setTileMetricWidth(double width) {
         tileMetricWidth = width;
     }
+
+    // ==================== JavaFX ====================
 
     public void updateZoomLevel(ScrollEvent event) {
         double zoomFact = 0.2; // facteur multiplicatif du déplacement de la molette de la souris
@@ -164,13 +175,43 @@ public class Map {
         // Changement de position après le zoom
         Position deltaPos = pos1.getMultiplied((-1) * deltaPPM / oldPPM);
 
-        // Mise à jour de toutes les Tiles
-        for (Tile t : tiles) {
-            t.update();
-        }
+        // Mise à jour des tiles
+        updateTiles();
 
         // Translation de Map
         mapPane.setLayoutX(mapPane.getLayoutX() + deltaPos.getX());
         mapPane.setLayoutY(mapPane.getLayoutY() + deltaPos.getY());
+
+//        double zoom = event.getDeltaY();
+//        double zoomFact = 1.1;
+//        if (zoom < 0) {
+//            zoomFact = 0.9;
+//        }
+//        mapZoom *= zoomFact;
+//
+//        mapPane.setScaleX(mapZoom);
+//        mapPane.setScaleY(mapZoom);
+    }
+
+    // Récupérer l'objet javafx qui définit la vue de la carte
+    public Pane getDrawing() {
+        return mapPane;
+    }
+
+    public void updateTiles() {
+        // Mise à jour de toutes les Tiles
+        for (Tile t : tiles) {
+            t.updateDrawing();
+        }
+    }
+
+    public void updateDrawings() {
+        for (Drawable d : elementsOnMap) {
+            d.updateDrawing();
+        }
+    }
+
+    public void attachDrawable(Drawable drawing) {
+        elementsOnMap.add(drawing);
     }
 }

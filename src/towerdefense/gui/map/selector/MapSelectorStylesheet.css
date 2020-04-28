@@ -2,6 +2,7 @@
 	-fx-border-width: 0;
 	-fx-background-color: #a6a6a6;
 	-fx-padding: 10;
+	-fx-cursor: hand;
 }
 
 .mapelement:hover {

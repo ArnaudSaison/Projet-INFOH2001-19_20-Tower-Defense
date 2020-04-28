@@ -6,8 +6,6 @@ public class PathFactory {
     private final Map map;
     private ArrayList<Path> paths;
 
-    private enum dir {TOP, BOTTOM, RIGHT, LEFT}
-
     public PathFactory(Map map) {
         this.map = map;
     }
@@ -19,27 +17,36 @@ public class PathFactory {
         // Initialisation de la récurrance avec le premier élément à analyser
         ArrayList<IntCoordinates> positions = new ArrayList<>();
         ArrayList<IntCoordinates> visited = new ArrayList<>();
+
         positions.add(gate.getPosition().getTileCoords());
         visited.add(gate.getPosition().getTileCoords());
 
         // recherche du bord de la carte
         ArrayList<Tile> adjacentTiles = getAdjacentTiles(positions.get(0));
         int index = adjacentTiles.indexOf(null); // la position dans la liste permet de déduire le côté
-        dir fromSide = dir.TOP;
+        PathTile.Connections fromSide;
         switch (index) {
             case 0:
-                fromSide = dir.TOP;
+                fromSide = PathTile.Connections.TOP;
                 break;
             case 1:
-                fromSide = dir.RIGHT;
+                fromSide = PathTile.Connections.RIGHT;
                 break;
             case 2:
-                fromSide = dir.BOTTOM;
+                fromSide = PathTile.Connections.BOTTOM;
                 break;
             case 3:
-                fromSide = dir.LEFT;
+                fromSide = PathTile.Connections.LEFT;
                 break;
+            default:
+                fromSide = PathTile.Connections.TOP;
         }
+        fromSide = getOppositeDir(fromSide);
+
+        ((PathTile) gate).reinitializeConnections();
+        ((PathTile) gate).setConnection(fromSide, true);
+        ((GatePathTile) gate).initArrow(fromSide);
+        ((PathTile) gate).updateConnection();
 
         // Initilisation de la recherche de chemin
         searchForPaths(positions, visited, positions.get(0), fromSide);
@@ -47,7 +54,7 @@ public class PathFactory {
         return paths;
     }
 
-    private void searchForPaths(ArrayList<IntCoordinates> positions, ArrayList<IntCoordinates> visited, IntCoordinates currentCoords, dir fromSide) {
+    private void searchForPaths(ArrayList<IntCoordinates> positions, ArrayList<IntCoordinates> visited, IntCoordinates currentCoords, PathTile.Connections fromSide) {
         ArrayList<Tile> adjacentTiles = getAdjacentTiles(currentCoords); // toutes les cases adjacentes à la case actuellement étudiée (qu'elles existent ou non)
 
         for (Tile probedTile : adjacentTiles) {
@@ -56,7 +63,13 @@ public class PathFactory {
                 IntCoordinates probedTileCoords = probedTile.getPosition().getTileCoords(); // Récupération des coordonnées de la case
 
                 if (!visited.contains(probedTileCoords)) { // Si la position n'appartient pas encore au chemin
-                    dir toSide = getToSideDir(currentCoords, probedTileCoords); // côté par lequel on va arriver dans cette case
+                    PathTile.Connections toSide = getToSideDir(currentCoords, probedTileCoords); // côté par lequel on va arriver dans cette case
+
+                    // Modification des cases pour qu'elle puissent graphiquement former les chemins
+                    ((PathTile) probedTile).setConnection(fromSide, true);
+                    ((PathTile) probedTile).setConnection(getOppositeDir(toSide), true);
+                    ((PathTile) probedTile).updateConnection();
+
                     ArrayList<IntCoordinates> resPositions = new ArrayList<>(positions); // nouvelle liste de position pour ne pas influencer les autres chemins possibles
                     ArrayList<IntCoordinates> resVisited = new ArrayList<>(visited);
 
@@ -68,6 +81,11 @@ public class PathFactory {
                     if (probedTile instanceof ExitPathTile) { // Si la case est une sortie
                         resPositions.add(probedTileCoords); // Ajouter la case de sortie
                         paths.add(new Path(resPositions)); // Comme il s'agit d'une sortie, on crée un chemin (condition de sortie de récurrence)
+
+                        for (IntCoordinates pt : visited) {
+                            map.getTile(pt.getX(), pt.getY()).updateDrawing();
+                        }
+
                     } else { // Sinon, la case était valide, mais pas une sortie, on va donc voir autour de celle-ci (récurrence)
                         searchForPaths(resPositions, resVisited, probedTileCoords, toSide); //
                     }
@@ -93,16 +111,37 @@ public class PathFactory {
         return adjacentTiles;
     }
 
-    private dir getToSideDir(IntCoordinates from, IntCoordinates to) {
-        dir res = dir.TOP;
+    private PathTile.Connections getToSideDir(IntCoordinates from, IntCoordinates to) {
+        PathTile.Connections res = PathTile.Connections.TOP;
         if (from.getX() == to.getX() && from.getY() < to.getY()) {
-            res = dir.TOP;
+            res = PathTile.Connections.TOP;
         } else if (from.getX() == to.getX() && from.getY() > to.getY()) {
-            res = dir.BOTTOM;
+            res = PathTile.Connections.BOTTOM;
         } else if (from.getX() < to.getX() && from.getY() == to.getY()) {
-            res = dir.LEFT;
+            res = PathTile.Connections.LEFT;
         } else if (from.getX() > to.getX() && from.getY() == to.getY()) {
-            res = dir.RIGHT;
+            res = PathTile.Connections.RIGHT;
+        }
+        return res;
+    }
+
+    private PathTile.Connections getOppositeDir(PathTile.Connections dir) {
+        PathTile.Connections res;
+        switch (dir) {
+            case TOP:
+                res = PathTile.Connections.BOTTOM;
+                break;
+            case BOTTOM:
+                res = PathTile.Connections.TOP;
+                break;
+            case LEFT:
+                res = PathTile.Connections.RIGHT;
+                break;
+            case RIGHT:
+                res = PathTile.Connections.LEFT;
+                break;
+            default:
+                res = PathTile.Connections.BOTTOM;
         }
         return res;
     }

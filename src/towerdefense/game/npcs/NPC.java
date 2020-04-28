@@ -1,5 +1,7 @@
 package towerdefense.game.npcs;
 
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
 import towerdefense.game.interfaces.Drawable;
 import towerdefense.game.interfaces.Lootable;
 import towerdefense.game.interfaces.Movable;
@@ -14,6 +16,10 @@ public abstract class NPC implements Lootable, Drawable, Movable {
     protected float speed;
     //protected ArrayList<Weapon> inventaire ; (optionnel)
 
+    private StackPane shape;
+    private StackPane healthBarShape;
+    private Image image;
+
     //NOTE: les valeurs mises ici le sont à titre d'exemple, à modifier si besoin.
 
     public NPC (Map map, int health, int goldloot, int speed){ // TODO: ajouter référence au gameModel
@@ -21,6 +27,11 @@ public abstract class NPC implements Lootable, Drawable, Movable {
         this.health = health;
         this.goldLoot = goldloot;
         this.speed = speed;
+
+        // JavaFX
+        shape = new StackPane();
+        healthBarShape = new StackPane();
+        shape.getChildren().add();
     }
 
     //******Getteurs******
@@ -61,12 +72,15 @@ public abstract class NPC implements Lootable, Drawable, Movable {
     }
 
     //*******Autres*******
-    public void updateDrawing(){}
-
     public String toString(){
         return "NPC :\n - position: " + position + "\n" +
                 "- health: " + health + "\n"+
                 "- goldLoot: " + goldLoot + "\n"+
                 "- speed: " + speed + ".";
+    }
+
+    // ========== Représentation JavaFX ==========
+    public void updateDrawing() {
+
     }
 }

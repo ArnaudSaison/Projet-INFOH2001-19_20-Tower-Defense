@@ -2,6 +2,9 @@ package towerdefense.game.map;
 
 import javafx.scene.Node;
 import javafx.scene.image.ImageView;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.Region;
+import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 import towerdefense.gui.listeners.TileClickedListener;
@@ -11,15 +14,21 @@ import java.util.ArrayList;
 public class Tile {
     // /!\ La position de la case est stockée sous forme de mètres et donne la position de son coin supérieur gauche
     private Position tilePosition; // stocke la position du coin supérieur gauche de la case
+    private StackPane tileShapeContainer;
     private Rectangle tileShape;
-    private Map map;
+    protected Map map;
 
     protected boolean isBlocked;
 
     //***** Contructeur *****
     public Tile(int x, int y, double tileMetricWidth) {
         tilePosition = new Position(x, y, tileMetricWidth);
+
+        tileShapeContainer = new StackPane();
         tileShape = new Rectangle();
+
+        tileShapeContainer.getChildren().add(tileShape);
+
         tileShape.getStyleClass().addAll("tile");
         tileShape.setOnMouseClicked(new TileClickedListener(this));
     }
@@ -45,7 +54,11 @@ public class Tile {
     }
 
     // Forme javafx associée
-    public Node getTileShape() {
+    public Node getTileShapeContainer() {
+        return tileShapeContainer;
+    }
+
+    public Node getTileShape(){
         return tileShape;
     }
 
@@ -59,11 +72,11 @@ public class Tile {
     }
 
     //***** Représentation de la case par un élément javafx *****
-    public void update() {
+    public void updateDrawing() {
         double correctionAdd = 0;
 
-        tileShape.setX(tilePosition.getPixelX());
-        tileShape.setY(tilePosition.getPixelY());
+        tileShapeContainer.setLayoutX(tilePosition.getPixelX());
+        tileShapeContainer.setLayoutY(tilePosition.getPixelY());
         tileShape.setHeight(map.getTileMetricWidth() * map.getPixelsPerMeter() + correctionAdd);
         tileShape.setWidth(map.getTileMetricWidth() * map.getPixelsPerMeter() + correctionAdd);
     }

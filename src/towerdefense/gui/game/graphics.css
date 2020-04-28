@@ -25,11 +25,11 @@
 ########################################*/
 .empty-tile {
 -fx-fill: #33cc33;
--fx-background-color: #33cc33;
 }
 
 .obstacle-tile {
--fx-fill: #666666;
+/*-fx-fill: #666666;*/
+-fx-fill: #33cc33;
 }
 
 .path-tile {

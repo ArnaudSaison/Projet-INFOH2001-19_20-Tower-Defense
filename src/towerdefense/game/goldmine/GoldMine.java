@@ -1,10 +1,20 @@
 package towerdefense.game.goldmine;
 
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.shape.Rectangle;
+import towerdefense.Config;
 import towerdefense.game.interfaces.*;
 import towerdefense.game.map.Map;
 import towerdefense.game.map.Position;
+import towerdefense.game.model.GameModel;
+
+import java.io.InputStream;
 
 public class GoldMine implements ProducesGold, Buyable, Upgradable, Placeable, Drawable {
+    private GameModel game;
     private Position position;
     private int level;
     private int price;
@@ -12,13 +22,13 @@ public class GoldMine implements ProducesGold, Buyable, Upgradable, Placeable, D
     private int productionRate;
     private int goldStorage;
     private int maxGoldStorage;
-    static int maxLevel;
-
+    private static int maxLevel;
 
     //NOTE: les valeurs mises ici le sont à titre d'exemple, à modifier si besoin.
 
-    public GoldMine(Map map) {
-        Position position = new Position(map);
+    public GoldMine(GameModel game, Position position) {
+        this.game = game;
+        this.position = position;
         level = 1;
         price = 200;
         priceIncrement = 5*level;
@@ -27,7 +37,6 @@ public class GoldMine implements ProducesGold, Buyable, Upgradable, Placeable, D
         maxGoldStorage = 200;
         maxLevel = 5;
     }
-
 
     //******Increasers*******
 
@@ -103,9 +112,6 @@ public class GoldMine implements ProducesGold, Buyable, Upgradable, Placeable, D
     }
 
     //******Autres*******
-
-    public void updateDrawing(){}//TODO : implémenter la représentation en JavaFX.
-
     public Position getPos(){
         return position;
     }
@@ -117,5 +123,27 @@ public class GoldMine implements ProducesGold, Buyable, Upgradable, Placeable, D
                 "- goldStorage: " + goldStorage + "\n"+
                 "- productionRate: " + productionRate + "\n"+
                 "- price: " + price + ".";
+    }
+
+    // ========== JavaFX ==========
+    private StackPane drawing;
+    private Image image;
+    private ImageView imageView;
+    private Pane fillIndicator;
+    private Rectangle fillIndicatorBackground;
+    private Rectangle fillIndicatorBar;
+
+    public void initializeDrawing(){
+        drawing = new StackPane();
+        image = new Image(game.getConfig().getGoldMineImageURL());
+
+    }
+
+    public StackPane getDrawing(){
+        return drawing;
+    }
+
+    public void updateDrawing(){
+
     }
 }

@@ -6,7 +6,6 @@ import java.util.Properties;
 
 public class MapFactory {
     public Map getMap(String mapFilePath) throws IOException {
-
         // Lecture des propriétés de la carte
         final Properties mapProperties = new Properties();
         InputStream mapPropertiesFile = new FileInputStream(mapFilePath + "/map.properties");

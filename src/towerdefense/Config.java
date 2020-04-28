@@ -17,6 +17,7 @@ public class Config {
     private int goldminesCost;
     private int wavesTimeBeforeFirstWave;
     private int wavesNewEnemiesPerWave;
+    private String arrowGatePathTileImageURL;
 
     //
 
@@ -30,11 +31,16 @@ public class Config {
         settings = new Properties();
         settings.load(new FileInputStream(filePath));
 
+        // Affichage
         screenWidth = Integer.parseInt(settings.getProperty("screenWidth"));
         screenHeight = Integer.parseInt(settings.getProperty("screenHeight"));
         frameRate = Integer.parseInt(settings.getProperty("frameRate"));
         zoomFact = Double.parseDouble(settings.getProperty("zoomFact"));
 
+        // Cases
+        arrowGatePathTileImageURL = settings.getProperty("arrowGatePathTileImageURL");
+
+        // Miens d'or
         goldminesProductionRate = Integer.parseInt(settings.getProperty("goldminesProductionRate"));
         goldminesCost = Integer.parseInt(settings.getProperty("goldminesCost"));
     }
@@ -70,5 +76,9 @@ public class Config {
 
     public int getWavesNewEnemiesPerWave() {
         return wavesNewEnemiesPerWave;
+    }
+
+    public String getArrowGatePathTileImageURL() {
+        return arrowGatePathTileImageURL;
     }
 }
