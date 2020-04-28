@@ -6,14 +6,21 @@ import towerdefense.game.interfaces.Drawable;
 import towerdefense.game.interfaces.Lootable;
 import towerdefense.game.interfaces.Movable;
 import towerdefense.game.map.Map;
+import towerdefense.game.Drawable;
+import towerdefense.game.Movable;
 import towerdefense.game.map.Position;
 import towerdefense.game.model.GameModel;
+import towerdefense.game.projectiles.Bullet;
+import towerdefense.game.projectiles.Glue;
+import towerdefense.game.projectiles.Shell;
 
-public abstract class NPC implements Lootable, Drawable, Movable {
+public abstract class NPC implements Drawable, Movable, Runnable {
     protected Position position;
     protected int health;
     protected int goldLoot;
-    protected float speed;
+    protected int speed;
+    protected GameModel gameModel;
+    protected Thread tNPC;
     //protected ArrayList<Weapon> inventaire ; (optionnel)
 
     private StackPane shape;
@@ -44,36 +51,62 @@ public abstract class NPC implements Lootable, Drawable, Movable {
 
     public float getSpeed(){return speed;}
 
-    public abstract String getType(); // TODO: utiliser une récupération d'instance
+    //********Setteur*********
 
-    //******Déplacement*******
+    public void setGameModel(GameModel gameModel){this.gameModel = gameModel;}
 
+    //******Gestion des attaques*******
+    public void hit(Shell shell){
+        explode(shell);
+    }
 
+    public void hit(Glue glue){
+        stick(glue);
+    }
 
-    ///TODO : pathfinding
+    public void hit(Bullet bullet){
+        injure(bullet);
+    }
 
-    public void move(){}
+    //*******Gestion des dégâts*********
 
-    public void glued(){
-        speed = speed/4; // TODO: if pour vérifier su glueresistant
-    } // TODO: utiliser verbe + utiliser arguments
+    public abstract void stick(Glue glue);
 
-    //*******Gestion de la vie******
-    // TODO: rajouter méthode hit car la tour ne sait pas ce qui va arriver au NPC
-    public String decreaseHealth(int damage){
-        String res = "alive"; // TODO: utiliser boolean
+    public abstract void explode(Shell shell);
+
+    public abstract void injure(Bullet bullet);
+
+    public void decreaseHealth(int damage){
         if (health <= 0) {
-            res = "is dead";
-            gemaModel.killNPC(this);
+            gameModel.killNPC(this);
         } else {
             health -= damage;
         }
         return res;
     }
 
+    //******Déplacement*******
+    @Override
+    public void move(){}
+
     //*******Autres*******
+    @Override
+    public void run(){
+        try {
+            while(true){
+                move();
+                Thread.sleep(speed);
+                System.out.println(toString());
+            }
+        }catch (Exception e){};
+    }
+
+    @Override
+    public void updateDrawing(){}
+
+    @Override
     public String toString(){
-        return "NPC :\n - position: " + position + "\n" +
+        return "- position: " + position + "\n" +
                 "- health: " + health + "\n"+
                 "- goldLoot: " + goldLoot + "\n"+
                 "- speed: " + speed + ".";
