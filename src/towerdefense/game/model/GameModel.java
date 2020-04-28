@@ -13,7 +13,9 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class GameModel implements Runnable {
-    //****** Attributs ******
+    /* *****************************************************************************************************************
+                                                      ATTRIBUTS
+    ***************************************************************************************************************** */
 
     //Joueur
     private Player player;
@@ -51,11 +53,14 @@ public class GameModel implements Runnable {
     //Thread
     private Thread tGameModel;
 
-    //****** Initialisations ******
+    /* *****************************************************************************************************************
+                                                      INITIALISATION
+    ***************************************************************************************************************** */
     public GameModel(MainApplication mainApplication) {
-        // Initialisation joueur
+        // Initialisation joueur:
         Player player = new Player();
-        // Initialisation des attributs
+
+        // Initialisation des attributs:
         isGameRunning = false;
         score = 0;
         initHealth = 2000;
@@ -63,11 +68,11 @@ public class GameModel implements Runnable {
         level = 1;
         round = 1;
 
-        // Initialisation des listes
+        // Initialisation des listes:
         ArrayList<NPC> NPCs = new ArrayList<NPC>();
         ArrayList<GoldMine> goldMines = new ArrayList<GoldMine>();
 
-        // Initialisation des observeurs
+        // Initialisation des observeurs:
         ArrayList<Tower> towers = new ArrayList<Tower>();
         ArrayList<Drawable.Lootable> lootables = new ArrayList<Drawable.Lootable>();
         ArrayList<Placeable> placeables = new ArrayList<Placeable>();
@@ -76,15 +81,14 @@ public class GameModel implements Runnable {
         ArrayList<ProducesGold> producesGolds = new ArrayList<ProducesGold>();
         ArrayList<Movable> movables = new ArrayList<Movable>();
 
-        // Initialisation d'un objet NPC factory
+        // Initialisation d'un objet NPC factory:
         NPCFactory npcFactory = new NPCFactory();
 
-        // Initialisation de la map
+        // Initialisation de la map:
         initializeMap();
 
         // initialisation d'un objet Shop
         Shop shop = new Shop();
-        //shop.getInstance(Shop.Type.CANON_TOWER, );
 
     }
 
@@ -106,6 +110,10 @@ public class GameModel implements Runnable {
 
     /** Démarre le thread du jeu dans lequel vont être démarrés tous les autres threads
     * */
+
+    /* *****************************************************************************************************************
+                                                      GESTION DU THREAD
+    ***************************************************************************************************************** */
     public void initializeLevel(){
         //========== Autres initilisations ==========
 
@@ -113,21 +121,29 @@ public class GameModel implements Runnable {
         //========== Lancement du thread ==========
         tGameModel = new Thread(this);
         tGameModel.start();
+        isGameRunning = true;
 
     }
 
     public void run(){
-        for (Movable movable : movables){
-            movable.move(); // TODO: séparer en plein de treads, car ennemis ne dépenent pas les uns des autres pour se déplacer
-        }
+        try{
+            while(isGameRunning){
+                for (Movable movable : movables){
+                    movable.move();
+                }
+            }
+        }catch (Exception e){System.out.println("Le jeu est en pause.");}
     }
+
 
 
     public void killNPC(NPC NPCToKill){
         NPCs.remove(NPCToKill);
     }
 
-    //****** Getteurs & setteurs ******
+    /* *****************************************************************************************************************
+                                                      GET/SET
+    ***************************************************************************************************************** */
 
     public boolean getIsGameRunning() {
         return isGameRunning;

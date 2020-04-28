@@ -90,7 +90,7 @@ public class GoldMine implements ProducesGold, Buyable, Upgradable, Placeable, D
                 Thread.sleep(productionRate);
                 System.out.println(toString());
             }
-        }catch (Exception e){};
+        }catch (Exception e){}
     }
 
     public void updateDrawing(){}//TODO : implémenter la représentation en JavaFX.
