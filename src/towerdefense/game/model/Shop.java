@@ -1,7 +1,7 @@
 package towerdefense.game.model;
 
 import towerdefense.game.goldmine.GoldMine;
-import towerdefense.game.interfaces.Buyable;
+import towerdefense.game.Buyable;
 import towerdefense.game.map.Map;
 import towerdefense.game.towers.GenericTower;
 import towerdefense.game.towers.CanonTower;

@@ -14,7 +14,7 @@ public class TileClickedListener implements EventHandler<MouseEvent> {
     @Override
     public void handle(MouseEvent mouseEvent) {
         if (mouseEvent.getEventType() == MouseEvent.MOUSE_CLICKED) {
-//            System.out.println(tile);
+            System.out.println(tile);
         }
     }
 }

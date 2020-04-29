@@ -107,8 +107,6 @@ public class GoldMine implements ProducesGold, Buyable, Upgradable, Placeable, D
         }catch (Exception e){}
     }
 
-    public void updateDrawing(){}//TODO : implémenter la représentation en JavaFX.
-
     public Position getPos(){
         return position;
     }
