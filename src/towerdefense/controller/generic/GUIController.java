@@ -1,4 +1,4 @@
-package towerdefense.gui.generic;
+package towerdefense.controller.generic;
 
 import towerdefense.MainApplication;
 

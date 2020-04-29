@@ -1,13 +1,25 @@
 package towerdefense.game.map;
 
-import javafx.scene.paint.Color;
+import towerdefense.view.EmptyTileView;
 
+/**
+ * Case vide de la carte (herbe) où les monstres ne peuvent pas se déplacer, mais où on peut construrie
+ */
 public class EmptyTile extends Tile {
 
-    // ***** Constructeur *****
-    public EmptyTile(int x, int y, double tileMetricWidth){
+    // ==================== Initilisation ====================
+    public EmptyTile(int x, int y, double tileMetricWidth) {
         super(x, y, tileMetricWidth);
-        this.getTileShape().getStyleClass().addAll("empty-tile", "can-be-built-on");
         isBlocked = false;
+    }
+
+    //==================== Interface Drawable ====================
+
+    /**
+     * Initilisation de la vue correpsondant à une case
+     */
+    @Override
+    public void initDrawing() {
+        tileView = new EmptyTileView(map, this);
     }
 }

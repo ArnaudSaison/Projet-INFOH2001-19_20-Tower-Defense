@@ -1,4 +1,4 @@
-package towerdefense.gui.confirmwindow;
+package towerdefense.controller.confirmwindow;
 
 import javafx.event.EventHandler;
 import javafx.geometry.Insets;
@@ -68,7 +68,7 @@ public class ConfirmWindow {
         mainPane.setAlignment(Pos.CENTER);
 
         Scene scene = new Scene(mainPane);
-        scene.getStylesheets().add("towerdefense/gui/confirmwindow/ConfirmWindowStylesheet.css");
+        scene.getStylesheets().add("towerdefense/controller/confirmwindow/ConfirmWindowStylesheet.css");
 
         message.getStyleClass().add("message");
         yesButton.getStyleClass().add("yes");

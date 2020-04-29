@@ -1,4 +1,4 @@
-package towerdefense.gui.listeners;
+package towerdefense.controller.listeners;
 
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;

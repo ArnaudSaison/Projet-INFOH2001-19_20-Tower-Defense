@@ -59,6 +59,10 @@ public class MapFactory {
     }
 
     private void saveMap(Map map) {
-        System.out.println("Not implemented"); //TODO: implémenter la méthode saveMap pour l'éditeur de map
+        System.out.println("Not implemented");
+        //TODO: implémenter la méthode saveMap pour l'éditeur de map
+        /* Pour l'éditeur :
+         * - Créer un fichier texte ne coomprtant que des cases vides,
+         * - le passer dans le getMap*/
     }
 }
