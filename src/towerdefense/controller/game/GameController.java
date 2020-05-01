@@ -125,9 +125,6 @@ public class GameController implements Initializable, GUIController {
 
     @FXML
     public void handleResetViewButton(MouseEvent event) {
-        mapView.setLayoutX(0);
-        mapView.setLayoutY(0);
-        map.resetPixelsPerMeter();
-        map.updateDrawing();
+        mapView.resetZoom();
     }
 }

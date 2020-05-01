@@ -104,13 +104,10 @@ public abstract class TileView extends StackPane implements Printable {
      * Méthode permettant de déplacer la réprésentation à l'endroit où l'objet se trouve dans le modèle
      */
     public void update() {
-        double correctionAdd = 0.7; // permet de compenser l'erreur d'arrondi créant les fins liserets blancs
+        double correctionAdd = 0; // permet de compenser l'erreur d'arrondi créant les fins liserets blancs
 
         double width = map.getTileMetricWidth() * map.getPixelsPerMeter() + correctionAdd;
         double height = map.getTileMetricWidth() * map.getPixelsPerMeter() + correctionAdd;
-
-        this.setLayoutX(tile.getPosition().getPixelX());
-        this.setLayoutY(tile.getPosition().getPixelY());
 
         tileShape.setHeight(height);
         tileShape.setWidth(width);

@@ -1,10 +1,12 @@
 package towerdefense.view;
 
 import javafx.geometry.Point3D;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
+import javafx.scene.layout.TilePane;
 import towerdefense.game.Drawable;
 import towerdefense.game.map.*;
 
@@ -15,7 +17,7 @@ import java.util.ArrayList;
  * Est composée d'une série de Panes représentant les cases
  * Peuvent ensuite venir s'ajouter tous les autres éléments qui doievnt pouvoir être représentés sur la carte
  */
-public class MapView extends Pane implements Printable {
+public class MapView extends TilePane implements Printable {
     // ==================== Attributs ====================
     private Map map; // Référence à la carte du modèle
 
@@ -32,6 +34,8 @@ public class MapView extends Pane implements Printable {
      * puis initialise la représentatin graphique de chaque case, l'ajoute à la carte et la met à jour
      */
     public MapView(Map map) {
+        super();
+
         // Initialisation des attributs
         this.map = map;
 
@@ -44,6 +48,14 @@ public class MapView extends Pane implements Printable {
             this.getChildren().add((Node) t.getDrawing());
             t.updateDrawing();
         }
+
+        setTileAlignment(Pos.CENTER);
+        setHgap(0);
+        setVgap(0);
+//        setWidth(map.getMapTileSizeX() * map.getTileMetricWidth() * map.getPixelsPerMeter());
+//        setHeight(map.getMapTileSizeY() * map.getTileMetricWidth() * map.getPixelsPerMeter());
+        setPrefRows(map.getMapTileSizeX());
+        setPrefColumns(map.getMapTileSizeY());
     }
 
     // ==================== Fonctionnement ====================
@@ -52,44 +64,22 @@ public class MapView extends Pane implements Printable {
      * Méthode qui gère le zoom de la carte
      */
     public void updateZoomLevel(ScrollEvent event) {
-        double pixelsPerMeter = map.getPixelsPerMeter();
+        double zoomFact = 0.08;
+        double deltaScale = 1 + (event.getDeltaY() / Math.abs(event.getDeltaY()) * zoomFact);
+        double newScale = getScaleX() * deltaScale;
+        System.out.println(newScale);
 
-        double zoomFact = 0.2; // facteur multiplicatif du déplacement de la molette de la souris
-        double zoomExp = 2; // facteur qui détermine combien le zoom est exponentiel
-        double minPixelsPerMeter = 1;
-        double maxPixelsPerMeter = 300;
-
-        // zoom mesuré par le ScrollEvent
-        double zoom = event.getDeltaY();
-        double deltaPPM = zoom * zoomFact;
-//        double deltaPPM = zoom * Math.pow(zoomFact, map.getSettingsPixelsPerMeter() / map.getPixelsPerMeter() * 2);
-        double oldPPM = pixelsPerMeter;
-
-        // Vérification de la validité du zoom et la cas échéant, mise à la valeur par défaut
-        if (pixelsPerMeter + deltaPPM < minPixelsPerMeter) {
-            deltaPPM = minPixelsPerMeter - pixelsPerMeter;
-        } else if (pixelsPerMeter + deltaPPM > maxPixelsPerMeter) {
-            deltaPPM = maxPixelsPerMeter - pixelsPerMeter;
+        if (newScale > 0.01 && newScale < 10) {
+            this.setScaleX(newScale);
+            this.setScaleY(newScale);
         }
+    }
 
-        // Calcul de la nouvelle échelle
-        map.setPixelsPerMeter(pixelsPerMeter + deltaPPM);
-
-        // origine
-        double x0 = this.getLayoutX();
-        double y0 = this.getLayoutY();
-
-        // position de la souris par rapport à l'origine
-        Position pos1 = new Position(event.getX() - x0, event.getY() - y0, map);
-        // Changement de position après le zoom
-        Position deltaPos = pos1.getMultiplied((-1) * deltaPPM / oldPPM);
-
-        // Mise à jour des tiles
-        updateTiles();
-
-        // Translation de Map
-        this.setLayoutX(this.getLayoutX() + deltaPos.getX());
-        this.setLayoutY(this.getLayoutY() + deltaPos.getY());
+    public void resetZoom() {
+        this.setScaleX(1);
+        this.setScaleY(1);
+        setLayoutX(0);
+        setLayoutY(0);
     }
 
     // ==================== Interface Printable ====================
