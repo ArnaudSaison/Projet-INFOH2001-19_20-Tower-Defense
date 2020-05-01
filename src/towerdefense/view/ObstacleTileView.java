@@ -13,35 +13,55 @@ import java.io.InputStream;
  */
 public class ObstacleTileView extends TileView {
     // ==================== Attributs ====================
-    private double zoomFact = 1; // zoom de l'élément rajouté sur la case
+    private double osbtacleZoomFact = 1; // zoom de l'élément rajouté sur la case
     private ImageView imageView; // conteneur élément rajouté
+
+    public enum ObstacleType {TREE, ROCK}
 
     // ==================== Initialisation ====================
 
     /**
      * Constructeur de la classe permettant de rajouter des éléments à la représentation
      */
-    public ObstacleTileView(Map map, Tile tile) {
+    public ObstacleTileView(Map map, Tile tile, ObstacleType type) {
         super(map, tile); // Appel au constructeur de TileView
-        this.getTileShape().getStyleClass().addAll("obstacle-tile", "cannot-be-built-on");
-        initObstacle();
+        getTileShape().getStyleClass().addAll("obstacle-tile-shape");
+
+        initTexture("grass.png", getRandomRotation(0, 3, 90), 1, 1);
+        initObstacle(type);
+        initHoverIndicator(false);
     }
 
     /**
      * Méthode permettant d'initialiser l'élément rajouté dans la case
+     * L'utilisation d'un enum permet de très simplement rajouter des types d'obstacles
+     * et de naturellement empêcher toute erreur qu'un argument de type String pourrait causer
      */
-    public void initObstacle() {
-        InputStream input = this.getClass().getResourceAsStream("../../resources/graphics/tree.png");
+    public void initObstacle(ObstacleType type) {
+        String fileName;
+        switch (type) {
+            case ROCK:
+                fileName = "rock";
+                osbtacleZoomFact = 3.0/4.0;
+                break;
+            default:
+            case TREE:
+                fileName = "tree";
+                osbtacleZoomFact = 1.0;
+                break;
+        }
+
+        InputStream input = this.getClass().getResourceAsStream("../../resources/graphics/obstacles/" + fileName + ".png");
         Image image = new Image(input, 100, 100, true, false);
         imageView = new ImageView();
 
         imageView.setImage(image);
-        imageView.setFitWidth(map.getTileMetricWidth() * zoomFact * map.getPixelsPerMeter());
+        imageView.setFitWidth(map.getTileMetricWidth() * osbtacleZoomFact * map.getPixelsPerMeter());
         imageView.setPreserveRatio(true); // Empêche la déformation
         imageView.setSmooth(false); // Diminue le lissage
         imageView.setCache(true);
 
-        this.getChildren().add(imageView); // Ajout de l'élément à la représentation de case
+        getChildren().add(imageView); // Ajout de l'élément à la représentation de case
         setAlignment(imageView, Pos.CENTER); // Aligement au centre
     }
 
@@ -52,6 +72,6 @@ public class ObstacleTileView extends TileView {
      */
     public void update() {
         super.update();
-        imageView.setFitWidth(map.getTileMetricWidth() * zoomFact * map.getPixelsPerMeter());
+        imageView.setFitWidth(map.getTileMetricWidth() * osbtacleZoomFact * map.getPixelsPerMeter());
     }
 }

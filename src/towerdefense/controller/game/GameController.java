@@ -2,14 +2,12 @@ package towerdefense.controller.game;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
 import javafx.scene.Node;
 import javafx.scene.control.Button;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
-import javafx.scene.layout.VBox;
+import javafx.scene.layout.*;
 import javafx.scene.text.Text;
 import towerdefense.MainApplication;
 import towerdefense.game.map.Map;
@@ -55,7 +53,7 @@ public class GameController implements Initializable, GUIController {
     // Attributs nécessaires à la liaison avec le modèle
     private MapFactory mapFactory;
     private Map map;
-    private MapView mapPane;
+    private MapView mapView;
 
     private double deltaXDrag;
     private double deltaYDrag;
@@ -81,13 +79,13 @@ public class GameController implements Initializable, GUIController {
         try {
             map = mapFactory.getMap(mapPath);
             map.initDrawing(); // initialisation de toutes les raprésentations graphiques
-            mapPane = (MapView) map.getDrawing(); // Ce casting est parmis par déifnition du MCV parttern
-            mapPane.getStylesheets().add(graphicsPath);
+            mapView = (MapView) map.getDrawing(); // Ce casting est parmis par déifnition du MCV parttern
+            mapView.getStylesheets().add(graphicsPath);
         } catch (IOException exception) {
             exception.printStackTrace();
         }
 
-        mapPlaceHolder.getChildren().add(0, mapPane);
+        mapPlaceHolder.getChildren().add(0, mapView);
     }
 
     //***** Gestion des éléments FXML *****
@@ -105,30 +103,30 @@ public class GameController implements Initializable, GUIController {
 
     @FXML
     public void handleZoomScroll(ScrollEvent event) {
-        mapPane.updateZoomLevel(event);
+        mapView.updateZoomLevel(event);
     }
 
     // Gestion du déplacement de la carte
     @FXML
     public void handleMousePressedDelta(MouseEvent event) {
         if (event.isSecondaryButtonDown()) {
-            deltaXDrag = mapPane.getLayoutX() - event.getX();
-            deltaYDrag = mapPane.getLayoutY() - event.getY();
+            deltaXDrag = mapView.getLayoutX() - event.getX();
+            deltaYDrag = mapView.getLayoutY() - event.getY();
         }
     }
 
     @FXML
     public void handleMouseDraggedMap(MouseEvent event) {
         if (event.isSecondaryButtonDown()) {
-            mapPane.setLayoutX(event.getX() + deltaXDrag);
-            mapPane.setLayoutY(event.getY() + deltaYDrag);
+            mapView.setLayoutX(event.getX() + deltaXDrag);
+            mapView.setLayoutY(event.getY() + deltaYDrag);
         }
     }
 
     @FXML
     public void handleResetViewButton(MouseEvent event) {
-        mapPane.setLayoutX(0);
-        mapPane.setLayoutY(0);
+        mapView.setLayoutX(0);
+        mapView.setLayoutY(0);
         map.resetPixelsPerMeter();
         map.updateDrawing();
     }

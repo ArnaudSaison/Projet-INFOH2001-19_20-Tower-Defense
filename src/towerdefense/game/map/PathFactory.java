@@ -44,10 +44,12 @@ public class PathFactory {
                     PathTile.Connections toSide = getToSideDir(currentCoords, probedTileCoords); // côté par lequel on va arriver dans cette case
 
                     // Modification des cases pour qu'elle puissent graphiquement former les chemins
-                    ((PathTile) probedTile).addConnection(fromSide);
-                    ((PathTile) probedTile).addConnection(getOppositeDir(toSide));
+                    PathTile currentTile = (PathTile)map.getTile(currentCoords.getX(), currentCoords.getY());
+                    currentTile.addConnection(getOppositeDir(toSide));
+                    currentTile.addConnection(getOppositeDir(fromSide));
 
-                    ArrayList<IntCoordinates> resPositions = new ArrayList<>(positions); // nouvelle liste de position pour ne pas influencer les autres chemins possibles
+                    // nouvelle liste de position pour ne pas influencer les autres chemins possibles
+                    ArrayList<IntCoordinates> resPositions = new ArrayList<>(positions);
                     ArrayList<IntCoordinates> resVisited = new ArrayList<>(visited);
 
                     resVisited.add(probedTileCoords); // on marque la case comme visitée
@@ -60,11 +62,11 @@ public class PathFactory {
                         paths.add(new Path(resPositions)); // Comme il s'agit d'une sortie, on crée un chemin (condition de sortie de récurrence)
 
                         // Ajout de la connection vers le bord de la map
-                        toSide = getMapSide(probedTileCoords);
-                        ((PathTile) probedTile).addConnection(getOppositeDir(toSide));
+                        ((PathTile) probedTile).addConnection(toSide);
+                        ((PathTile) probedTile).addConnection(getMapSide(probedTileCoords));
 
                     } else { // Sinon, la case était valide, mais pas une sortie, on va donc voir autour de celle-ci (récurrence)
-                        searchForPaths(resPositions, resVisited, probedTileCoords, toSide); //
+                        searchForPaths(resPositions, resVisited, probedTileCoords, getOppositeDir(toSide)); //
                     }
                 }
             } else {
@@ -98,7 +100,7 @@ public class PathFactory {
                 fromSide = PathTile.Connections.TOP;
         }
 
-        return getOppositeDir(fromSide);
+        return fromSide;
     }
 
     private ArrayList<Tile> getAdjacentTiles(IntCoordinates tileCoords) {

@@ -30,7 +30,7 @@
                      <children>
                         <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../../../resources/graphics/bank.png" />
+                              <Image url="@../../../resources/graphics/UI/round.png" />
                            </image>
                         </ImageView>
                         <Text fx:id="gameRoundInfoBarText" strokeType="OUTSIDE" strokeWidth="0.0" text="Round 1" HBox.hgrow="ALWAYS">
@@ -50,7 +50,7 @@
                      <children>
                         <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../../../resources/graphics/heart.png" />
+                              <Image url="@../../../resources/graphics/UI/heart.png" />
                            </image></ImageView>
                         <Text fx:id="gameHealthInfoBarText" strokeType="OUTSIDE" strokeWidth="0.0" text="654/1000" HBox.hgrow="ALWAYS">
                            <font>
@@ -65,7 +65,7 @@
                      <children>
                         <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../../../resources/graphics/bank.png" />
+                              <Image url="@../../../resources/graphics/UI/bank.png" />
                            </image>
                         </ImageView>
                         <Text fx:id="gameGoldInfoBarText" strokeType="OUTSIDE" strokeWidth="0.0" text="200" HBox.hgrow="ALWAYS">
@@ -86,7 +86,7 @@
                      <graphic>
                         <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
                            <image>
-                              <Image url="@../../../resources/graphics/bank.png" />
+                              <Image url="@../../../resources/graphics/UI/reset.png" />
                            </image>
                         </ImageView>
                      </graphic>
@@ -118,7 +118,7 @@
                <graphic>
                   <ImageView fitHeight="17.0" fitWidth="17.0" pickOnBounds="true" preserveRatio="true">
                      <image>
-                        <Image url="@../../../resources/graphics/pause.png" />
+                        <Image url="@../../../resources/graphics/UI/pause.png" />
                      </image>
                      <viewport>
                         <Rectangle2D />

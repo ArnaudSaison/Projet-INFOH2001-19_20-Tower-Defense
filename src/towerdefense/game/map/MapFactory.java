@@ -1,5 +1,7 @@
 package towerdefense.game.map;
 
+import towerdefense.view.ObstacleTileView;
+
 import java.io.*;
 import java.util.ArrayList;
 import java.util.Properties;
@@ -32,8 +34,14 @@ public class MapFactory {
                     case 'X': // vide
                         tiles.add((Tile) new EmptyTile(columnCounter, rowCounter, tileMetricWidth));
                         break;
-                    case 'O': // obstacle
-                        tiles.add((Tile) new ObstacleTile(columnCounter, rowCounter, tileMetricWidth));
+                    case 'O': // obstacle : type par défaut (arbre)
+                        tiles.add((Tile) new ObstacleTile(columnCounter, rowCounter, tileMetricWidth, ObstacleTileView.ObstacleType.TREE));
+                        break;
+                    case 'T': // obstacle : arbre
+                        tiles.add((Tile) new ObstacleTile(columnCounter, rowCounter, tileMetricWidth, ObstacleTileView.ObstacleType.TREE));
+                        break;
+                    case 'R': // obstacle : rock
+                        tiles.add((Tile) new ObstacleTile(columnCounter, rowCounter, tileMetricWidth, ObstacleTileView.ObstacleType.ROCK));
                         break;
                     case 'P': // chemin
                         tiles.add((Tile) new PathTile(columnCounter, rowCounter, tileMetricWidth));

@@ -14,7 +14,7 @@ import java.io.InputStream;
  */
 public class ExitPathTileView extends PathTileView {
     // ==================== Attributs ====================
-    private double zoomFact = 1.0 / 2.0;
+    private double arrowZoomFact = 1.0 / 2.0;
     private ImageView imageView; // conteneur élément rajouté
 
     // ==================== Initialisation ====================
@@ -22,9 +22,8 @@ public class ExitPathTileView extends PathTileView {
     /**
      * Constructeur de la classe
      */
-    public ExitPathTileView(Map map, Tile tile, PathTile.Connections connection) {
+    public ExitPathTileView(Map map, PathTile tile, PathTile.Connections connection) {
         super(map, tile); // Appel au constructeur de TileView
-        this.getTileShape().getStyleClass().addAll("path-tile", "cannot-be-built-on");
         initArrow(connection);
     }
 
@@ -34,18 +33,20 @@ public class ExitPathTileView extends PathTileView {
     public void initArrow(PathTile.Connections connection) {
         // Chargement de l'image
         InputStream input = this.getClass().getResourceAsStream("../../resources/graphics/arrow.png");
-        Image image = new Image(input, 100, 100, true, false);
+        Image image = new Image(input, 14, 22, true, false);
         imageView = new ImageView();
 
         // Réglages de l'image
         imageView.setImage(image);
-        imageView.setFitWidth(map.getTileMetricWidth() * zoomFact * map.getPixelsPerMeter());
+        fitImage();
+
         imageView.setPreserveRatio(true);
         imageView.setSmooth(false);
         imageView.setCache(true);
 
+
         // Ajout de l'iamge au conteneur (cette classe)
-        this.getChildren().add(imageView);
+        getChildren().add(imageView);
 
         // La flèche est tournée pour représenter la direction dans laquelle le NPC entre sur la case
         if (connection == PathTile.Connections.RIGHT) {
@@ -73,6 +74,11 @@ public class ExitPathTileView extends PathTileView {
      */
     public void update() {
         super.update();
-        imageView.setFitWidth(map.getTileMetricWidth() * zoomFact * map.getPixelsPerMeter());
+        fitImage();
+    }
+
+    private void fitImage(){
+        imageView.setFitWidth(map.getTileMetricWidth() * arrowZoomFact * map.getPixelsPerMeter());
+        imageView.setFitHeight(map.getTileMetricWidth() * arrowZoomFact * map.getPixelsPerMeter());
     }
 }

@@ -5,7 +5,7 @@ import towerdefense.game.npcs.NPC;
 
 import java.util.ArrayList;
 
-public class GameModel implements Runnable{
+public class GameModel implements Runnable {
     // Thread
     private boolean running;
     private boolean paused;
@@ -18,8 +18,10 @@ public class GameModel implements Runnable{
     // Eléments de la carte
 
     // ====================== Initilisation ======================
-    /**Constructeur du jeu
-     * */
+
+    /**
+     * Constructeur du jeu
+     */
     public GameModel(Config config) {
         // ********** Initialisation des attributs **********
 
@@ -37,20 +39,22 @@ public class GameModel implements Runnable{
     }
 
     // ====================== Gestion des Threads ======================
-    /**Routine du thread
-     * */
+
+    /**
+     * Routine du thread
+     */
     public void run() {
         int lastWave = waves.size() - 1;
         int currentWave = 0;
         boolean lastNPC = false;
 
-        while(running) {
-            while(!paused) {
+        while (running) {
+            while (!paused) {
                 if (!lastNPC) {
                     NPC npc = waves.get(currentWave).getNextEnemy();
                     lastNPC = waves.get(currentWave).isFinished();
                 } else if (currentWave <= lastWave) {
-                    currentWave ++;
+                    currentWave++;
                 } else {
                     for () {
                         wave.nextLevel();
@@ -70,23 +74,26 @@ public class GameModel implements Runnable{
 
     }
 
-    /**Mettre le jeu en pause
+    /**
+     * Mettre le jeu en pause
      * appelle tous les threads de tous les objets pour les mettre en pause
-     * */
+     */
     public void pauseGame() {
         paused = true;
     }
 
-    /**Relancer le jeu après une pause
+    /**
+     * Relancer le jeu après une pause
      * appelle tous les threads de tous les objets pour arrêter la pause
-     * */
+     */
     public void resumeGame() {
         paused = false;
     }
 
-    /**Arrête le jeu
+    /**
+     * Arrête le jeu
      * appelle tous les threads de tous les objets pour les mettre en pause
-     * */
+     */
     public void stopGame() {
         running = false;
     }

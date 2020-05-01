@@ -7,10 +7,13 @@ import towerdefense.view.ObstacleTileView;
  * Cette case n'est pas un chemin
  */
 public class ObstacleTile extends Tile {
+    // ==================== Attributs ====================
+    private ObstacleTileView.ObstacleType type;
 
     // ==================== Initilisation ====================
-    public ObstacleTile(int x, int y, double tileMetricWidth) {
+    public ObstacleTile(int x, int y, double tileMetricWidth, ObstacleTileView.ObstacleType type) {
         super(x, y, tileMetricWidth);
+        this.type = type;
         isBlocked = true;
     }
 
@@ -21,6 +24,6 @@ public class ObstacleTile extends Tile {
      */
     @Override
     public void initDrawing() {
-        tileView = new ObstacleTileView(map, this);
+        tileView = new ObstacleTileView(map, this, type);
     }
 }

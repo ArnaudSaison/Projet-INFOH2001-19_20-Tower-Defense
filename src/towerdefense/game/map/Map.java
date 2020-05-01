@@ -76,10 +76,10 @@ public class Map implements Drawable {
         // Liste des autres éléments qui se trouvent sur la carte (NPC, tour, mine d'or, ...)
         elementsOnMap = new ArrayList<>();
 
-        // test
-        for (Path path : availablePaths) {
-            System.out.println(path);
-        }
+//        // test
+//        for (Path path : availablePaths) {
+//            System.out.println(path);
+//        }
     }
 
     //==================== Interface Drawable ====================

@@ -2,6 +2,8 @@ package towerdefense.controller.listeners;
 
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
+import towerdefense.game.map.Path;
+import towerdefense.game.map.PathTile;
 import towerdefense.game.map.Tile;
 
 public class TileClickedListener implements EventHandler<MouseEvent> {
@@ -15,6 +17,10 @@ public class TileClickedListener implements EventHandler<MouseEvent> {
     public void handle(MouseEvent mouseEvent) {
         if (mouseEvent.getEventType() == MouseEvent.MOUSE_CLICKED) {
             System.out.println(tile);
+        }
+
+        if (tile instanceof PathTile) {
+            System.out.println(((PathTile)tile).getConnections());
         }
     }
 }

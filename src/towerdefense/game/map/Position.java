@@ -29,6 +29,7 @@ public class Position {
     public Position(double x, double y, Map map) {
         this.x = x;
         this.y = y;
+        this.map = map;
     }
 
     public Position(double x, double y, Map map, boolean convertToMeters) {
@@ -104,11 +105,6 @@ public class Position {
     public static double getNorm(double X, double Y) {
         return Math.sqrt(Math.pow(X, 2) + Math.pow(Y, 2));
     }
-
-    //public Pair getPosition(){
-    //Pair<Double, Double> point = new Pair<Double, Double>(x,y);
-    //return point;
-    //}
 
     //***** Autres *****
     public double getDistance(Position p) {

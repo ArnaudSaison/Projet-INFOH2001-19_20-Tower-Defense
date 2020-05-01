@@ -1,7 +1,9 @@
 package towerdefense.view;
 
+import javafx.geometry.Point3D;
 import javafx.scene.Node;
 import javafx.scene.input.ScrollEvent;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import towerdefense.game.Drawable;
 import towerdefense.game.map.*;
@@ -22,6 +24,13 @@ public class MapView extends Pane implements Printable {
     private ArrayList<Node> elementsToAdd;
 
     // ==================== Initilisation ====================
+
+    /**
+     * Constructeur de MapView
+     * <p>
+     * Se charge d'appliquer le style à l'objet Pane,
+     * puis initialise la représentatin graphique de chaque case, l'ajoute à la carte et la met à jour
+     */
     public MapView(Map map) {
         // Initialisation des attributs
         this.map = map;
@@ -52,8 +61,8 @@ public class MapView extends Pane implements Printable {
 
         // zoom mesuré par le ScrollEvent
         double zoom = event.getDeltaY();
-        // double deltaPPM = zoom * zoomFact;
-        double deltaPPM = zoom * Math.pow(zoomFact, map.getSettingsPixelsPerMeter() / map.getPixelsPerMeter() * 2);
+        double deltaPPM = zoom * zoomFact;
+//        double deltaPPM = zoom * Math.pow(zoomFact, map.getSettingsPixelsPerMeter() / map.getPixelsPerMeter() * 2);
         double oldPPM = pixelsPerMeter;
 
         // Vérification de la validité du zoom et la cas échéant, mise à la valeur par défaut
@@ -110,6 +119,8 @@ public class MapView extends Pane implements Printable {
     public void updateDrawables() {
         getChildren().removeAll(elementsToRemove);
         getChildren().addAll(elementsToAdd);
+        elementsToRemove.clear();
+        elementsToAdd.clear();
 
         for (Drawable drawable : map.getElementsOnMap()) {
             drawable.updateDrawing();
