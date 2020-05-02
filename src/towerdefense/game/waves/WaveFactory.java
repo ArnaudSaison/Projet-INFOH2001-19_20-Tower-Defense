@@ -28,6 +28,7 @@ public class WaveFactory {
     private int standardExtraHealth;
     private int standardExtraSpeed;
     private int standardExtraGoldLoot;
+
     private int specialHealth;
     private int specialSpeed;
     private int specialGoldLoot;
