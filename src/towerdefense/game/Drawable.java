@@ -1,12 +1,5 @@
-package towerdefense.game.interfaces;
-
-import javafx.scene.layout.StackPane;
+package towerdefense.game;
 
 public interface Drawable {
     public void updateDrawing();
-    public StackPane getDrawing();
-    public void initializeDrawing();
-
-    interface Lootable {
-    }
 }

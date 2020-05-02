@@ -1,38 +1,31 @@
 package towerdefense.game.model;
 
-import towerdefense.game.goldmine.GoldMine;
-import towerdefense.game.Buyable;
 import towerdefense.game.map.Map;
-import towerdefense.game.towers.GenericTower;
-import towerdefense.game.towers.CanonTower;
-import towerdefense.game.towers.GlueTower;
+
+import java.util.ArrayList;
 
 public class Shop {
-    public enum Type {GENERIC_TOWER, GLUE_TOWER, CANON_TOWER}
+    /*==================================================================================================================
+                                                   ATTRIBUTS
+    ==================================================================================================================*/
+    //Références nécessaires à la création des tours et mines d'or:
+    private Map map;
+    private GameModel gameModel;
 
-    public Buyable buy(String type, Map map) {
-        Buyable res = null;
-        if (!type.equals("Tower")) {
-            res = (Buyable) getInstance(type, map);
-        }
-        return res;
-    }
+    private ArrayList<String> standardNPCTypes;
+    private ArrayList<String> specialNPCTypes;
 
-    public Buyable getInstance(Type type, Map map) {
-        Buyable res = null;
-        switch (type){
-            //Tower
-            case "standardtower": res = new GenericTower(map, 3, 10,2); break;
-            case "rapidtower": res = new GenericTower(map,2,10,5); break;
-            case "longrangetower": res = new GenericTower(map,5,30,1); break;
-            case "canontower": res = new CanonTower(map, 200, 10); break;
-            case "gluetower": res = new GlueTower(map,300); break;
-
-            //Goldmine
-            case "goldmine": res = new GoldMine(map); break;
-            default : System.out.println("Invalid Buyable type");
-        }
-        return res;
-    }
-
+    //Paramètres de configuration lus dans le fichier wave.properties:
+    private int standardRange;
+    private int standardFireRate;
+    private int standardDamageDeal;
+    private int standardRangeIncrement;
+    private int standardFireRateIncrement;
+    private int standardDamageDealIncrement;
+    private int specialRange;
+    private int specialFireRate;
+    private int specialDamageDeal;
+    private int specialRangeIncrement;
+    private int specialFireRateIncrement;
+    private int specialDamageDealIncrement;
 }

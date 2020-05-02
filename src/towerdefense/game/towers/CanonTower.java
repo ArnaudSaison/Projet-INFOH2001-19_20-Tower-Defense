@@ -1,46 +1,33 @@
 package towerdefense.game.towers;
 
 import towerdefense.game.map.Map;
-import towerdefense.game.map.Position;
+import towerdefense.game.model.GameModel;
 import towerdefense.game.npcs.NPC;
-
-import java.util.ArrayList;
+import towerdefense.game.projectiles.Shell;
 
 public class CanonTower extends Tower {
-    public CanonTower(Map map, int price, int damageDeal){
-        Position position = new Position(map);
-        level = 1;
-        this.price = price;
-        priceIncrement = 5*level;
-        range = 20;//.................................en mètre.
-        fireRate = 4;//...............................coups/seconde.
-        this.damageDeal = damageDeal;//...............en point de vie.
-        targets = new ArrayList<NPC>();
-        KIATargets = new ArrayList<NPC>();
-        maxTargetNumber = 5;//....................... traite une jusqu'à 5 cibles.
+    private Shell shell;
+
+    public CanonTower(Map map, GameModel gameModel, int range, int fireRate, int damageDeal, int maxTargetNumber){
+        super(map, gameModel, range, fireRate, damageDeal, maxTargetNumber);
+        shell = new Shell(damageDeal);
     }
 
-    //******traitement des cibles*******
-
-    public ArrayList<NPC> hit(ArrayList<NPC> npcs) {
-        this.targetAcquisition(npcs);
-        for (NPC target : targets) {
-            if (target.getType() != "ExplosiveResistant"){
-                target.decreaseHealth(damageDeal);
-                if (target.decreaseHealth(damageDeal) == "is dead") {
-                    KIATargets.add(target);
-                }
-            }
+    @Override
+    public void hit(){
+        super.hit();
+        for (NPC target : super.targets){
+            target.hit(shell);
         }
-        return KIATargets;
     }
 
-    //*******Passage de niveau******
-    public void levelUp(){
-        if (canBeLeveledUp()){
-            price=+ priceIncrement;
-            maxTargetNumber++;
-            damageDeal++;
-        }
+    @Override
+    public void levelUp() {
+        super.levelUp();
+    }
+
+    @Override
+    public String toString(){
+        return (super.toString() + "\n" + getClass().getName() + ".");
     }
 }

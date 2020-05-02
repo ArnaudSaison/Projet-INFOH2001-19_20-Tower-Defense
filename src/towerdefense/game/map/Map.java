@@ -2,10 +2,8 @@ package towerdefense.game.map;
 
 import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.Pane;
-import javafx.scene.layout.StackPane;
-import towerdefense.game.interfaces.Drawable;
+import towerdefense.game.Drawable;
 
-import java.awt.event.MouseEvent;
 import java.util.ArrayList;
 
 public class Map {
