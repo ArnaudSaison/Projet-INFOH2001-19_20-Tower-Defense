@@ -37,7 +37,7 @@ public class MainApplication extends Application {
     public void start(Stage stage) throws IOException {
         //========== Initialisation du modèle de la l'application ==========
         assertDirectoryStructure();
-        Config config = new Config(defaultResourcesPath);
+        config = new Config(defaultResourcesPath);
         System.setProperty("prism.lcdtext", "false");
         System.setProperty("prism.lcdtext", "false");
 

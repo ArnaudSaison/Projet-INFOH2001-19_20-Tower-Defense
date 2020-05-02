@@ -34,8 +34,12 @@ public class MapView extends Pane implements Printable {
     public MapView(Map map) {
         // Initialisation des attributs
         this.map = map;
+        elementsToRemove = new ArrayList<>();
+        elementsToAdd = new ArrayList<>();
 
         // Réglages graphiques
+        String graphicsPath = "towerdefense/controller/game/graphics.css";
+        this.getStylesheets().add(graphicsPath);
         this.getStyleClass().add("map");
 
         // Ajout de toutes les cases qui constituent la carte d'un point de vue grapique
@@ -99,6 +103,7 @@ public class MapView extends Pane implements Printable {
      */
     public void update() {
         updateTiles();
+        updateDrawables();
     }
 
     /**
@@ -127,6 +132,7 @@ public class MapView extends Pane implements Printable {
         }
     }
 
+    // Liaison directe avec le modèle sans interaction avec JavaFX
     /**
      * Ajouter un élément Printable à cet objet JavaFX
      */

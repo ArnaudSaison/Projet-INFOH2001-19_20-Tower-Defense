@@ -52,7 +52,7 @@
       </HBox>
    </top>
    <center>
-      <ScrollPane hbarPolicy="NEVER" maxWidth="600.0" minWidth="600.0" prefHeight="200.0" prefWidth="600.0" styleClass="scrollpane" vbarPolicy="ALWAYS" BorderPane.alignment="CENTER">
+      <ScrollPane hbarPolicy="NEVER" maxWidth="600.0" minWidth="600.0" prefHeight="200.0" prefWidth="600.0" vbarPolicy="ALWAYS" BorderPane.alignment="CENTER">
          <content>
             <VBox fx:id="mapListBox" prefHeight="20.0" prefWidth="580.0" spacing="20.0">
                <padding>
