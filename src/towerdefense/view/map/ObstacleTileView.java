@@ -1,4 +1,4 @@
-package towerdefense.view;
+package towerdefense.view.map;
 
 import javafx.geometry.Pos;
 import javafx.scene.image.Image;
@@ -51,7 +51,7 @@ public class ObstacleTileView extends TileView {
                 break;
         }
 
-        InputStream input = this.getClass().getResourceAsStream("../../resources/graphics/obstacles/" + fileName + ".png");
+        InputStream input = this.getClass().getResourceAsStream("../../../resources/graphics/obstacles/" + fileName + ".png");
         Image image = new Image(input, 100, 100, true, false);
         imageView = new ImageView();
 

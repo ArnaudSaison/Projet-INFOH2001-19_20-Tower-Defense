@@ -1,11 +1,10 @@
-package towerdefense.view;
+package towerdefense.view.map;
 
 import javafx.geometry.Pos;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import towerdefense.game.map.Map;
 import towerdefense.game.map.PathTile;
-import towerdefense.game.map.Tile;
 
 import java.io.InputStream;
 
@@ -14,8 +13,7 @@ import java.io.InputStream;
  */
 public class GatePathTileView extends PathTileView {
     // ==================== Attributs ====================
-    private double arrowZoomFact = 1.0/2.0;
-    private double aspectRatio = 14.0/22.0;
+    private double arrowZoomFact = 1.0 / 2.0;
     private ImageView imageView; // conteneur élément rajouté
 
     // ==================== Initialisation ====================
@@ -25,7 +23,6 @@ public class GatePathTileView extends PathTileView {
      */
     public GatePathTileView(Map map, PathTile tile, PathTile.Connections connection) {
         super(map, tile); // Appel au constructeur de TileView
-
         initArrow(connection);
     }
 
@@ -34,13 +31,12 @@ public class GatePathTileView extends PathTileView {
      */
     public void initArrow(PathTile.Connections connection) {
         // Chargement de l'image
-        InputStream input = this.getClass().getResourceAsStream("../../resources/graphics/arrow.png");
-        Image image = new Image(input, 28, 88, true, false);
+        InputStream input = this.getClass().getResourceAsStream("../../../resources/graphics/arrow.png");
+        Image image = new Image(input, 100, 100, true, false);
         imageView = new ImageView();
 
         // Réglages de l'image
         imageView.setImage(image);
-        fitImage();
 
         imageView.setPreserveRatio(true);
         imageView.setSmooth(false);
@@ -66,6 +62,8 @@ public class GatePathTileView extends PathTileView {
             imageView.setRotate(90);
             setAlignment(imageView, Pos.TOP_CENTER);
         }
+
+        fitImage();
     }
 
     // ==================== Interface Printable ====================
@@ -73,12 +71,13 @@ public class GatePathTileView extends PathTileView {
     /**
      * Redéfinition de la méthode update pour aussi mettre à jour l'élément rajouté
      */
+    @Override
     public void update() {
         super.update();
         fitImage();
     }
 
-    private void fitImage(){
+    private void fitImage() {
         imageView.setFitWidth(map.getTileMetricWidth() * arrowZoomFact * map.getPixelsPerMeter());
         imageView.setFitHeight(map.getTileMetricWidth() * arrowZoomFact * map.getPixelsPerMeter());
     }

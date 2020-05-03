@@ -1,6 +1,6 @@
 package towerdefense.game.map;
 
-import towerdefense.view.PathTileView;
+import towerdefense.view.map.PathTileView;
 
 import java.util.ArrayList;
 

@@ -1,6 +1,6 @@
 package towerdefense.game.map;
 
-import towerdefense.view.ExitPathTileView;
+import towerdefense.view.map.ExitPathTileView;
 
 import java.util.ArrayList;
 

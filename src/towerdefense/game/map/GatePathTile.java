@@ -1,15 +1,48 @@
 package towerdefense.game.map;
 
-import towerdefense.view.GatePathTileView;
+import towerdefense.view.map.GatePathTileView;
+
+import java.util.ArrayList;
+import java.util.Random;
 
 /**
  * Case de chemin représentant plus spécifiquement une entrée
  */
 public class GatePathTile extends PathTile {
+    // ==================== Attributs ====================
+    private ArrayList<Path> paths;
+    private Random random;
 
     // ==================== Initilisation ====================
     public GatePathTile(int x, int y, double tileMetricWidth) {
         super(x, y, tileMetricWidth);
+        this.paths = new ArrayList<>();
+        random = new Random();
+    }
+
+    /**
+     * méthode pour attacher des chemins à une case d'entrée
+     *
+     * @param pathsToAttach chemins à attacher à la case d'entrée
+     */
+    public void attachPaths(ArrayList<Path> pathsToAttach) {
+        paths.addAll(pathsToAttach);
+    }
+
+    /**
+     * Réinitialise les chemins attachés à la case en vidant la liste
+     */
+    public void reinitialisePaths() {
+        paths.clear();
+    }
+
+    /**
+     * Sélectionne aléatoirement un chemin par ceux disponibles depuis cette case
+     *
+     * @return Path Chemin à partir de cette case choisi aléatoirement
+     */
+    public Path getRandomPath() {
+        return paths.get(random.nextInt(paths.size()));
     }
 
     //==================== Interface Drawable ====================

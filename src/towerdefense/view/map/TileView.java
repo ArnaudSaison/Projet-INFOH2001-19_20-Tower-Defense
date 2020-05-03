@@ -1,4 +1,4 @@
-package towerdefense.view;
+package towerdefense.view.map;
 
 import javafx.scene.Node;
 import javafx.scene.image.Image;
@@ -8,6 +8,7 @@ import javafx.scene.shape.Rectangle;
 import towerdefense.controller.listeners.TileClickedListener;
 import towerdefense.game.map.Map;
 import towerdefense.game.map.Tile;
+import towerdefense.view.Printable;
 
 import java.io.InputStream;
 import java.util.Random;
@@ -54,7 +55,7 @@ public abstract class TileView extends StackPane implements Printable {
      */
     public void initTexture(String imageName, int rotation, double scaleX, double scaleY) {
         // Chargement de l'image
-        InputStream input = getClass().getResourceAsStream("../../resources/graphics/tiles/" + imageName);
+        InputStream input = getClass().getResourceAsStream("../../../resources/graphics/tiles/" + imageName);
         Image image = new Image(input, 100, 100, true, false);
         texture = new ImageView();
 

@@ -3,8 +3,6 @@ package towerdefense.controller.game;
 import javafx.animation.Animation;
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
-import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -17,18 +15,20 @@ import javafx.scene.text.Text;
 import javafx.util.Duration;
 import towerdefense.Config;
 import towerdefense.MainApplication;
+import towerdefense.game.Buyable;
 import towerdefense.game.map.Map;
 import towerdefense.game.map.MapFactory;
 import towerdefense.controller.generic.GUIController;
-import towerdefense.view.MapView;
+import towerdefense.game.map.PathTile;
+import towerdefense.view.map.MapView;
+import towerdefense.view.shop.ShopItem;
 
 import java.io.IOException;
 import java.net.URL;
-import java.util.ArrayList;
 import java.util.ResourceBundle;
 
 /**
- * Le GameCOntroller est instancié par JavaFX lors de la lecture du fichier FXML
+ * Le GameController est instancié par JavaFX lors de la lecture du fichier FXML
  */
 public class GameController implements Initializable, GUIController {
     // ==================== Attributs nécessaires au fonctionnement de javafx ====================
@@ -90,6 +90,7 @@ public class GameController implements Initializable, GUIController {
 
     // ==================== Initilisations ====================
     // Méthodes requises par FXML
+
     /**
      * Constructeur du controller : est exécuté avant la lecture du FXML
      */
@@ -105,9 +106,11 @@ public class GameController implements Initializable, GUIController {
     public void initialize(URL url, ResourceBundle resourceBundle) {
     }
 
-    // Méthodes rajoutées pour permettre le fonctionnement du jeu
+    // Méthodes rajoutées pour permettre l'initilisation du jeu
+
     /**
      * Méthode appelée par le MainApplication pour passer des arguments à ce controller
+     *
      * @param main application qui a créé le controller
      */
     public void setMainApplication(MainApplication main) {
@@ -122,12 +125,10 @@ public class GameController implements Initializable, GUIController {
 //        shop.initDrawing();
 
         // Initilisation du bouton de pause
-        pauseIcon = new Image("/resources/graphics/UI/pause.png", 21, 21, true, true);
-        resumeIcon = new Image("/resources/graphics/UI/play.png", 21, 21, true, true);
-        pauseButtonView = new ImageView(resumeIcon);
-        pauseButtonView.setFitHeight(20);
-        pauseButtonView.setFitWidth(20);
-        pauseButton.setGraphic(pauseButtonView);
+        initPauseButton();
+
+        // Initilisation du shop
+        initShopView();
 
         // Initialisation de la map
         String mapPath = mainApplication.getSelectedMapPath();
@@ -148,8 +149,23 @@ public class GameController implements Initializable, GUIController {
         startAllTimers();
     }
 
+    private void initPauseButton() {
+        pauseIcon = new Image("/resources/graphics/UI/pause.png", 21, 21, true, true);
+        resumeIcon = new Image("/resources/graphics/UI/play.png", 21, 21, true, true);
+        pauseButtonView = new ImageView(resumeIcon);
+        pauseButtonView.setFitHeight(20);
+        pauseButtonView.setFitWidth(20);
+        pauseButton.setGraphic(pauseButtonView);
+    }
+
+    private void initShopView() {
+//        shopItemsBox.initDrawing();
+//        shopItemsBox.getChildren().addAll(shop.getDrawing);
+    }
+
     // ==================== Fonctionnement du controller ====================
     // Updates
+
     /**
      * Méthode qui définit l'ensemble des actions à effectuer pour mettre à jour la GUI
      */
@@ -157,6 +173,7 @@ public class GameController implements Initializable, GUIController {
 //        gameRoundInfoBarText.setText("Round" + gameModel.getCurrentRound());
 //        gameHealthInfoBarText.setText(player.getHealth() + "/" + player.getMaxHealth());
 //        gameGoldInfoBarText.setText(player.getGold());
+//        j ++;
     }
 
     /**
@@ -164,6 +181,7 @@ public class GameController implements Initializable, GUIController {
      */
     private void updateView() {
         mapView.updateDrawables();
+//        i ++;
     }
 
     // Initilisation des timers
@@ -172,7 +190,7 @@ public class GameController implements Initializable, GUIController {
      * Initialisation d'un obet Timeline qui met à jour la GUI
      */
     private void runUI() {
-        UITimer = new Timeline(new KeyFrame(Duration.millis((int)(1.0 / config.getUIFrameRate() * 1000)), actionEvent -> updateUI()));
+        UITimer = new Timeline(new KeyFrame(Duration.millis((int) (1.0 / config.getUIFrameRate() * 1000)), actionEvent -> updateUI()));
         UITimer.setCycleCount(Animation.INDEFINITE);
         UITimer.play();
     }
@@ -181,7 +199,7 @@ public class GameController implements Initializable, GUIController {
      * Initialisation d'un obet Timeline qui met à jour tous les éléments sur la carte (mais pas les tiles)
      */
     private void runView() {
-        ViewTimer = new Timeline(new KeyFrame(Duration.millis((int)(1.0 / config.getFrameRate() * 1000)), actionEvent -> updateView()));
+        ViewTimer = new Timeline(new KeyFrame(Duration.millis((int) (1.0 / config.getFrameRate() * 1000)), actionEvent -> updateView()));
         ViewTimer.setCycleCount(Animation.INDEFINITE);
         ViewTimer.play();
     }
@@ -194,7 +212,11 @@ public class GameController implements Initializable, GUIController {
     private void stopAllTimers() {
         UITimer.stop();
         ViewTimer.stop();
+//        double k = i / j;
+//        System.out.println("modèle : " + i + ", UI :" + j + ", proportion modèle / UI (attendu : 1.5) : " + k);
     }
+//    double i = 0.0;
+//    double j = 0.0;
 
     /**
      * Méthode qui démarre tous les timers
@@ -212,12 +234,14 @@ public class GameController implements Initializable, GUIController {
 
     // ==================== Gestion des éléments FXML ====================
     // Boutons de la GUI
+
     /**
      * Bouton permettant de quitter le jeu : affiche une boîte de dialogue pour demander confirmation
      */
     @FXML
     public void handleQuitGameButtonClicked(MouseEvent event) throws IOException {
-        if (!isGameFinished) {
+//        if (!gameModel.getIsRunning) {
+        if (isGameFinished) {
             boolean answer = mainApplication.confirmWindow(
                     "The Game is not finished yet. Do you want to quit anyway ?",
                     "Quit Game",
@@ -252,6 +276,7 @@ public class GameController implements Initializable, GUIController {
     }
 
     // Déplacements et zoom de la carte
+
     /**
      * Gestion du zoom sur la carte
      */
@@ -260,7 +285,8 @@ public class GameController implements Initializable, GUIController {
         mapView.updateZoomLevel(event);
     }
 
-    /** Gestion du déplacement de la carte, calcul du déplacement
+    /**
+     * Gestion du déplacement de la carte, calcul du déplacement
      */
     @FXML
     public void handleMousePressedDelta(MouseEvent event) {

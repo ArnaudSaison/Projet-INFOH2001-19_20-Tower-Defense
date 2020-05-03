@@ -1,4 +1,4 @@
-package towerdefense.view;
+package towerdefense.view.shop;
 
 import javafx.scene.layout.HBox;
 
@@ -10,5 +10,7 @@ public class ShopItem extends HBox {
 
 
     // ==================== Initialisation ====================
+    public ShopItem(String name, String iconPath, int price, int rang) {
 
+    }
 }

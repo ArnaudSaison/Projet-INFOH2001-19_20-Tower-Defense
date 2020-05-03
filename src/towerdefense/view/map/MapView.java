@@ -1,4 +1,4 @@
-package towerdefense.view;
+package towerdefense.view.map;
 
 import javafx.geometry.Point3D;
 import javafx.scene.Node;
@@ -7,6 +7,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import towerdefense.game.Drawable;
 import towerdefense.game.map.*;
+import towerdefense.view.Printable;
 
 import java.util.ArrayList;
 

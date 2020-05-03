@@ -1,9 +1,8 @@
 package towerdefense.game.map;
 
-import javafx.scene.Node;
 import towerdefense.game.Drawable;
 import towerdefense.view.Printable;
-import towerdefense.view.TileView;
+import towerdefense.view.map.TileView;
 
 /**
  * Une Tile représente une case de la carte

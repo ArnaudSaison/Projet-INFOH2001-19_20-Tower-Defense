@@ -1,6 +1,6 @@
 package towerdefense.game.map;
 
-import towerdefense.view.EmptyTileView;
+import towerdefense.view.map.EmptyTileView;
 
 /**
  * Case vide de la carte (herbe) où les monstres ne peuvent pas se déplacer, mais où on peut construrie

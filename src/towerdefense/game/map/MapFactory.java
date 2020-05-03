@@ -1,6 +1,6 @@
 package towerdefense.game.map;
 
-import towerdefense.view.ObstacleTileView;
+import towerdefense.view.map.ObstacleTileView;
 
 import java.io.*;
 import java.util.ArrayList;

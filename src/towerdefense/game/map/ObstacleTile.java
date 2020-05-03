@@ -1,6 +1,6 @@
 package towerdefense.game.map;
 
-import towerdefense.view.ObstacleTileView;
+import towerdefense.view.map.ObstacleTileView;
 
 /**
  * Case conteannt un obstable sur laquelle il est donc impossible de construire ou pour un NPC de se déplacer

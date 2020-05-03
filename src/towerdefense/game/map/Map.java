@@ -1,7 +1,7 @@
 package towerdefense.game.map;
 
 import towerdefense.game.Drawable;
-import towerdefense.view.MapView;
+import towerdefense.view.map.MapView;
 import towerdefense.view.Printable;
 
 import java.util.ArrayList;
@@ -23,7 +23,7 @@ public class Map implements Drawable {
     // Listes de cases
     private ArrayList<Tile> tiles;
     private ArrayList<ObstacleTile> obstacles;
-    private ArrayList<Tile> gates;
+    private ArrayList<GatePathTile> gates;
 
     // Liste des chemins
     private ArrayList<Path> availablePaths;
@@ -60,7 +60,7 @@ public class Map implements Drawable {
 
             // création de liste des entrées de la carte
             if (t instanceof GatePathTile) {
-                gates.add(t);
+                gates.add((GatePathTile) t);
             } else if (t instanceof ObstacleTile) {
                 obstacles.add((ObstacleTile) t);
             }
@@ -68,18 +68,20 @@ public class Map implements Drawable {
 
         // Calcul des chemins valides grpace au PathFactory
         PathFactory pathFactory = new PathFactory(this);
-        for (Tile gate : gates) {
+        for (GatePathTile gate : gates) {
             ArrayList<Path> computedPaths = pathFactory.getAllPaths(gate);
             availablePaths.addAll(computedPaths);
+            gate.attachPaths(computedPaths);
         }
 
         // Liste des autres éléments qui se trouvent sur la carte (NPC, tour, mine d'or, ...)
         elementsOnMap = new ArrayList<>();
 
-//        // test
-//        for (Path path : availablePaths) {
-//            System.out.println(path);
-//        }
+        // test
+        for (Path path : availablePaths) {
+            System.out.println(path);
+            System.out.println(path.getRandomPositions());
+        }
     }
 
     //==================== Interface Drawable ====================
@@ -159,7 +161,7 @@ public class Map implements Drawable {
     /**
      * Récupérer toutes les entrées de la carte
      */
-    public ArrayList<Tile> getGates() {
+    public ArrayList<GatePathTile> getGates() {
         return gates;
     }
 
