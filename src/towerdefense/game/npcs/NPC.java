@@ -10,17 +10,21 @@ import towerdefense.game.projectiles.Glue;
 import towerdefense.game.projectiles.Shell;
 
 public abstract class NPC implements Drawable, Movable, Runnable {
+    //TODO: arriver au bout du chemin ! + (joueur).
     /*==================================================================================================================
                                                    ATTRIBUTS
     ==================================================================================================================*/
     protected Position position;
     protected GameModel gameModel;
     protected Thread tNPC;
+    protected Boolean onMap;
+    protected Boolean isArrived;
 
     //Attributs de spécification:
     protected int health;
-    protected int goldLoot;
     protected int speed;
+    protected int goldLoot;
+    protected int healthLoot;
 
     //Optionnel:
     //protected ArrayList<Weapon> inventaire ; (optionnel)
@@ -28,14 +32,18 @@ public abstract class NPC implements Drawable, Movable, Runnable {
     /*==================================================================================================================
                                                    CONSTRUCTEUR
     ==================================================================================================================*/
-    public NPC (Map map, GameModel gameModel, int health, int speed, int goldLoot){
+    public NPC (Map map, GameModel gameModel, int health, int speed, int goldLoot, int scoreLoot){
         position = new Position(map);
+        onMap = false;
+        isArrived = false;
         this.gameModel = gameModel;
         this.tNPC = new Thread();
 
         this.health = health;
-        this.goldLoot = goldLoot;
         this.speed = speed;
+        this.goldLoot = goldLoot;
+        this.healthLoot= scoreLoot;
+
     }
 
     /*==================================================================================================================
@@ -75,7 +83,8 @@ public abstract class NPC implements Drawable, Movable, Runnable {
                                                         GESTION DU THREAD
     ==================================================================================================================*/
     public void initialize(){
-        tNPC.start();
+        if(onMap){
+            tNPC.start();}
     }
 
     @Override
@@ -91,11 +100,17 @@ public abstract class NPC implements Drawable, Movable, Runnable {
     public void move(){}
 
     /*==================================================================================================================
-                                                        GETTEURS
+                                                        GETTEURS/SETTEURS
     ==================================================================================================================*/
     public Position getPos(){return position;}
 
     public int getGoldLoot(){return goldLoot;}
+
+    public int getHealthLoot(){return healthLoot;}
+
+    public Boolean getIsArrived(){return isArrived;}
+
+    public void setOnMap(Boolean OnMap){this.onMap = onMap;}
 
     /*==================================================================================================================
                                                         AUTRES

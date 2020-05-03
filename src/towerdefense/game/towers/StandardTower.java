@@ -9,8 +9,8 @@ public class StandardTower extends Tower{
     private String type;
     private Bullet bullet;
 
-    public StandardTower(Map map, GameModel gameModel, int range, int fireRate, int damageDeal, int maxTargetNumber, String type){
-        super(map, gameModel, range, fireRate, damageDeal, maxTargetNumber);
+    public StandardTower(Map map, GameModel gameModel,int price, int range, int fireRate, int damageDeal, int maxTargetNumber, String type){
+        super(map, gameModel,price, range, fireRate, damageDeal, maxTargetNumber);
         this.type = type;
         bullet = new Bullet(damageDeal);
     }

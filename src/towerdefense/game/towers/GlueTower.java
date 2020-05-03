@@ -8,8 +8,8 @@ import towerdefense.game.projectiles.Glue;
 public class GlueTower extends Tower {
     private Glue glue;
 
-    public GlueTower(Map map, GameModel gameModel, int range, int fireRate, int damageDeal, int maxTargetNumber){
-        super(map, gameModel, range, fireRate, damageDeal, maxTargetNumber);
+    public GlueTower(Map map, GameModel gameModel,int price, int range, int fireRate, int damageDeal, int maxTargetNumber){
+        super(map, gameModel,price, range, fireRate, damageDeal, maxTargetNumber);
         glue = new Glue(damageDeal);
     }
 

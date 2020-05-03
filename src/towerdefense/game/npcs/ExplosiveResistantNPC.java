@@ -8,8 +8,8 @@ import towerdefense.game.projectiles.Shell;
 
 public class ExplosiveResistantNPC extends NPC {
 
-    public ExplosiveResistantNPC(Map map, GameModel gameModel, int health, int speed, int goldLoot) {
-        super(map, gameModel, health, speed, goldLoot);
+    public ExplosiveResistantNPC(Map map, GameModel gameModel, int health, int speed, int goldLoot, int scoreLoot) {
+        super(map, gameModel, health, speed, goldLoot, scoreLoot);
     }
 
     @Override

@@ -25,6 +25,7 @@ public class GameModel implements Runnable{
     private ArrayList<NPC> NPCsOnMap;
     private WaveFactory waveFactory;
     private Map map;
+    Player player;
 
     // Eléments de la carte
 
@@ -41,7 +42,7 @@ public class GameModel implements Runnable{
         map = mapFactory.getMap("C:\\Users\\Pedro\\Desktop\\INFO\\Projet-INFOH2001-19_20-Tower-Defense\\resources\\maps\\map1");
         // ********** Wave Factory **********
         waveFactory = new WaveFactory(map,this,"C:\\Users\\Pedro\\Desktop\\INFO\\Projet-INFOH2001-19_20-Tower-Defense\\resources\\wave");
-
+        wave = waveFactory.getWave("easy",0);
         // ********** initilisation du thread **********
         this.gameThread = new Thread();
     }
@@ -56,12 +57,15 @@ public class GameModel implements Runnable{
             try{
                 while(!paused) {
                     if (!wave.isFinished()) {
-                        placeNPC(wave.getNextEnemy());
+                        NPC nextNPC = wave.getNextEnemy();
+                        placeNPC(nextNPC);
+                        nextNPC.initialize();
+                        Thread.sleep(1000); // place et démarre un NPC toute les secondes.
                     } else {
                         waveFactory.getNextWave(wave);
                     }
                 }
-            } catch (IOException e) {
+            } catch (IOException | InterruptedException e) {
                 e.printStackTrace();
             }
             try{
@@ -74,15 +78,30 @@ public class GameModel implements Runnable{
     }
 
 
-    public void initialize() {
-        gameThread.start();
+    public void initialize(){
+    gameThread.start();
     }
 
     public void placeNPC(NPC npc) {
+        npc.setOnMap(true);
         NPCsOnMap.add(npc);
     }
 
-    public void killNPC(NPC npc){NPCsOnMap.remove(npc);}
+    public void killNPC(NPC npc){
+        if (!npc.getIsArrived()) {
+            incrementPlayerGold(npc);
+            incrementPlayerHealth(npc);
+        }else{
+            decrementPlayerHealth(npc);
+        }
+        NPCsOnMap.remove(npc);
+    }
+
+    public void incrementPlayerGold(NPC npc){player.increaseGold(npc.getGoldLoot());}
+
+    public void incrementPlayerHealth(NPC npc){player.increaseHealth(npc.getHealthLoot());}
+
+    public void decrementPlayerHealth(NPC npc){player.decreaseHealth(npc.getHealthLoot());}
 
     /**Mettre le jeu en pause
      * appelle tous les threads de tous les objets pour les mettre en pause
@@ -109,4 +128,8 @@ public class GameModel implements Runnable{
                                                    GETTEURS/SETTEURS
     ==================================================================================================================*/
     public ArrayList<NPC> getNPCsOnMap(){return NPCsOnMap;}
+
+    public Player getPlayer(){return player;}
+
+    public Boolean getPaused(){return paused;}
 }

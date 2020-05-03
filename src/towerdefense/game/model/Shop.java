@@ -9,7 +9,6 @@ import towerdefense.game.towers.StandardTower;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
-import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
@@ -20,6 +19,8 @@ public class Shop {
     //Références nécessaires à la création des tours et mines d'or:
     private Map map;
     private GameModel gameModel;
+    private Player player;
+    public enum ShopCases {STANDARD_TOWER, RAPID_TOWER, LONG_RANGE_TOWER, CANON_TOWER, GLUE_TOWER, GOLDMINE}
 
     /*==================================================================================================================
                                                    CONSTRUCTEUR
@@ -27,18 +28,19 @@ public class Shop {
     public Shop(Map map, GameModel gameModel, String waveFilePath) {
         this.map = map;
         this.gameModel = gameModel;
+        player = gameModel.getPlayer();
     }
 
     /*==================================================================================================================
                                                    GESTION DES CAS
     ==================================================================================================================*/
-    public Buyable getInstance(String type, String shopFilePath) throws FileNotFoundException {
+    public Buyable getInstance(ShopCases type, String shopFilePath) throws FileNotFoundException {
         //================================Lecture des propriétés du magasin============================================
 
         //Chemin d'accès au fichier shop.properties:
         final Properties shopProperties = new Properties();
         InputStream shopPropertiesFile = new FileInputStream(shopFilePath + "/wave.properties");
-        Properties.load(shopPropertiesFile); //TODO : Pourquoi ?
+        Properties.load(shopPropertiesFile); //TODO : Je ne sait pas quoi faire.
 
         //Spécification des attributs et de base des tours:
         int standardRange = Integer.parseInt(shopProperties.getProperty("standardRange"));
@@ -48,16 +50,11 @@ public class Shop {
 
         int standardRangeIncrement = Integer.parseInt(shopProperties.getProperty("standardRangeIncrement"));
         int standardFireRateIncrement = Integer.parseInt(shopProperties.getProperty("standardFireRateIncrement"));
-        int standardDamageDealIncrement = Integer.parseInt(shopProperties.getProperty("standardDamageDealIncrement"));
 
         int specialRange = Integer.parseInt(shopProperties.getProperty("specialRange"));
         int specialFireRate = Integer.parseInt(shopProperties.getProperty("specialFireRate"));
         int specialDamageDeal = Integer.parseInt(shopProperties.getProperty("specialDamageDeal"));
         int specialMaxEnemyNumber = Integer.parseInt(shopProperties.getProperty("specialMaxEnemyNumber"));
-
-        int specialRangeIncrement = Integer.parseInt(shopProperties.getProperty("specialRangeIncrement"));
-        int specialFireRateIncrement = Integer.parseInt(shopProperties.getProperty("specialFireRateIncrement"));
-        int specialDamageDealIncrement = Integer.parseInt(shopProperties.getProperty("specialDamageDealIncrement"));
 
         //Spécification des attributs et de base des mines d'or:
         int maxLevel = Integer.parseInt(shopProperties.getProperty("maxLevel"));
@@ -69,23 +66,38 @@ public class Shop {
         int productionRateIncrement = Integer.parseInt(shopProperties.getProperty("productionRateIncrement"));
         int maxGoldStorageIncrement = Integer.parseInt(shopProperties.getProperty("maxGoldStorageIncrement"));
 
+        //Prix:
+        int standardPrice = Integer.parseInt(shopProperties.getProperty("standardPrice"));
+        int rapidPrice = Integer.parseInt(shopProperties.getProperty("rapidPrice"));
+        int longRangePrice = Integer.parseInt(shopProperties.getProperty("longRangePrice"));
+        int canonPrice = Integer.parseInt(shopProperties.getProperty("canonPrice"));
+        int gluePrice = Integer.parseInt(shopProperties.getProperty("gluePrice"));
+
+        int goldMinePrice = Integer.parseInt(shopProperties.getProperty("goldMinePrice"));
+
         //===============================================Gestion des cas================================================
         Buyable res = null;
-        switch (type.toLowerCase()) {
+        switch (type) {
             //Tours:
-            case "standardtower": res = new StandardTower(map, gameModel, standardRange, standardFireRate, standardDamageDeal, standardMaxEnemyNumber, type);
+            case STANDARD_TOWER: res = new StandardTower(map, gameModel,standardPrice, standardRange, standardFireRate, standardDamageDeal, standardMaxEnemyNumber, type);
+                player.decreaseGold(standardPrice);
             break;
-            case "rapidtower": res = new StandardTower(map, gameModel, standardRange, standardFireRate, standardDamageDeal, standardMaxEnemyNumber, type);
+            case RAPID_TOWER: res = new StandardTower(map, gameModel,rapidPrice, standardRange, standardFireRate+ standardFireRateIncrement, standardDamageDeal, standardMaxEnemyNumber, type);
+                player.decreaseGold(rapidPrice);
             break;
-            case "longrangetower": res = new StandardTower(map, gameModel, standardRange, standardFireRate, standardDamageDeal, standardMaxEnemyNumber, type);
+            case LONG_RANGE_TOWER: res = new StandardTower(map, gameModel,longRangePrice, standardRange +standardRangeIncrement, standardFireRate, standardDamageDeal, standardMaxEnemyNumber, type);
+                player.decreaseGold(longRangePrice);
             break;
-            case "canontower": res = new CanonTower(map, gameModel, specialRange, specialFireRate, specialDamageDeal, specialMaxEnemyNumber);
+            case CANON_TOWER: res = new CanonTower(map, gameModel,canonPrice, specialRange, specialFireRate, specialDamageDeal, specialMaxEnemyNumber);
+                player.decreaseGold(canonPrice);
             break;
-            case "gluetower": res = new GlueTower(map, gameModel, specialRange, specialFireRate, specialDamageDeal, specialMaxEnemyNumber);
+            case GLUE_TOWER: res = new GlueTower(map, gameModel,gluePrice, specialRange, specialFireRate, specialDamageDeal, specialMaxEnemyNumber);
+                player.decreaseGold(gluePrice);
             break;
 
             //Mine d'or:
-            case "goldmine": res = new GoldMine(map, maxLevel, price, priceIncrement, productionRate, productionRateIncrement, maxGoldStorage, maxGoldStorageIncrement );
+            case GOLDMINE: res = new GoldMine(map, maxLevel, goldMinePrice, priceIncrement, productionRate, productionRateIncrement, maxGoldStorage, maxGoldStorageIncrement );
+                player.decreaseGold(goldMinePrice);
             break;
         }
         return res;

@@ -8,8 +8,8 @@ import towerdefense.game.projectiles.Shell;
 
 public class GlueResistantNPC extends NPC {
 
-    public GlueResistantNPC(Map map, GameModel gameModel, int health, int speed, int goldLoot) {
-        super(map, gameModel, health, speed, goldLoot);
+    public GlueResistantNPC(Map map, GameModel gameModel, int health, int speed, int goldLoot, int scoreLoot) {
+        super(map, gameModel, health, speed, goldLoot, scoreLoot);
     }
 
     @Override

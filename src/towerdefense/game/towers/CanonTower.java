@@ -8,8 +8,8 @@ import towerdefense.game.projectiles.Shell;
 public class CanonTower extends Tower {
     private Shell shell;
 
-    public CanonTower(Map map, GameModel gameModel, int range, int fireRate, int damageDeal, int maxTargetNumber){
-        super(map, gameModel, range, fireRate, damageDeal, maxTargetNumber);
+    public CanonTower(Map map, GameModel gameModel,int price, int range, int fireRate, int damageDeal, int maxTargetNumber){
+        super(map, gameModel,price, range, fireRate, damageDeal, maxTargetNumber);
         shell = new Shell(damageDeal);
     }
 

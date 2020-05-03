@@ -5,12 +5,13 @@ import towerdefense.game.model.GameModel;
 import towerdefense.game.projectiles.Bullet;
 import towerdefense.game.projectiles.Glue;
 import towerdefense.game.projectiles.Shell;
+import towerdefense.game.waves.WaveFactory;
 
 public class StandardNPC extends NPC {
-    private String type;
+    private WaveFactory.NPCTypes type;
 
-    public StandardNPC(Map map, GameModel gameModel, int health, int speed, int goldLoot, String type) {
-        super(map, gameModel, health, speed, goldLoot);
+    public StandardNPC(Map map, GameModel gameModel, int health, int speed, int goldLoot,int healthLoot, WaveFactory.NPCTypes type) {
+        super(map, gameModel, health, speed, goldLoot, healthLoot);
         this.type=type;
     }
 

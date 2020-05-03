@@ -24,8 +24,9 @@ public class GoldMine implements ProducesGold, Buyable, Upgradable, Placeable, D
 
     //Autres:
     private Position position;
-    private GameModel gameModel;//TODO: pour gérer l'or du joueur, c'est la mine d'or qui doit avoir uneref au gameModel ou le joueur ?
+    private GameModel gameModel;
     private Thread tGoldMine;
+    private Boolean runing;
 
     /*==================================================================================================================
                                                    CONSTRUCTEUR
@@ -43,6 +44,7 @@ public class GoldMine implements ProducesGold, Buyable, Upgradable, Placeable, D
 
         position = new Position(map);
         tGoldMine = new Thread(this);
+        runing = false;
     }
 
     /*==================================================================================================================
@@ -82,18 +84,29 @@ public class GoldMine implements ProducesGold, Buyable, Upgradable, Placeable, D
                                                    GESTION DU THREAD
     ==================================================================================================================*/
     public void initialize(){
+        runing = true;
         tGoldMine.start();
     }
 
-    @Override
     public void run(){
-        try {
-            while(true){
-                produceGold();
-                Thread.sleep(productionRate);
-                System.out.println(toString());
+
+        while (runing) {
+            while (!gameModel.getPaused()) {
+                try {
+                    produceGold();
+                    Thread.sleep(productionRate);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
             }
-        }catch (Exception e){}
+        }
+        while (gameModel.getPaused()) {
+            try {
+                Thread.sleep(10);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
     }
 
     @Override
@@ -105,7 +118,7 @@ public class GoldMine implements ProducesGold, Buyable, Upgradable, Placeable, D
     @Override
     public int getCost(){
         return price;
-    }
+    } //static ?
 
     @Override
     public Position getPos(){

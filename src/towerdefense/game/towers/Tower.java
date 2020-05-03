@@ -32,6 +32,7 @@ public abstract class Tower implements Buyable, Upgradable, Placeable, Drawable,
     protected Position position;
     protected GameModel gameModel;
     protected Thread tTower;
+    private Boolean runing;
 
     //Optionel:
     //private int health; (optionnel)
@@ -40,15 +41,17 @@ public abstract class Tower implements Buyable, Upgradable, Placeable, Drawable,
     /*==================================================================================================================
                                                    CONSTRUCTEUR
     ==================================================================================================================*/
-    public Tower(Map map, GameModel gameModel, int range, int fireRate, int damageDeal, int maxTargetNumber){
+    public Tower(Map map, GameModel gameModel,int price, int range, int fireRate, int damageDeal, int maxTargetNumber){
         level = 1;
         maxLevel = 3;
 
         position = new Position(map);
         targets = new ArrayList<>();
         tTower = new Thread();
+        runing = false;
 
         this.gameModel = gameModel;
+        this.price = price;
         this.range = range;
         this.fireRate = fireRate;
         this.damageDeal = damageDeal;
@@ -92,11 +95,29 @@ public abstract class Tower implements Buyable, Upgradable, Placeable, Drawable,
                                                      GESTION DU THREAD
     ==================================================================================================================*/
     public void initialize(){
+        runing = true;
         tTower.start();
     }
 
     @Override
-    public void run(){}
+    public void run(){
+        while (runing) {
+            while (!gameModel.getPaused()) {
+                try {
+                    hit();
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        }
+        while (gameModel.getPaused()) {
+            try {
+                Thread.sleep(10);
+            } catch (InterruptedException e) {
+                e.printStackTrace();
+            }
+        }
+    }
 
     @Override
     public void updateDrawing(){}
