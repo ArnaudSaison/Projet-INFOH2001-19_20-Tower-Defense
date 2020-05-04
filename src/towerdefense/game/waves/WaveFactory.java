@@ -1,16 +1,17 @@
 package towerdefense.game.waves;
 
-import javafx.scene.layout.HBox;
-import javafx.scene.text.Text;
-import towerdefense.MainApplication;
 import towerdefense.game.map.Map;
 import towerdefense.game.model.GameModel;
 import towerdefense.game.npcs.NPC;
 import towerdefense.game.npcs.NPCFactory;
-import towerdefense.gui.map.selector.MapClickedListener;
 
-import java.io.*;
-import java.util.*;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.util.ArrayList;
+import java.util.Objects;
+import java.util.Properties;
 
 public class WaveFactory {
     /*==================================================================================================================
@@ -21,7 +22,6 @@ public class WaveFactory {
     private GameModel gameModel;
 
     public enum NPCTypes {STANDARD_NPC, RAPID_NPC, SUPER_HEALTH_NPC, EXPLOSIVE_RESISTANT_NPC, GLUE_RESISTANT_NPC}
-
     private ArrayList<File> allMapSpecificationsFiles;
 
     /*==================================================================================================================
@@ -39,114 +39,82 @@ public class WaveFactory {
                                                    METHODES
     ==================================================================================================================*/
 
-    /** En fonction de la difficulté que le joueur a choisi, renvoie un objet Wave correspondant aux spécifications lus
-     * dans le fichier wave.properties.*/
+    /** */
 
     public Wave getWave(String difficulty, int waveIterator, int cycleIterator) throws IOException {
-        File npcProperties = allMapSpecificationsFiles.get(2);
-        File wave1Properties = allMapSpecificationsFiles.get(3);
-        File wave2Properties = allMapSpecificationsFiles.get(4);
-        File wave3Properties = allMapSpecificationsFiles.get(5);
+        //====================================Variables locales=========================================================
 
+        //Récupérations des fichiers properties:
+        File npcProperties = allMapSpecificationsFiles.get(2);
+        File waveProperties = allMapSpecificationsFiles.get(3+waveIterator);
+
+        //Récupération des spécifications des NPCs:
         ArrayList<ArrayList<Integer>> npcSpecifications = getNpcSpecifications(npcProperties);
 
-        ArrayList<ArrayList<Double>> wave1Specifications = getWaveSpecifications(wave1Properties);
-        ArrayList<ArrayList<Double>> wave2Specifications = getWaveSpecifications(wave2Properties);
-        ArrayList<ArrayList<Double>> wave3Specifications = getWaveSpecifications(wave3Properties);
-        ArrayList<ArrayList<ArrayList<Double>>> wavesSpecifications = new ArrayList<ArrayList<ArrayList<Double>>>();
+        //Récupération des spécifications de la vague en cours:
+        ArrayList<ArrayList<Double>> waveSpecifications = getWaveSpecifications(waveProperties);
 
+        //Nombre total d'ennemi de la vague:
         int enemyNumber;
-        //Compteur:
+
+        //Indice lié à la lecture des caractéristiques des NPCs selon la difficulté:
+        int i = 0;
+
+        //Compteur par type de NPC:
         int standard = 0;
         int rapid = 0;
         int superHealth = 0;
         int explosiveResistant = 0;
         int glueResistant = 0;
 
-        ArrayList<NPC> npcList = new ArrayList<NPC>();
+        //Liste des NPC qui composent la vague:
+        ArrayList<NPC> npcList = new ArrayList<>();
+
+        //Instanciation de la NPC Factory:
         NPCFactory npcFactory = new NPCFactory();
-        ArrayList<ArrayList<Double>> waveSpecifications = wavesSpecifications.get(waveIterator);
         //===============================================Gestion des cas================================================
 
         switch (difficulty.toLowerCase()) {
             case "easy":
-                int easyIncrement = npcSpecifications.get(2).get(0);
-                int initialEnemyNumber = (int)waveSpecifications.get(0).get(0); //TODO : pourquoi le cast ne prend pas ?
-                enemyNumber = initialEnemyNumber + cycleIterator*easyIncrement;
-                    while(standard < (int)enemyNumber*waveSpecifications.get(1).get(0)) {
-                        npcList.add(npcFactory.getInstance(NPCTypes.STANDARD_NPC, map, gameModel, npcSpecifications.get(0)));
-                        standard++;
-                    }
-                    while(rapid < (int)enemyNumber*waveSpecifications.get(1).get(1)) {
-                        npcList.add(npcFactory.getInstance(NPCTypes.RAPID_NPC, map, gameModel, npcSpecifications.get(0)));
-                        rapid++;
-                    }
-                    while(superHealth < (int)enemyNumber*waveSpecifications.get(1).get(2)) {
-                        npcList.add(npcFactory.getInstance(NPCTypes.SUPER_HEALTH_NPC, map, gameModel, npcSpecifications.get(0)));
-                        superHealth++;
-                    }
-                    while(explosiveResistant < (int)enemyNumber*waveSpecifications.get(1).get(3)) {
-                        npcList.add(npcFactory.getInstance(NPCTypes.EXPLOSIVE_RESISTANT_NPC, map, gameModel, npcSpecifications.get(1)));
-                        explosiveResistant++;
-                    }
-                    while(glueResistant < (int)enemyNumber*waveSpecifications.get(1).get(4)) {
-                        npcList.add(npcFactory.getInstance(NPCTypes.GLUE_RESISTANT_NPC, map, gameModel, npcSpecifications.get(1)));
-                        glueResistant++;
-                    }
-                break;
+                i=0;
+                    break;
             case "normal":
-                int normalIncrement = npcSpecifications.get(2).get(1);
-                int initialEnemyNumber = (int)waveSpecifications.get(0).get(0);
-                enemyNumber = initialEnemyNumber + cycleIterator*normalIncrement;
-
-                    while(standard < (int)enemyNumber*wave1Specifications.get(1).get(0)) {
-                        npcList.add(npcFactory.getInstance(NPCTypes.STANDARD_NPC, map, gameModel, npcSpecifications.get(0)));
-                        standard++;
-                    }
-                    while(rapid < (int)enemyNumber*waveSpecifications.get(1).get(1)) {
-                        npcList.add(npcFactory.getInstance(NPCTypes.RAPID_NPC, map, gameModel, npcSpecifications.get(0)));
-                        rapid++;
-                    }
-                    while(superHealth < (int)enemyNumber*waveSpecifications.get(1).get(2)) {
-                        npcList.add(npcFactory.getInstance(NPCTypes.SUPER_HEALTH_NPC, map, gameModel, npcSpecifications.get(0)));
-                        superHealth++;
-                    }
-                    while(explosiveResistant < (int)enemyNumber*waveSpecifications.get(1).get(3)) {
-                        npcList.add(npcFactory.getInstance(NPCTypes.EXPLOSIVE_RESISTANT_NPC, map, gameModel, npcSpecifications.get(1)));
-                        explosiveResistant++;
-                    }
-                    while(glueResistant < (int)enemyNumber*waveSpecifications.get(1).get(4)) {
-                        npcList.add(npcFactory.getInstance(NPCTypes.GLUE_RESISTANT_NPC, map, gameModel, npcSpecifications.get(1)));
-                        glueResistant++;
-                    }
+                i=1;
                 break;
             case "hard":
-                int hardIncrement = npcSpecifications.get(2).get(2);
-                int initialEnemyNumber = (int)waveSpecifications.get(0).get(0);
-                enemyNumber = initialEnemyNumber + cycleIterator*hardIncrement;
-                    while(standard < (int)enemyNumber*waveSpecifications.get(1).get(0)) {
-                        npcList.add(npcFactory.getInstance(NPCTypes.STANDARD_NPC, map, gameModel, npcSpecifications.get(0)));
-                        standard++;
-                    }
-                    while(rapid < (int)enemyNumber*waveSpecifications.get(1).get(1)) {
-                        npcList.add(npcFactory.getInstance(NPCTypes.RAPID_NPC, map, gameModel, npcSpecifications.get(0)));
-                        rapid++;
-                    }
-                    while(superHealth < (int)enemyNumber*waveSpecifications.get(1).get(2)) {
-                        npcList.add(npcFactory.getInstance(NPCTypes.SUPER_HEALTH_NPC, map, gameModel, npcSpecifications.get(0)));
-                        superHealth++;
-                    }
-                    while(explosiveResistant < (int)enemyNumber*waveSpecifications.get(1).get(3)) {
-                        npcList.add(npcFactory.getInstance(NPCTypes.EXPLOSIVE_RESISTANT_NPC, map, gameModel, npcSpecifications.get(1)));
-                        explosiveResistant++;
-                    }
-                    while(glueResistant < (int)enemyNumber*waveSpecifications.get(1).get(4)) {
-                        npcList.add(npcFactory.getInstance(NPCTypes.GLUE_RESISTANT_NPC, map, gameModel, npcSpecifications.get(1)));
-                        glueResistant++;
-                    }
+                i=2;
                 break;
         }
-        if (waveIterator == 3){
+
+        //Remplissage de la liste de NPC:
+        int normalIncrement = npcSpecifications.get(2).get(i);
+        int initialEnemyNumber = waveSpecifications.get(0).get(0).intValue();
+        enemyNumber = initialEnemyNumber + cycleIterator*normalIncrement;
+
+        while(standard < enemyNumber*waveSpecifications.get(1).get(0)) {
+            npcList.add(npcFactory.getInstance(NPCTypes.STANDARD_NPC, map, gameModel, npcSpecifications.get(0)));
+            standard++;
+        }
+        while(rapid < enemyNumber*waveSpecifications.get(1).get(1)) {
+            npcList.add(npcFactory.getInstance(NPCTypes.RAPID_NPC, map, gameModel, npcSpecifications.get(0)));
+            rapid++;
+        }
+        while(superHealth < enemyNumber*waveSpecifications.get(1).get(2)) {
+            npcList.add(npcFactory.getInstance(NPCTypes.SUPER_HEALTH_NPC, map, gameModel, npcSpecifications.get(0)));
+            superHealth++;
+        }
+        while(explosiveResistant < enemyNumber*waveSpecifications.get(1).get(3)) {
+            npcList.add(npcFactory.getInstance(NPCTypes.EXPLOSIVE_RESISTANT_NPC, map, gameModel, npcSpecifications.get(1)));
+            explosiveResistant++;
+        }
+        while(glueResistant < enemyNumber*waveSpecifications.get(1).get(4)) {
+            npcList.add(npcFactory.getInstance(NPCTypes.GLUE_RESISTANT_NPC, map, gameModel, npcSpecifications.get(1)));
+            glueResistant++;
+        }
+
+        //=========================Incrémentation des compteurs de vague et de cycle====================================
+        // TODO: utiliser une méthode ?
+        if (waveIterator == 2){
             waveIterator=0;
             cycleIterator++;
         }else{waveIterator++; }
@@ -161,45 +129,46 @@ public class WaveFactory {
     }
 
     /**Après lecture d'un fichier wave(n).properties, renvoie une liste de liste tel que : [constants, easySpecifications , normalSpecifications, hardSpecifications]*/
-    public ArrayList<ArrayList<Double>> getWaveSpecifications(File wavePropertiesFile){
-        final Properties waveProperties = new Properties(); //TODO: comment lire le fichier properties?
+    public ArrayList<ArrayList<Double>> getWaveSpecifications(File waveSpeFile) throws IOException {
+        final Properties waveProperties = new Properties();
+        InputStream wavePropertiesFile = new FileInputStream(waveSpeFile.getName());
         waveProperties.load(wavePropertiesFile);
 
-        ArrayList<ArrayList<Double>> res = new ArrayList<ArrayList<Double>>();
+        ArrayList<ArrayList<Double>> res = new ArrayList<>();
         //Nombre total d'ennemi:
-        double totalEnemyNumber = Double.parseDouble("totalEnemyNumber");
+        double totalEnemyNumber = Double.parseDouble(waveProperties.getProperty("totalEnemyNumber"));
 
         //Porte d'entré:
-        double mapGate = Double.parseDouble("mapGate");
+        double mapGate = Double.parseDouble(waveProperties.getProperty("mapGate"));
 
         //Difficulté "easy":
-        double easyStandardProportion = Double.parseDouble("easyStandardProportion");
+        double easyStandardProportion = Double.parseDouble(waveProperties.getProperty("easyStandardProportion"));
         double easyRapidProportion = Double.parseDouble(waveProperties.getProperty("easyRapidProportion"));
-        double easySuperHealthProportion = Double.parseDouble("easySuperHealthProportion");
+        double easySuperHealthProportion = Double.parseDouble(waveProperties.getProperty("easySuperHealthProportion"));
         double easyExplosiveResistantProportion = Double.parseDouble(waveProperties.getProperty("easyExplosiveResistantProportion"));
         double easyGlueResistantProportion = Double.parseDouble(waveProperties.getProperty("easyGlueResistantProportion"));
 
         //Difficulté "normal":
-        double normalStandardProportion = Double.parseDouble("normalStandardProportion");
+        double normalStandardProportion = Double.parseDouble(waveProperties.getProperty("normalStandardProportion"));
         double normalRapidProportion = Double.parseDouble(waveProperties.getProperty("normalRapidProportion"));
-        double normalSuperHealthProportion = Double.parseDouble("normalSuperHealthProportion");
+        double normalSuperHealthProportion = Double.parseDouble(waveProperties.getProperty("normalSuperHealthProportion"));
         double normalExplosiveResistantProportion = Double.parseDouble(waveProperties.getProperty("normalExplosiveResistantProportion"));
         double normalGlueResistantProportion = Double.parseDouble(waveProperties.getProperty("normalGlueResistantProportion"));
 
         //Difficulté "hard":
-        double hardStandardProportion = Double.parseDouble("hardStandardProportion");
+        double hardStandardProportion = Double.parseDouble(waveProperties.getProperty("hardStandardProportion"));
         double hardRapidProportion = Double.parseDouble(waveProperties.getProperty("hardRapidProportion"));
-        double hardSuperHealthProportion = Double.parseDouble("hardSuperHealthProportion");
+        double hardSuperHealthProportion = Double.parseDouble(waveProperties.getProperty("hardSuperHealthProportion"));
         double hardExplosiveResistantProportion = Double.parseDouble(waveProperties.getProperty("hardExplosiveResistantProportion"));
         double hardGlueResistantProportion = Double.parseDouble(waveProperties.getProperty("hardGlueResistantProportion"));
 
         //Créer sous forme de liste les contantes pour chaque niveau de difficuté:
-        ArrayList<Double> constants = new ArrayList<Double>();
+        ArrayList<Double> constants = new ArrayList<>();
         constants.add(totalEnemyNumber);
         constants.add(mapGate);
 
         //Créer sous forme de liste les spécifications pour la difficulté easy:
-        ArrayList<Double> easySpecifications = new ArrayList<Double>();
+        ArrayList<Double> easySpecifications = new ArrayList<>();
         easySpecifications.add(easyStandardProportion);
         easySpecifications.add(easyRapidProportion);
         easySpecifications.add(easySuperHealthProportion);
@@ -207,7 +176,7 @@ public class WaveFactory {
         easySpecifications.add(easyGlueResistantProportion);
 
         //Créer sous forme de liste les spécifications dpour la difficulté normal:
-        ArrayList<Double> normalSpecifications = new ArrayList<Double>();
+        ArrayList<Double> normalSpecifications = new ArrayList<>();
         normalSpecifications.add(normalStandardProportion);
         normalSpecifications.add(normalRapidProportion);
         normalSpecifications.add(normalSuperHealthProportion);
@@ -215,7 +184,7 @@ public class WaveFactory {
         normalSpecifications.add(normalGlueResistantProportion);
 
         //Créer sous forme de liste les spécifications pour la difficulté hard:
-        ArrayList<Double> hardSpecifications = new ArrayList<Double>();
+        ArrayList<Double> hardSpecifications = new ArrayList<>();
         hardSpecifications.add(hardStandardProportion);
         hardSpecifications.add(hardRapidProportion);
         hardSpecifications.add(hardSuperHealthProportion);
@@ -230,14 +199,13 @@ public class WaveFactory {
         return res;
     }
 
-
-
     /**Après lecture du fichier npc.properties, renvoie une liste de liste tel que : [standardSpecifications , specialSpecifications, difficultyIncrements]*/
-    public ArrayList<ArrayList<Integer>> getNpcSpecifications(File npcPropertiesFile){
+    public ArrayList<ArrayList<Integer>> getNpcSpecifications(File npcPropFile) throws IOException {
         final Properties npcProperties = new Properties();
-        npcProperties.load(npcPropertiesFile);
+        InputStream wavePropertiesFile = new FileInputStream(npcPropFile.getName());
+        npcProperties.load(wavePropertiesFile);
 
-        ArrayList<ArrayList<Integer>> res = new ArrayList<ArrayList<Integer>>();
+        ArrayList<ArrayList<Integer>> res = new ArrayList<>();
 
         //Spécification des attributs de base des NPCs:
         int standardHealth = Integer.parseInt(npcProperties.getProperty("standardHealth"));
@@ -264,7 +232,7 @@ public class WaveFactory {
         int hardIncrement = Integer.parseInt(npcProperties.getProperty("hardIncrement"));
 
         //Créer sous forme de liste les spécifications des NPCs standards:
-        ArrayList<Integer> standardSpecifications = new ArrayList<Integer>();
+        ArrayList<Integer> standardSpecifications = new ArrayList<>();
         standardSpecifications.add(standardHealth);
         standardSpecifications.add(standardSpeed);
         standardSpecifications.add(standardGoldLoot);
@@ -275,7 +243,7 @@ public class WaveFactory {
         standardSpecifications.add(standardExtraHealthLoot);
 
         //Créer sous forme de liste les spécifications des NPCs spéciaux:
-        ArrayList<Integer> specialSpecifications = new ArrayList<Integer>();
+        ArrayList<Integer> specialSpecifications = new ArrayList<>();
         specialSpecifications.add(specialHealth);
         specialSpecifications.add(specialSpeed);
         specialSpecifications.add(specialGoldLoot);
@@ -286,7 +254,7 @@ public class WaveFactory {
         specialSpecifications.add(specialExtraHealthLoot);
 
         //Créer sous forme de liste les incréments liés à la difficulté:
-        ArrayList<Integer> difficultyIncrements = new ArrayList<Integer>();
+        ArrayList<Integer> difficultyIncrements = new ArrayList<>();
         difficultyIncrements.add(easyIncrement);
         difficultyIncrements.add(normalIncrement);
         difficultyIncrements.add(hardIncrement);
@@ -298,11 +266,10 @@ public class WaveFactory {
         return res;
     }
 
-
     /**Renvoie une liste, triée dans l'ordre alphabétique, contenant tous les fichiers spécifiant les propriètés d'une carte.*/
     public ArrayList<File> getAllMapSpecificationsFiles(File mapFolder){
-        ArrayList<File> res = new ArrayList<File>();
-        for (File fileEntry : mapFolder.listFiles()) {
+        ArrayList<File> res = new ArrayList<>();
+        for (File fileEntry : Objects.requireNonNull(mapFolder.listFiles())) {
             if (fileEntry.isDirectory()) {
                 getAllMapSpecificationsFiles(fileEntry);
             } else {

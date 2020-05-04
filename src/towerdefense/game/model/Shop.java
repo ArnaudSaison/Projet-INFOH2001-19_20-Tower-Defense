@@ -8,7 +8,7 @@ import towerdefense.game.towers.GlueTower;
 import towerdefense.game.towers.StandardTower;
 
 import java.io.FileInputStream;
-import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.Properties;
 
@@ -25,7 +25,7 @@ public class Shop {
     /*==================================================================================================================
                                                    CONSTRUCTEUR
     ==================================================================================================================*/
-    public Shop(Map map, GameModel gameModel, String waveFilePath) {
+    public Shop(Map map, GameModel gameModel) {
         this.map = map;
         this.gameModel = gameModel;
         player = gameModel.getPlayer();
@@ -34,13 +34,13 @@ public class Shop {
     /*==================================================================================================================
                                                    GESTION DES CAS
     ==================================================================================================================*/
-    public Buyable getInstance(ShopCases type, String shopFilePath) throws FileNotFoundException {
+    public Buyable getInstance(ShopCases type, String shopFilePath) throws IOException {
         //================================Lecture des propriétés du magasin============================================
 
         //Chemin d'accès au fichier shop.properties:
         final Properties shopProperties = new Properties();
-        InputStream shopPropertiesFile = new FileInputStream(shopFilePath + "/wave.properties");
-        Properties.load(shopPropertiesFile); //TODO : Je ne sait pas quoi faire.
+        InputStream shopPropertiesFile = new FileInputStream(shopFilePath + "/map.properties");
+        shopProperties.load(shopPropertiesFile);
 
         //Spécification des attributs et de base des tours:
         int standardRange = Integer.parseInt(shopProperties.getProperty("standardRange"));
@@ -79,13 +79,13 @@ public class Shop {
         Buyable res = null;
         switch (type) {
             //Tours:
-            case STANDARD_TOWER: res = new StandardTower(map, gameModel,standardPrice, standardRange, standardFireRate, standardDamageDeal, standardMaxEnemyNumber, type);
+            case STANDARD_TOWER: res = new StandardTower(map, gameModel,standardPrice, standardRange, standardFireRate, standardDamageDeal, standardMaxEnemyNumber, "StandardTower");
                 player.decreaseGold(standardPrice);
             break;
-            case RAPID_TOWER: res = new StandardTower(map, gameModel,rapidPrice, standardRange, standardFireRate+ standardFireRateIncrement, standardDamageDeal, standardMaxEnemyNumber, type);
+            case RAPID_TOWER: res = new StandardTower(map, gameModel,rapidPrice, standardRange, standardFireRate+ standardFireRateIncrement, standardDamageDeal, standardMaxEnemyNumber, "RapidTower");
                 player.decreaseGold(rapidPrice);
             break;
-            case LONG_RANGE_TOWER: res = new StandardTower(map, gameModel,longRangePrice, standardRange +standardRangeIncrement, standardFireRate, standardDamageDeal, standardMaxEnemyNumber, type);
+            case LONG_RANGE_TOWER: res = new StandardTower(map, gameModel,longRangePrice, standardRange +standardRangeIncrement, standardFireRate, standardDamageDeal, standardMaxEnemyNumber, "LongRangeTower");
                 player.decreaseGold(longRangePrice);
             break;
             case CANON_TOWER: res = new CanonTower(map, gameModel,canonPrice, specialRange, specialFireRate, specialDamageDeal, specialMaxEnemyNumber);

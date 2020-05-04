@@ -42,7 +42,7 @@ public class GameModel implements Runnable{
         map = mapFactory.getMap("C:\\Users\\Pedro\\Desktop\\INFO\\Projet-INFOH2001-19_20-Tower-Defense\\resources\\maps\\map1");
         // ********** Wave Factory **********
         waveFactory = new WaveFactory(map,this,"C:\\Users\\Pedro\\Desktop\\INFO\\Projet-INFOH2001-19_20-Tower-Defense\\resources\\wave");
-        wave = waveFactory.getWave("easy",0);
+        wave = waveFactory.getWave("easy",0,0);
         // ********** initilisation du thread **********
         this.gameThread = new Thread();
     }
