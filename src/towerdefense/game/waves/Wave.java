@@ -14,12 +14,13 @@ public class Wave {
 
     // Occurrence de la vague:
     private int occurrence;
+    private int cycle;
 
-    public Wave(ArrayList<NPC> NPCs, String difficulty, int occurrence ) {
+    public Wave(ArrayList<NPC> NPCs, String difficulty, int occurrence, int cycle ) {
         this.waveNPCs = NPCs;
         this.difficulty = difficulty;
         this.occurrence = occurrence;
-
+        this.cycle = cycle;
     }
 
     public String getDifficulty() {
@@ -50,4 +51,6 @@ public class Wave {
             System.out.println(e.toString());
         }
     }
+
+    public int getCycle(){return cycle;}
 }
