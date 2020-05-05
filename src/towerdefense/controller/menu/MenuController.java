@@ -1,10 +1,10 @@
-package towerdefense.gui.menu;
+package towerdefense.controller.menu;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.input.MouseEvent;
 import towerdefense.MainApplication;
-import towerdefense.gui.generic.GUIController;
+import towerdefense.controller.generic.GUIController;
 
 import java.io.IOException;
 import java.net.URL;

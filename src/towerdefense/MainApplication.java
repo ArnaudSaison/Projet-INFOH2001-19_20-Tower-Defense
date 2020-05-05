@@ -6,8 +6,8 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.Pane;
 import javafx.stage.Stage;
-import towerdefense.gui.confirmwindow.ConfirmWindow;
-import towerdefense.gui.generic.GUIController;
+import towerdefense.controller.confirmwindow.ConfirmWindow;
+import towerdefense.controller.generic.GUIController;
 
 import java.io.File;
 import java.io.IOException;
@@ -113,16 +113,16 @@ public class MainApplication extends Application {
         String sceneTypePath;
         switch (sceneType) {
             case GAME:
-                sceneTypePath = "gui/game/GameFXML.fxml";
+                sceneTypePath = "controller/game/GameFXML.fxml";
                 break;
             case MENU:
-                sceneTypePath = "gui/menu/MenuFXML.fxml";
+                sceneTypePath = "controller/menu/MenuFXML.fxml";
                 break;
             case EDITOR:
-                sceneTypePath = "gui/map/editor/MapEditorFXML.fxml";
+                sceneTypePath = "controller/map/editor/MapEditorFXML.fxml";
                 break;
             case SELECTOR:
-                sceneTypePath = "gui/map/selector/MapSelectorFXML.fxml";
+                sceneTypePath = "controller/map/selector/MapSelectorFXML.fxml";
                 break;
             default:
                 throw new IllegalStateException("Unexpected value: " + sceneType);

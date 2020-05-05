@@ -1,57 +1,26 @@
 package towerdefense.game.map;
 
-import javafx.geometry.Pos;
-import javafx.scene.image.Image;
-import javafx.scene.image.ImageView;
-import javafx.scene.layout.StackPane;
+import towerdefense.view.GatePathTileView;
 
-import java.io.InputStream;
-
+/**
+ * Case de chemin représentant plus spécifiquement une entrée
+ */
 public class GatePathTile extends PathTile {
-    private double zoomFact = 1.0 / 2.0;
-    private ImageView imageView;
 
-    // ==================== Constructeur ====================
+    // ==================== Initilisation ====================
     public GatePathTile(int x, int y, double tileMetricWidth) {
         super(x, y, tileMetricWidth);
-        imageView = new ImageView();
     }
 
-    // ==================== JavaFX ====================
-    public void initArrow(PathTile.Connections connection) {
-        InputStream input = this.getClass().getResourceAsStream("../../../resources/graphics/arrow.png");
-        Image image = new Image(input, 100, 100, true, false);
+    //==================== Interface Drawable ====================
 
-        imageView.setImage(image);
-        imageView.setFitWidth(map.getTileMetricWidth() * zoomFact * map.getPixelsPerMeter());
-        imageView.setPreserveRatio(true);
-        imageView.setSmooth(false);
-        imageView.setCache(true);
-
-        ((StackPane) getTileShapeContainer()).getChildren().add(imageView);
-
-        if (connection == Connections.RIGHT) {
-            imageView.setRotate(0);
-            ((StackPane) getTileShapeContainer()).setAlignment(imageView, Pos.CENTER_LEFT);
-
-        } else if (connection == Connections.BOTTOM) {
-            imageView.setRotate(90);
-            ((StackPane) getTileShapeContainer()).setAlignment(imageView, Pos.TOP_CENTER);
-
-        } else if (connection == Connections.LEFT) {
-            imageView.setRotate(180);
-            ((StackPane) getTileShapeContainer()).setAlignment(imageView, Pos.CENTER_RIGHT);
-
-        } else if (connection == Connections.TOP) {
-            imageView.setRotate(270);
-            ((StackPane) getTileShapeContainer()).setAlignment(imageView, Pos.BOTTOM_CENTER);
-        }
-    }
-
-
+    /**
+     * Initilisation de la vue correpsondant à une case
+     */
     @Override
-    public void updateDrawing() {
-        super.updateDrawing();
-        imageView.setFitWidth(map.getTileMetricWidth() * zoomFact * map.getPixelsPerMeter());
+    public void initDrawing() {
+        // Récupérer la connection permet d'afficher dans la bonne direction la flèche indiquant qu'il s'agit d'une entrée
+        // récupération de la première connection ajoutée car ce sera toujours la direction de l'entrée (voir PathFactory)
+        tileView = new GatePathTileView(map, this, getConnections().get(0));
     }
 }

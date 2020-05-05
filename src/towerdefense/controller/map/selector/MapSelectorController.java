@@ -1,17 +1,14 @@
-package towerdefense.gui.map.selector;
+package towerdefense.controller.map.selector;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.input.ScrollEvent;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
 import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import towerdefense.MainApplication;
-import towerdefense.gui.generic.GUIController;
+import towerdefense.controller.generic.GUIController;
 
 import java.io.File;
 import java.io.IOException;

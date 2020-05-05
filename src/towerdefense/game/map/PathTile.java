@@ -1,77 +1,72 @@
 package towerdefense.game.map;
 
-import javafx.scene.image.ImageView;
-import javafx.scene.paint.Color;
+import towerdefense.view.PathTileView;
 
 import java.util.ArrayList;
 
+/**
+ * Case représentant un chemin sur lequel les ennemis peuvent se déplacer
+ */
 public class PathTile extends Tile {
+    //==================== Attributs ====================
+    // Type particulier de classe permettant de stocker des variables très limitées, mais fixées et facilement compréhensibles
+    // Note : il est nécessaire de rendre cette classe publique afin de pouvoir accéder à son contenu depusi d'autres classes
+    // Cependant celle-ci n'est pas modifiable et ne peut donc pas être mal utilisée par ces autres classes
     public enum Connections {TOP, BOTTOM, LEFT, RIGHT}
 
-    protected boolean top;
-    protected boolean bottom;
-    protected boolean left;
-    protected boolean right;
+    private ArrayList<Connections> connections;
 
-    // ***** Constructeur *****
+    // ==================== Initilisation ====================
+
+    /**
+     * Constructeur de la classe
+     */
     public PathTile(int x, int y, double tileMetricWidth) {
         super(x, y, tileMetricWidth);
-        this.getTileShape().getStyleClass().addAll("path-tile", "cannot-be-built-on");
-
-        top = false;
-        bottom = false;
-        left = false;
-        right = false;
+        connections = new ArrayList<>();
     }
 
-    public void setConnection(Connections connection, boolean value) {
-        switch (connection) {
-            case TOP:
-                top = value;
-                break;
-            case BOTTOM:
-                bottom = value;
-                break;
-            case RIGHT:
-                right = value;
-                break;
-            case LEFT:
-                left = value;
-                break;
+    // ==================== Gestion des connections entre cases ====================
+
+    /**
+     * Méthode permettant de rajouter une connection.
+     * Une case ne peut pas contenir des connections redondantes
+     * et n'ajoutera rien à sa liste de connections si une est détectée
+     */
+    public void addConnection(Connections connection) {
+        if (!connections.contains(connection)) {
+            connections.add(connection);
         }
     }
 
+    /**
+     * Méthode qui vide la liste des connections
+     */
     public void reinitializeConnections() {
-        top = false;
-        bottom = false;
-        left = false;
-        right = false;
+        connections.clear();
     }
 
+    /**
+     * Méthode permettant de vérifier si une case est connectée à une autre dans une certaine direction
+     */
     public boolean getConnection(Connections connection) {
-        boolean res = false;
-        switch (connection) {
-            case TOP:
-                res = top;
-                break;
-            case BOTTOM:
-                res = bottom;
-                break;
-            case RIGHT:
-                res = right;
-                break;
-            case LEFT:
-                res = left;
-                break;
-        }
-        return res;
+        return connections.contains(connection);
     }
 
+    /**
+     * Méthode qui renvoie une liste des
+     */
+    public ArrayList<Connections> getConnections() {
+        return connections;
+    }
+
+    //==================== Interface Drawable ====================
+
+    /**
+     * Initilisation de la vue correpsondant à une case
+     */
     @Override
-    public void updateDrawing() {
-        super.updateDrawing();
-    }
-
-    public void updateConnection() {
+    public void initDrawing() {
+        tileView = new PathTileView(map, this);
     }
 }

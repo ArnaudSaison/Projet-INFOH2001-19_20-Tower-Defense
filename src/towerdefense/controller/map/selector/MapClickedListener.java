@@ -1,9 +1,8 @@
-package towerdefense.gui.map.selector;
+package towerdefense.controller.map.selector;
 
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.HBox;
-import towerdefense.MainApplication;
 
 public class MapClickedListener implements EventHandler<MouseEvent> {
     private MapSelectorController controller;

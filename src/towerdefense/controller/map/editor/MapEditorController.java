@@ -1,11 +1,11 @@
-package towerdefense.gui.map.editor;
+package towerdefense.controller.map.editor;
 
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.StackPane;
 import towerdefense.MainApplication;
-import towerdefense.gui.generic.GUIController;
+import towerdefense.controller.generic.GUIController;
 
 import java.io.IOException;
 import java.net.URL;

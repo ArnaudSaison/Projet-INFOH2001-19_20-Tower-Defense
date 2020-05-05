@@ -21,32 +21,10 @@ public class PathFactory {
         positions.add(gate.getPosition().getTileCoords());
         visited.add(gate.getPosition().getTileCoords());
 
-        // recherche du bord de la carte
-        ArrayList<Tile> adjacentTiles = getAdjacentTiles(positions.get(0));
-        int index = adjacentTiles.indexOf(null); // la position dans la liste permet de déduire le côté
         PathTile.Connections fromSide;
-        switch (index) {
-            case 0:
-                fromSide = PathTile.Connections.TOP;
-                break;
-            case 1:
-                fromSide = PathTile.Connections.RIGHT;
-                break;
-            case 2:
-                fromSide = PathTile.Connections.BOTTOM;
-                break;
-            case 3:
-                fromSide = PathTile.Connections.LEFT;
-                break;
-            default:
-                fromSide = PathTile.Connections.TOP;
-        }
-        fromSide = getOppositeDir(fromSide);
+        fromSide = getMapSide(gate.getPosition().getTileCoords());
 
-        ((PathTile) gate).reinitializeConnections();
-        ((PathTile) gate).setConnection(fromSide, true);
-        ((GatePathTile) gate).initArrow(fromSide);
-        ((PathTile) gate).updateConnection();
+        ((PathTile) gate).addConnection(fromSide);
 
         // Initilisation de la recherche de chemin
         searchForPaths(positions, visited, positions.get(0), fromSide);
@@ -66,9 +44,8 @@ public class PathFactory {
                     PathTile.Connections toSide = getToSideDir(currentCoords, probedTileCoords); // côté par lequel on va arriver dans cette case
 
                     // Modification des cases pour qu'elle puissent graphiquement former les chemins
-                    ((PathTile) probedTile).setConnection(fromSide, true);
-                    ((PathTile) probedTile).setConnection(getOppositeDir(toSide), true);
-                    ((PathTile) probedTile).updateConnection();
+                    ((PathTile) probedTile).addConnection(fromSide);
+                    ((PathTile) probedTile).addConnection(getOppositeDir(toSide));
 
                     ArrayList<IntCoordinates> resPositions = new ArrayList<>(positions); // nouvelle liste de position pour ne pas influencer les autres chemins possibles
                     ArrayList<IntCoordinates> resVisited = new ArrayList<>(visited);
@@ -82,9 +59,9 @@ public class PathFactory {
                         resPositions.add(probedTileCoords); // Ajouter la case de sortie
                         paths.add(new Path(resPositions)); // Comme il s'agit d'une sortie, on crée un chemin (condition de sortie de récurrence)
 
-                        for (IntCoordinates pt : visited) {
-                            map.getTile(pt.getX(), pt.getY()).updateDrawing();
-                        }
+                        // Ajout de la connection vers le bord de la map
+                        toSide = getMapSide(probedTileCoords);
+                        ((PathTile) probedTile).addConnection(getOppositeDir(toSide));
 
                     } else { // Sinon, la case était valide, mais pas une sortie, on va donc voir autour de celle-ci (récurrence)
                         searchForPaths(resPositions, resVisited, probedTileCoords, toSide); //
@@ -97,6 +74,31 @@ public class PathFactory {
     }
 
     private void deadEnd() {
+    }
+
+    private PathTile.Connections getMapSide(IntCoordinates tile) {
+        // recherche du bord de la carte
+        ArrayList<Tile> adjacentTiles = getAdjacentTiles(tile);
+        int index = adjacentTiles.indexOf(null); // la position dans la liste permet de déduire le côté
+        PathTile.Connections fromSide;
+        switch (index) {
+            case 0:
+                fromSide = PathTile.Connections.TOP;
+                break;
+            case 1:
+                fromSide = PathTile.Connections.RIGHT;
+                break;
+            case 2:
+                fromSide = PathTile.Connections.BOTTOM;
+                break;
+            case 3:
+                fromSide = PathTile.Connections.LEFT;
+                break;
+            default:
+                fromSide = PathTile.Connections.TOP;
+        }
+
+        return getOppositeDir(fromSide);
     }
 
     private ArrayList<Tile> getAdjacentTiles(IntCoordinates tileCoords) {
