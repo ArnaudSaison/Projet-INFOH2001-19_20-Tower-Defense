@@ -234,7 +234,7 @@ public class MapEditorController implements Initializable, GUIController {
     public void handleSaveNewTextFieldTyped(KeyEvent keyEvent) {
         currentFileName = saveNewTextField.getText();
         if (!validateFileName(currentFileName)) {
-            saveNewTextField.setStyle("-fx-text-fill: red;");
+            saveNewTextField.setStyle("-fx-text-fill: red;");//TODO: corriger bug saver snas bon nom de fichier
         } else {
             saveNewTextField.setStyle("-fx-text-fill: black;");
         }

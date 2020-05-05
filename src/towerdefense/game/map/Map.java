@@ -159,7 +159,7 @@ public class Map implements Drawable {
     /**
      * Ajout d'un élément à afficher sur la carte
      */
-    public void addElementsOnMap(Drawable element) {
+    public void addElementOnMap(Drawable element) {
         elementsOnMap.add(element);
         mapView.addDrawable(element.getDrawing());
     }
@@ -167,7 +167,7 @@ public class Map implements Drawable {
     /**
      * Retrait d'un élément à ne plus afficher sur la carte
      */
-    public void removeElementsOnMap(Drawable element) {
+    public void removeElementOnMap(Drawable element) {
         elementsOnMap.remove(element);
         mapView.removeDrawable(element.getDrawing());
     }
