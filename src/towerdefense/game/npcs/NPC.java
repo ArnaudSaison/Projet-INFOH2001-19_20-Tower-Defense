@@ -17,7 +17,9 @@ public abstract class NPC implements Drawable, Movable, Runnable {
     protected Position position;
     protected GameModel gameModel;
     protected Thread tNPC;
+    //Permet de savoir si le NPC est sur la carte:
     protected Boolean onMap;
+    //Permet de savoir si le NPC est arrivé au bout du chemin, donc sans se faire tuer:
     protected Boolean isArrived;
 
     //Attributs de spécification:

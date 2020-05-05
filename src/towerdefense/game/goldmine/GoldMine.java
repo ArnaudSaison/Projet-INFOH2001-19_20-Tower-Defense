@@ -102,7 +102,7 @@ public class GoldMine implements ProducesGold, Buyable, Upgradable, Placeable, D
         }
         while (gameModel.getPaused()) {
             try {
-                Thread.sleep(10);
+                Thread.sleep(100);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }

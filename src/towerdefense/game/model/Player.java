@@ -19,4 +19,13 @@ public class Player {
     public void increaseHealth(int scoreIncrement){ health += scoreIncrement;}
 
     public void decreaseHealth(int scoreDecrement){ health += scoreDecrement;}
+
+    //********Getteurs*********
+    public int getHealth() {
+        return health;
+    }
+
+    public int getGold() {
+        return gold;
+    }
 }

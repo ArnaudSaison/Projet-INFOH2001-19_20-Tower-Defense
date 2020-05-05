@@ -47,6 +47,9 @@ public class GameModel implements Runnable{
 
         // ********** initilisation du thread **********
         this.gameThread = new Thread();
+
+        //***********initialisation du joueur***********
+        player = new Player(100,100);
     }
 
     /*==================================================================================================================
@@ -54,6 +57,8 @@ public class GameModel implements Runnable{
     ==================================================================================================================*/
     /**Routine du thread
      * */
+
+    //TODO : mettre le gameModel en pause via le sleep, ça va freezer le jeu ?
     public void run() {
         while(running) {
             try{
@@ -66,6 +71,9 @@ public class GameModel implements Runnable{
                         wave.affiche();
                         System.out.println("=========================================================================");
                     } else {
+                        while(!NPCsOnMap.isEmpty()){
+                            Thread.sleep(100); //Attend qu'il n'y ait plus de NPC sur la carte avant de relancer une nouvelle vague.
+                        }
                         wave = waveFactory.getNextWave(wave);
                         System.out.println("*************************Wave***************************************");
                     }

@@ -4,6 +4,8 @@ import org.junit.Test;
 import towerdefense.game.map.Map;
 import towerdefense.game.map.MapFactory;
 import towerdefense.game.model.GameModel;
+import towerdefense.game.model.Player;
+import towerdefense.game.npcs.NPC;
 import towerdefense.game.waves.Wave;
 import towerdefense.game.waves.WaveFactory;
 
@@ -16,8 +18,18 @@ public class TestGameModel {
     /**Vérifie via un print que les vagues sont composées selon les indications fournies par les fichier properties.*/
     public void testGameModel() throws IOException {
         GameModel gameModelTest = new GameModel();
-        gameModelTest.initialize();
-        gameModelTest.run();
+        //gameModelTest.initialize();
+        //gameModelTest.run();
+
+        Wave vague = gameModelTest.donneVague();
+        NPC npc = vague.getNextEnemy();
+        gameModelTest.placeNPC(npc);
+        System.out.println(gameModelTest.getNPCsOnMap());
+        gameModelTest.killNPC(npc);
+        System.out.println(gameModelTest.getNPCsOnMap());
+        Player player = gameModelTest.getPlayer();
+        System.out.println(player.getHealth());
+        System.out.println(player.getGold());
     }
 
     //@Test
@@ -58,4 +70,8 @@ public class TestGameModel {
 
     //==================================================================================================================
 
+    @Test
+    public void fonctionnementNPC(){
+
+    }
 }
