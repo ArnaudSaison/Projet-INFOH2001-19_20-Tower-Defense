@@ -2,28 +2,30 @@ package towerdefense.game.model;
 
 public class Player {
 
-    private int score;
+    private int health;
     private int gold;
 
-    public Player(){
-        score = 2000;
-        gold = 100;
+    public Player(int initialGold, int initialHealth){
+        health = initialHealth;
+        gold = initialGold;
     }
 
     //******Gestion de l'or*******
+    public void increaseGold(int goldIncrement){gold += goldIncrement;}
 
-    public void pay(){}
-
-    public void renitializeGold(){}
-
-    public void addGold(int gold){
-        this.gold += gold;
-    }
+    public void decreaseGold(int goldDecrement){gold -= goldDecrement;}
 
     //******Gestion du score*******
+    public void increaseHealth(int scoreIncrement){ health += scoreIncrement;}
 
-    public void increaseScore(){}
+    public void decreaseHealth(int scoreDecrement){ health -= scoreDecrement;}
 
-    public void decreaseScore(){}
+    //********Getteurs*********
+    public int getHealth() {
+        return health;
+    }
 
+    public int getGold() {
+        return gold;
+    }
 }
