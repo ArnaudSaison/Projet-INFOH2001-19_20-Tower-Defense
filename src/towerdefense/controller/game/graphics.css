@@ -2,38 +2,38 @@
 # Style de la map
 ########################################*/
 .map {
--fx-stroke-width: 1;
--fx-stroke: black;
--fx-stroke-type: outside;
+-fx-boder-width: 0;
+-fx-boder-color: black;
+-fx-boder-type: outside;
 }
 
 /*########################################
 # style général des tiles
 ########################################*/
-.tile {
+.hover-indicator {
+-fx-fill: rgba(0, 0, 0, 0);
 -fx-stroke-width: 0;
 -fx-stroke: white;
 -fx-stroke-type: inside;
 }
 
-.tile:hover {
+.hover-indicator:hover {
 -fx-stroke-width: 2;
 }
 
 /*########################################
 # style des différentes tiles
 ########################################*/
-.empty-tile {
--fx-fill: #33cc33;
+.empty-tile-shape {
+/*-fx-fill: #33cc33;*/
 }
 
-.obstacle-tile {
-/*-fx-fill: #666666;*/
--fx-fill: #33cc33;
+.obstacle-tile-shape {
+/*-fx-fill: #33cc33;*/
 }
 
-.path-tile {
--fx-fill: #e6e6e6;
+.path-tile-shape {
+/*-fx-fill: #e6e6e6;*/
 }
 
 /*########################################

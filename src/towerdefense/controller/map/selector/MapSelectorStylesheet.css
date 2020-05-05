@@ -7,12 +7,20 @@
 
 .mapelement:hover {
 	-fx-background-color: #949494;
+	-fx-border-style: solid outside;
+	-fx-border-insets: 3;
+	-fx-border-width: 3;
 }
 
 .maplistvbox {
 }
 
-.scrollpane {
-	-fx-border-width: 0;
-	-fx-background-insets: 0;
+.scroll-pane > .viewport {
+   -fx-background-color: transparent;
+}
+
+.scroll-pane {
+   -fx-background-color: white;
+   -fx-background-insets: 0;
+   -fx-background-insets: 0;
 }

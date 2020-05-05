@@ -4,7 +4,10 @@
 }
 
 .gameSideBar {
-	-fx-background-color: #cccccc;
+	-fx-background-color: #cccccc 0.5;
+    -fx-border-style: solid;
+    -fx-border-width: 0 0 0 5;
+    -fx-border-color: gray;
 }
 
 .resetViewButton {
@@ -22,3 +25,7 @@
 .resetViewButton:hover {
 	-fx-background-color: rgba(150, 150, 150, 1);
 }
+
+.shop-items-box {
+}
+

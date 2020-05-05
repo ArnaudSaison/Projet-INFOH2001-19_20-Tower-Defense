@@ -26,6 +26,7 @@ public class MenuController implements Initializable, GUIController {
     //Getters et Setters
     public void setMainApplication(MainApplication main){
         this.mainApplication = main;
+        mainApplication.getMainWindow().setTitle("Tower Defense");
     }
 
     // Gestion des éléments FXML

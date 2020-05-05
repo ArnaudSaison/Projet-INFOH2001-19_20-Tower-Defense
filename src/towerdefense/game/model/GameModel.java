@@ -9,6 +9,7 @@ import towerdefense.game.waves.WaveFactory;
 import java.io.IOException;
 import java.util.ArrayList;
 
+
 public class GameModel implements Runnable{
     /*==================================================================================================================
                                                    ATTRIBUTS
@@ -28,6 +29,7 @@ public class GameModel implements Runnable{
 
     // Eléments de la carte
 
+  
     /*==================================================================================================================
                                                    CONSTRUCTEUR
     ==================================================================================================================*/
@@ -112,6 +114,7 @@ public class GameModel implements Runnable{
         NPCsOnMap.remove(npc);
     }
 
+
     public void incrementPlayerGold(NPC npc){player.increaseGold(npc.getGoldLoot());}
 
     public void incrementPlayerHealth(NPC npc){player.increaseHealth(npc.getHealthLoot());}
@@ -120,21 +123,23 @@ public class GameModel implements Runnable{
 
     /**Mettre le jeu en pause
      * appelle tous les threads de tous les objets pour les mettre en pause
-     * */
+     */
     public void pauseGame() {
         paused = true;
     }
 
-    /**Relancer le jeu après une pause
+    /**
+     * Relancer le jeu après une pause
      * appelle tous les threads de tous les objets pour arrêter la pause
-     * */
+     */
     public void resumeGame() {
         paused = false;
     }
 
-    /**Arrête le jeu
+    /**
+     * Arrête le jeu
      * appelle tous les threads de tous les objets pour les mettre en pause
-     * */
+     */
     public void stopGame() {
         running = false;
     }

@@ -1,13 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import java.lang.String?>
 <?import java.net.URL?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ScrollPane?>
+<?import javafx.scene.control.Tab?>
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.ColumnConstraints?>
 <?import javafx.scene.layout.GridPane?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.RowConstraints?>
 <?import javafx.scene.layout.StackPane?>
@@ -15,6 +23,54 @@
 <?import javafx.scene.text.Font?>
 
 <BorderPane fx:id="borderPane" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="720.0" prefWidth="1280.0" styleClass="background" xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="towerdefense.controller.map.editor.MapEditorController">
+   <center>
+      <StackPane prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <children>
+            <Pane fx:id="mapPlaceHolder" onMouseDragged="#handleMouseDraggedMap" onMousePressed="#handleMousePressedDelta" onScroll="#handleZoomScroll" prefHeight="200.0" prefWidth="200.0" />
+            <HBox fx:id="sizeSelectorHBox" alignment="CENTER" maxHeight="50.0" maxWidth="800.0" minHeight="50.0" minWidth="800.0" prefHeight="50.0" prefWidth="800.0" spacing="20.0" styleClass="size-selector-hbox" visible="false" StackPane.alignment="CENTER">
+               <children>
+                  <Label text="Choose a size for the map">
+                     <HBox.margin>
+                        <Insets />
+                     </HBox.margin>
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Label>
+                  <Label text="columns :">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="newMapColumns" maxWidth="50.0" minWidth="50.0" onKeyTyped="#handleNewMapColumnsTyped" prefWidth="50.0">
+                     <HBox.margin>
+                        <Insets right="10.0" />
+                     </HBox.margin>
+                  </TextField>
+                  <Label text="rows :">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Label>
+                  <TextField fx:id="newMapRows" maxWidth="50.0" minWidth="50.0" onKeyTyped="#handleNewMapRowsTyped" prefWidth="50.0">
+                     <HBox.margin>
+                        <Insets right="10.0" />
+                     </HBox.margin>
+                  </TextField>
+                  <Button fx:id="createNewMapButton" disable="true" mnemonicParsing="false" onMouseClicked="#handleCreateNewMapButtonClicked" styleClass="new-map-button" text="Create New Map">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Button>
+                  <Button mnemonicParsing="false" onMouseClicked="#handleCancelNewMapButtonClicked" styleClass="cancel-button" text="Cancel">
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Button>
+               </children>
+            </HBox>
+         </children></StackPane>
+   </center>
    <top>
       <HBox alignment="CENTER_LEFT" styleClass="menubar" BorderPane.alignment="CENTER">
          <children>
@@ -39,7 +95,7 @@
                <font>
                   <Font size="16.0" />
                </font></Button>
-            <Button mnemonicParsing="false" styleClass="menubarbutton" text="New File">
+            <Button mnemonicParsing="false" onMouseClicked="#handleNewFileButtonClicked" styleClass="menubarbutton" text="New File">
                <HBox.margin>
                   <Insets />
                </HBox.margin>
@@ -49,7 +105,7 @@
                <font>
                   <Font size="16.0" />
                </font></Button>
-            <Button alignment="CENTER_RIGHT" mnemonicParsing="false" styleClass="menubarbutton" text="Load File">
+            <Button alignment="CENTER_RIGHT" mnemonicParsing="false" onMouseClicked="#handleLoadFileButtonClicked" styleClass="menubarbutton" text="Load File">
                <HBox.margin>
                   <Insets />
                </HBox.margin>
@@ -59,8 +115,46 @@
                <font>
                   <Font size="16.0" />
                </font></Button>
+            <Button mnemonicParsing="false" onMouseClicked="#handleOpenMapDirectoryButtonCLicked" styleClass="menubarbutton" text="Open Maps Directory">
+               <font>
+                  <Font size="16.0" />
+               </font>
+               <padding>
+                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+               </padding>
+            </Button>
+            <Region maxWidth="100.0" minWidth="0.0" prefWidth="100.0" />
+            <Button fx:id="resetViewButton" minHeight="40.0" mnemonicParsing="false" onMouseClicked="#handleResetViewButton" styleClass="reset-view-button" text="Reset View" visible="false">
+               <font>
+                  <Font size="14.0" />
+               </font>
+               <graphic>
+                  <ImageView fitHeight="20.0" fitWidth="20.0" pickOnBounds="true" preserveRatio="true">
+                     <image>
+                        <Image url="@../../../../resources/graphics/UI/reset.png" />
+                     </image>
+                  </ImageView>
+               </graphic>
+            </Button>
             <Region HBox.hgrow="ALWAYS" />
-            <Button alignment="CENTER_RIGHT" mnemonicParsing="false" onMouseClicked="#handleSaveButtonClicked" styleClass="menubarbutton" text="Save">
+            <HBox fx:id="saveNewHBox" alignment="CENTER_RIGHT" visible="false">
+               <children>
+                  <TextField fx:id="saveNewTextField" onKeyTyped="#handleSaveNewTextFieldTyped" prefColumnCount="20" promptText="Choose a name (without extension)">
+                     <HBox.margin>
+                        <Insets right="20.0" />
+                     </HBox.margin>
+                  </TextField>
+                  <Button fx:id="saveNewButton" alignment="CENTER_RIGHT" mnemonicParsing="false" onMouseClicked="#handleSaveNewButtonClicked" styleClass="menubarbutton" text="Save New">
+                     <padding>
+                        <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                     </padding>
+                     <font>
+                        <Font size="16.0" />
+                     </font>
+                  </Button>
+               </children>
+            </HBox>
+            <Button fx:id="saveButton" alignment="CENTER_RIGHT" mnemonicParsing="false" onMouseClicked="#handleSaveButtonClicked" styleClass="menubarbutton" text="Save" visible="false">
                <HBox.margin>
                   <Insets />
                </HBox.margin>
@@ -78,32 +172,83 @@
       <URL value="@MapEditorStylesheet.css" />
    </stylesheets>
    <right>
-      <VBox prefHeight="200.0" prefWidth="300.0" styleClass="sidebar" BorderPane.alignment="CENTER">
-         <children>
-            <Label text="Map Properties">
-               <padding>
-                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-               </padding>
-            </Label>
-            <GridPane>
-              <columnConstraints>
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="146.0" minWidth="10.0" prefWidth="98.0" />
-                <ColumnConstraints hgrow="SOMETIMES" maxWidth="205.0" minWidth="10.0" prefWidth="202.0" />
-              </columnConstraints>
-              <rowConstraints>
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-                <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
-              </rowConstraints>
-            </GridPane>
-            <Label text="Tiles">
-               <padding>
-                  <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-               </padding>
-            </Label>
-         </children></VBox>
+      <TabPane prefWidth="300.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
+        <tabs>
+          <Tab closable="false" text="Map">
+               <content>
+                  <VBox>
+                     <children>
+                        <Label prefHeight="37.0" prefWidth="380.0" text="Map Properties">
+                           <padding>
+                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                           </padding>
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                        </Label>
+                        <GridPane>
+                          <columnConstraints>
+                            <ColumnConstraints halignment="RIGHT" hgrow="SOMETIMES" maxWidth="248.0" minWidth="10.0" prefWidth="223.0" />
+                            <ColumnConstraints halignment="LEFT" hgrow="SOMETIMES" maxWidth="205.0" minWidth="10.0" prefWidth="77.0" />
+                          </columnConstraints>
+                          <rowConstraints>
+                            <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                          </rowConstraints>
+                           <children>
+                              <Label text="Default scale in pixel / meter">
+                                 <GridPane.margin>
+                                    <Insets bottom="5.0" left="5.0" right="5.0" top="5.0" />
+                                 </GridPane.margin>
+                                 <font>
+                                    <Font size="14.0" />
+                                 </font>
+                              </Label>
+                              <TextField fx:id="pixelsPerMeterField" maxWidth="-Infinity" minWidth="-Infinity" onKeyTyped="#handlePixelsPerMeterFieldTyped" prefWidth="40.0" GridPane.columnIndex="1" />
+                           </children>
+                        </GridPane>
+                     </children>
+                     <styleClass>
+                        <String fx:value="sidebar" />
+                        <String fx:value="sidebar-map" />
+                     </styleClass>
+                  </VBox>
+               </content>
+            </Tab>
+            <Tab text="Tiles">
+               <content>
+                  <VBox fx:id="vBoxTilesSideBar">
+                     <styleClass>
+                        <String fx:value="sidebar-tiles" />
+                        <String fx:value="sidebar" />
+                     </styleClass>
+                     <children>
+                        <Label text="Tile editing tools">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                           <padding>
+                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                           </padding>
+                        </Label>
+                        <ScrollPane fx:id="scrollPaneTilesSideBar" hbarPolicy="NEVER" prefHeight="440.0" prefWidth="300.0" vbarPolicy="ALWAYS" VBox.vgrow="ALWAYS" />
+                     </children>
+                  </VBox>
+               </content>
+            </Tab>
+          <Tab closable="false" text="Waves">
+               <content>
+                  <VBox prefHeight="200.0" prefWidth="100.0">
+                     <styleClass>
+                        <String fx:value="sidebar" />
+                        <String fx:value="sidebar-waves" />
+                     </styleClass>
+                  </VBox>
+               </content></Tab>
+        </tabs>
+      </TabPane>
    </right>
-   <center>
-      <StackPane fx:id="mapPlaceHolder" prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER" />
-   </center>
+
 </BorderPane>

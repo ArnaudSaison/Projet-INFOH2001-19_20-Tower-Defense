@@ -1,6 +1,6 @@
 package towerdefense.game.map;
 
-import towerdefense.view.ExitPathTileView;
+import towerdefense.view.map.ExitPathTileView;
 
 import java.util.ArrayList;
 
@@ -10,8 +10,8 @@ import java.util.ArrayList;
 public class ExitPathTile extends PathTile {
 
     // ==================== Initilisation ====================
-    public ExitPathTile(int x, int y, double tileMetricWidth){
-        super(x, y, tileMetricWidth);
+    public ExitPathTile(int x, int y, Map map){
+        super(x, y, map);
     }
 
     //==================== Interface Drawable ====================

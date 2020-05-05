@@ -10,6 +10,7 @@ import javafx.scene.text.Text;
 import towerdefense.MainApplication;
 import towerdefense.controller.generic.GUIController;
 
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
@@ -39,7 +40,6 @@ public class MapSelectorController implements Initializable, GUIController {
 
     public void updateMaps() throws IOException {
         mapListBox.getChildren().clear();
-        directoryPath = mainApplication.getDefaultResourcesPath() + "maps";
         File mapsDirectory = new File(directoryPath);
 
         if (mapsDirectory.isDirectory()) {
@@ -62,8 +62,11 @@ public class MapSelectorController implements Initializable, GUIController {
     //Getters et Setters
     public void setMainApplication(MainApplication main){
         this.mainApplication = main;
+        mainApplication.getMainWindow().setTitle("Tower Defense : Map Selector");
 
         // On peut à présent initialiser tout ce qui requiert une référence à mainApplication
+        directoryPath = mainApplication.getDefaultResourcesPath() + "maps";
+
         try {
             updateMaps();
         } catch (IOException exception) {
@@ -83,6 +86,7 @@ public class MapSelectorController implements Initializable, GUIController {
     // Gestion des éléments FXML
     @FXML
     public void handleBackToMenuButtonClicked(MouseEvent event) throws IOException {
+        mainApplication.setSelectedMapPath(null);
         mainApplication.setCurrentSceneTo(MainApplication.SceneType.MENU);
     }
 
@@ -93,6 +97,13 @@ public class MapSelectorController implements Initializable, GUIController {
 
     @FXML
     public void handleContinueButtonClicked(MouseEvent event) throws IOException {
-        mainApplication.setCurrentSceneTo(mainApplication.getNextScene());
+        if (mainApplication.getSelectedMapPath() != null) {
+            mainApplication.setCurrentSceneTo(mainApplication.getNextScene());
+        }
+    }
+
+    @FXML
+    public void handleOpenMapDirectoryButtonCLicked(MouseEvent event) throws IOException {
+        Desktop.getDesktop().open(new File(directoryPath));
     }
 }
