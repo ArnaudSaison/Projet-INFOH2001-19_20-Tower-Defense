@@ -10,12 +10,12 @@ import towerdefense.game.npcs.NPC;
 import towerdefense.game.waves.Wave;
 import towerdefense.game.waves.WaveFactory;
 
-import java.io.File;
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
+import java.util.Properties;
 
 public class TestGameModel {
-    @Test
+    //@Test
     /**Vérifie via un print que les vagues sont composées selon les indications fournies par les fichier properties.*/
     public void testGameModel() throws IOException {
         GameModel gameModelTest = new GameModel();
@@ -27,7 +27,7 @@ public class TestGameModel {
 
         Wave vague = gameModelTest.donneVague();
         NPC npc = vague.getNextEnemy();
-        gameModelTest.placeNPC(npc);
+        gameModelTest.initializeNPC(npc);
         System.out.println(gameModelTest.getNPCsOnMap());
         //npc.setIsArrived(true);
         gameModelTest.killNPC(npc);
@@ -78,7 +78,14 @@ public class TestGameModel {
     //==================================================================================================================
 
     @Test
-    public void fonctionnementNPC(){
-
+    public void testShop() throws IOException {
+        Properties shopProperties = new Properties();
+        InputStream shopPropertiesFile = new FileInputStream("C:\\Users\\Pedro\\Desktop\\INFO\\Projet-INFOH2001-19_20-Tower-Defense\\resources\\shops\\shop");
+        shopProperties.load(shopPropertiesFile);
+        try{
+            String[] standardLevel1 = shopProperties.getProperty("standard1").split(", ");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 }

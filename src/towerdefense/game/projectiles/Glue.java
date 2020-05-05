@@ -1,6 +1,6 @@
 package towerdefense.game.projectiles;
 
-public class Glue {
+public class Glue extends Projectile{
     private int damage;
 
     public Glue(int damage){

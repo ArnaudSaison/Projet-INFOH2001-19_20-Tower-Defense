@@ -3,23 +3,25 @@ package towerdefense.game.towers;
 import towerdefense.game.map.Map;
 import towerdefense.game.model.GameModel;
 import towerdefense.game.npcs.NPC;
-import towerdefense.game.projectiles.Bullet;
+import towerdefense.game.projectiles.Arrow;
+
+import java.util.ArrayList;
 
 public class StandardTower extends Tower{
     private String type;
-    private Bullet bullet;
+    private Arrow arrow;
 
-    public StandardTower(Map map, GameModel gameModel,int price, int range, int fireRate, int damageDeal, int maxTargetNumber, String type){
-        super(map, gameModel,price, range, fireRate, damageDeal, maxTargetNumber);
+    public StandardTower(Map map, GameModel gameModel, ArrayList<ArrayList<Integer>> towerSpe, String type){
+        super(map, gameModel,towerSpe);
         this.type = type;
-        bullet = new Bullet(damageDeal);
+        arrow = new Arrow(damageDeal);
     }
 
     @Override
-    public void hit(){
-        super.hit();
+    public void attack(){
+        super.attack();
         for (NPC target : super.targets){
-            target.hit(bullet);
+            target.hit(arrow);
         }
     }
 

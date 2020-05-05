@@ -5,17 +5,19 @@ import towerdefense.game.model.GameModel;
 import towerdefense.game.npcs.NPC;
 import towerdefense.game.projectiles.Shell;
 
+import java.util.ArrayList;
+
 public class CanonTower extends Tower {
     private Shell shell;
 
-    public CanonTower(Map map, GameModel gameModel,int price, int range, int fireRate, int damageDeal, int maxTargetNumber){
-        super(map, gameModel,price, range, fireRate, damageDeal, maxTargetNumber);
-        shell = new Shell(damageDeal);
+    public CanonTower(Map map, GameModel gameModel,ArrayList<ArrayList<Integer>> towerSpe){
+        super(map, gameModel,towerSpe);
     }
 
     @Override
-    public void hit(){
-        super.hit();
+    public void attack(){
+        super.attack();
+        shell = new Shell(damageDeal);
         for (NPC target : super.targets){
             target.hit(shell);
         }

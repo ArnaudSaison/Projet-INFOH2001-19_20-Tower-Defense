@@ -2,7 +2,7 @@ package towerdefense.game.npcs;
 
 import towerdefense.game.map.Map;
 import towerdefense.game.model.GameModel;
-import towerdefense.game.projectiles.Bullet;
+import towerdefense.game.projectiles.Arrow;
 import towerdefense.game.projectiles.Glue;
 import towerdefense.game.projectiles.Shell;
 import towerdefense.game.waves.WaveFactory;
@@ -26,8 +26,8 @@ public class StandardNPC extends NPC {
     }
 
     @Override
-    public void injure(Bullet bullet){
-        decreaseHealth(bullet.getDamage());
+    public void injure(Arrow arrow){
+        decreaseHealth(arrow.getDamage());
     }
 
     @Override

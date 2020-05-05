@@ -42,6 +42,7 @@ public class WaveFactory {
 
     /**Retourne un objet Wave contenant une liste de NPC dont la proportion et les caractéristiques de chaque type est
      * défini ici sur base de la lecture des fichiers properties correspondant*/
+    //TODO: enlever iterator
     public Wave getWave(String difficulty, int waveIterator, int cycleIterator) throws IOException {
         //====================================Variables locales=========================================================
 

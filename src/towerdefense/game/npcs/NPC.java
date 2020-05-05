@@ -1,15 +1,16 @@
 package towerdefense.game.npcs;
 
 import towerdefense.game.Drawable;
+import towerdefense.game.Hittable;
 import towerdefense.game.Movable;
 import towerdefense.game.map.Map;
 import towerdefense.game.map.Position;
 import towerdefense.game.model.GameModel;
-import towerdefense.game.projectiles.Bullet;
+import towerdefense.game.projectiles.Arrow;
 import towerdefense.game.projectiles.Glue;
 import towerdefense.game.projectiles.Shell;
 
-public abstract class NPC implements Drawable, Movable, Runnable {
+public abstract class NPC implements Drawable, Movable, Runnable, Hittable {
     //TODO: arriver au bout du chemin ! + (joueur).
     /*==================================================================================================================
                                                    ATTRIBUTS
@@ -17,8 +18,10 @@ public abstract class NPC implements Drawable, Movable, Runnable {
     protected Position position;
     protected GameModel gameModel;
     protected Thread tNPC;
+
     //Permet de savoir si le NPC est sur la carte:
     protected boolean onMap;
+
     //Permet de savoir si le NPC est arrivé au bout du chemin, donc sans se faire tuer:
     protected boolean isArrived;
 
@@ -52,16 +55,19 @@ public abstract class NPC implements Drawable, Movable, Runnable {
                                                         GESTION DES ATTAQUES
     ==================================================================================================================*/
     /**Methode surchargée qui prend en argument un objet type Projectile*/
+    @Override
     public void hit(Shell shell){
         explode(shell);
     }
 
+    @Override
     public void hit(Glue glue){
         stick(glue);
     }
 
-    public void hit(Bullet bullet){
-        injure(bullet);
+    @Override
+    public void hit(Arrow arrow){
+        injure(arrow);
     }
 
     /*==================================================================================================================
@@ -71,7 +77,7 @@ public abstract class NPC implements Drawable, Movable, Runnable {
 
     public abstract void explode(Shell shell);
 
-    public abstract void injure(Bullet bullet);
+    public abstract void injure(Arrow arrow);
 
     public void decreaseHealth(int damage){
         if (health <= 0) {
@@ -92,7 +98,13 @@ public abstract class NPC implements Drawable, Movable, Runnable {
     }
 
     @Override
-    public void run(){}
+    public void run(){
+        while(onMap && gameModel.getRunning()){
+    }
+    }
+
+    //todo : remove element
+
 
     @Override
     public void updateDrawing(){}
