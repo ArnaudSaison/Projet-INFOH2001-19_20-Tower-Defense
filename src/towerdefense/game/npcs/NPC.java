@@ -18,9 +18,9 @@ public abstract class NPC implements Drawable, Movable, Runnable {
     protected GameModel gameModel;
     protected Thread tNPC;
     //Permet de savoir si le NPC est sur la carte:
-    protected Boolean onMap;
+    protected boolean onMap;
     //Permet de savoir si le NPC est arrivé au bout du chemin, donc sans se faire tuer:
-    protected Boolean isArrived;
+    protected boolean isArrived;
 
     //Attributs de spécification:
     protected int health;
@@ -112,9 +112,11 @@ public abstract class NPC implements Drawable, Movable, Runnable {
 
     public int getHealthLoot(){return healthLoot;}
 
-    public Boolean getIsArrived(){return isArrived;}
+    public boolean getIsArrived(){return isArrived;}
 
-    public void setOnMap(Boolean onMap){this.onMap = onMap;}
+    public void setIsArrived(boolean isArrived){ this.isArrived = isArrived;}
+
+    public void setOnMap(boolean onMap){this.onMap = onMap;}
 
     /*==================================================================================================================
                                                         AUTRES

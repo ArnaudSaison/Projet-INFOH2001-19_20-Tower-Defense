@@ -21,27 +21,26 @@ public class Shop {
     private GameModel gameModel;
     private Player player;
     public enum ShopCases {STANDARD_TOWER, RAPID_TOWER, LONG_RANGE_TOWER, CANON_TOWER, GLUE_TOWER, GOLDMINE}
+    final Properties shopProperties;
 
     /*==================================================================================================================
                                                    CONSTRUCTEUR
     ==================================================================================================================*/
-    public Shop(Map map, GameModel gameModel) {
+    public Shop(Map map, GameModel gameModel, String shopFilePath) throws IOException {
         this.map = map;
         this.gameModel = gameModel;
         player = gameModel.getPlayer();
+
+        //================================Lecture des propriétés du magasin============================================
+        shopProperties = new Properties();
+        InputStream shopPropertiesFile = new FileInputStream(shopFilePath);
+        shopProperties.load(shopPropertiesFile);
     }
 
     /*==================================================================================================================
                                                    GESTION DES CAS
     ==================================================================================================================*/
-    public Buyable getInstance(ShopCases type, String shopFilePath) throws IOException {
-        //================================Lecture des propriétés du magasin============================================
-
-        //Chemin d'accès au fichier shop.properties:
-        final Properties shopProperties = new Properties();
-        InputStream shopPropertiesFile = new FileInputStream(shopFilePath + "/map.properties");
-        shopProperties.load(shopPropertiesFile);
-
+    public Buyable getInstance(ShopCases type){
         //Spécification des attributs et de base des tours:
         int standardRange = Integer.parseInt(shopProperties.getProperty("standardRange"));
         int standardFireRate = Integer.parseInt(shopProperties.getProperty("standardFireRate"));

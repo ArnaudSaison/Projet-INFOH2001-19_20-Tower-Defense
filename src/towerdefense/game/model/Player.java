@@ -13,12 +13,12 @@ public class Player {
     //******Gestion de l'or*******
     public void increaseGold(int goldIncrement){gold += goldIncrement;}
 
-    public void decreaseGold(int goldDecrement){gold += goldDecrement;}
+    public void decreaseGold(int goldDecrement){gold -= goldDecrement;}
 
     //******Gestion du score*******
     public void increaseHealth(int scoreIncrement){ health += scoreIncrement;}
 
-    public void decreaseHealth(int scoreDecrement){ health += scoreDecrement;}
+    public void decreaseHealth(int scoreDecrement){ health -= scoreDecrement;}
 
     //********Getteurs*********
     public int getHealth() {
