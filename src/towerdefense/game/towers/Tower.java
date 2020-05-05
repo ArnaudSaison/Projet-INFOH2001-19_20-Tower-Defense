@@ -8,6 +8,7 @@ import towerdefense.game.map.Map;
 import towerdefense.game.map.Position;
 import towerdefense.game.model.GameModel;
 import towerdefense.game.npcs.NPC;
+import towerdefense.view.Printable;
 
 import java.util.ArrayList;
 
@@ -119,8 +120,35 @@ public abstract class Tower implements Buyable, Upgradable, Placeable, Drawable,
         }
     }
 
-    @Override
-    public void updateDrawing(){}
+    /*==================================================================================================================
+                                                    JavaFX
+    ==================================================================================================================*/
+    /**
+     * Initilisation de la vue
+     * Création d'un objet de la vue qui pourra ensuite être récupéré
+     */
+    public void initDrawing() {
+//        npcView = new NPCView(this, map, "");
+    }
+
+    /**
+     * Mise à jour de la représentation graphique
+     * Ne peut être appelée que par la vue
+     */
+    public void updateDrawing() {
+//        npcView.update();
+    }
+
+    /**
+     * Récupérer la représentation graphique de l'ojet
+     * Ne peut être appelée que par la vue
+     *
+     * @return représentation graphique de l'ojet
+     */
+    public Printable getDrawing() {
+//        return npcView;
+        return null;
+    }
 
     /*==================================================================================================================
                                                     AUTRES

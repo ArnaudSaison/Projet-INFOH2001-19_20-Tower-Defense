@@ -10,12 +10,7 @@ import towerdefense.view.Printable;
 public interface Drawable {
     public void updateDrawing();
 
-    public Printable getDrawing();
+    public void initDrawing();
 
-    /**
-     * Retirer la représentation graphique de l'élément de la vue
-     * Cette méthode ne sert pas à faire disparaître la représentation en question,
-     * mais bien à supprimer toute référence de cette raprésentation et ainsi pouvoir supprimer this
-     */
-    public void removeDrawing();
+    public Printable getDrawing();
 }

@@ -1,8 +1,10 @@
 package towerdefense.game.model;
 
+import towerdefense.Config;
 import towerdefense.game.map.Map;
 import towerdefense.game.map.MapFactory;
 import towerdefense.game.npcs.NPC;
+import towerdefense.game.npcs.StandardNPC;
 import towerdefense.game.waves.Wave;
 import towerdefense.game.waves.WaveFactory;
 
@@ -21,6 +23,8 @@ public class GameModel implements Runnable{
 
     // Attributs du jeu
     private int timeBeforeBeginning;
+
+    private Config config;
     private Wave wave;
     private ArrayList<NPC> NPCsOnMap;
     private WaveFactory waveFactory;
@@ -35,17 +39,17 @@ public class GameModel implements Runnable{
     ==================================================================================================================*/
     /**Constructeur du jeu
      * */
-    public GameModel() throws IOException { //TODO: rajouter config en argument!
+    public GameModel(Config config, String mapPath) throws IOException {
         // ********** Initialisation des attributs **********
         NPCsOnMap = new ArrayList<>();
 
         //************Map*********************
         MapFactory mapFactory = new MapFactory();
-        map = mapFactory.getMap("C:\\Users\\Pedro\\Desktop\\INFO\\Projet-INFOH2001-19_20-Tower-Defense\\resources\\maps\\map1");
+        map = mapFactory.getMap(mapPath);
 
         // ********** Wave Factory **********
-        waveFactory = new WaveFactory(map,this,"C:\\Users\\Pedro\\Desktop\\INFO\\Projet-INFOH2001-19_20-Tower-Defense\\resources\\maps\\map1");
-        wave = waveFactory.getWave("easy",0,0);
+//        waveFactory = new WaveFactory(map,this,"C:\\Users\\Pedro\\Desktop\\INFO\\Projet-INFOH2001-19_20-Tower-Defense\\resources\\maps\\map1");
+//        wave = waveFactory.getWave("easy",0,0);
 
         // ********** initilisation du thread **********
         this.gameThread = new Thread();
@@ -96,12 +100,13 @@ public class GameModel implements Runnable{
     public void initialize(){
     gameThread.start();
     running = true;
-    paused =false;
+    paused = false;
     }
 
     public void placeNPC(NPC npc) {
         npc.setOnMap(true);
         NPCsOnMap.add(npc);
+        map.addElementOnMap(npc);
     }
 
     public void killNPC(NPC npc){
@@ -152,6 +157,10 @@ public class GameModel implements Runnable{
     public Player getPlayer(){return player;}
 
     public Boolean getPaused(){return paused;}
+
+    public Map getMap() {
+        return map;
+    }
 
     /*==================================================================================================================
                                                        TESTS

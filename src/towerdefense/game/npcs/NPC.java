@@ -8,6 +8,8 @@ import towerdefense.game.model.GameModel;
 import towerdefense.game.projectiles.Bullet;
 import towerdefense.game.projectiles.Glue;
 import towerdefense.game.projectiles.Shell;
+import towerdefense.view.Printable;
+import towerdefense.view.npc.NPCView;
 
 public abstract class NPC implements Drawable, Movable, Runnable {
     //TODO: arriver au bout du chemin ! + (joueur).
@@ -16,11 +18,16 @@ public abstract class NPC implements Drawable, Movable, Runnable {
     ==================================================================================================================*/
     protected Position position;
     protected GameModel gameModel;
+    protected Map map;
     protected Thread tNPC;
     //Permet de savoir si le NPC est sur la carte:
     protected boolean onMap;
     //Permet de savoir si le NPC est arrivé au bout du chemin, donc sans se faire tuer:
     protected boolean isArrived;
+    protected HeadedDir isHeaded;
+
+    private double width = 1.0/4.0;
+    private double height = 1.0/4.0;
 
     //Attributs de spécification:
     protected int health;
@@ -31,36 +38,44 @@ public abstract class NPC implements Drawable, Movable, Runnable {
     //Optionnel:
     //protected ArrayList<Weapon> inventaire ; (optionnel)
 
+    // JavaFX
+    private NPCView npcView;
+
     /*==================================================================================================================
                                                    CONSTRUCTEUR
     ==================================================================================================================*/
-    public NPC (Map map, GameModel gameModel, int health, int speed, int goldLoot, int scoreLoot){
+    public NPC(Map map, GameModel gameModel, int health, int speed, int goldLoot, int scoreLoot) {
         position = new Position(map);
         onMap = false;
         isArrived = false;
         this.gameModel = gameModel;
         this.tNPC = new Thread();
+        this.map = map;
 
         this.health = health;
         this.speed = speed;
         this.goldLoot = goldLoot;
-        this.healthLoot= scoreLoot;
+        this.healthLoot = scoreLoot;
 
+        isHeaded = HeadedDir.DOWN;
     }
 
     /*==================================================================================================================
                                                         GESTION DES ATTAQUES
     ==================================================================================================================*/
-    /**Methode surchargée qui prend en argument un objet type Projectile*/
-    public void hit(Shell shell){
+
+    /**
+     * Methode surchargée qui prend en argument un objet type Projectile
+     */
+    public void hit(Shell shell) {
         explode(shell);
     }
 
-    public void hit(Glue glue){
+    public void hit(Glue glue) {
         stick(glue);
     }
 
-    public void hit(Bullet bullet){
+    public void hit(Bullet bullet) {
         injure(bullet);
     }
 
@@ -73,7 +88,7 @@ public abstract class NPC implements Drawable, Movable, Runnable {
 
     public abstract void injure(Bullet bullet);
 
-    public void decreaseHealth(int damage){
+    public void decreaseHealth(int damage) {
         if (health <= 0) {
             gameModel.killNPC(this);
         } else {
@@ -84,48 +99,105 @@ public abstract class NPC implements Drawable, Movable, Runnable {
     /*==================================================================================================================
                                                         GESTION DU THREAD
     ==================================================================================================================*/
-    public void initialize(){
-        if(onMap){
+    public void initialize() {
+        if (onMap) {
             tNPC.start();
             System.out.println("NPC : je suis initialisé.");
         }
     }
 
     @Override
-    public void run(){}
+    public void run() {
+    }
 
-    @Override
-    public void updateDrawing(){}
+    /*==================================================================================================================
+                                                        JavaFX
+    ==================================================================================================================*/
+
+    /**
+     * Initilisation de la vue
+     * Création d'un objet de la vue qui pourra ensuite être récupéré
+     */
+    public void initDrawing() {
+        npcView = new NPCView(this, map, "generic");
+    }
+
+    /**
+     * Mise à jour de la représentation graphique
+     * Ne peut être appelée que par la vue
+     */
+    public void updateDrawing() {
+        npcView.update();
+    }
+
+    /**
+     * Récupérer la représentation graphique de l'ojet
+     * Ne peut être appelée que par la vue
+     *
+     * @return représentation graphique de l'ojet
+     */
+    public Printable getDrawing() {
+        return npcView;
+    }
 
     /*==================================================================================================================
                                                         GESTION DU DEPLACEMENT
     ==================================================================================================================*/
     @Override
-    public void move(){}
+    public void move() {
+    }
+
+    /**
+     * Donne la direction dans laquelle le NPC se dirige
+     * @return direction du NPC
+     */
+    public HeadedDir getHeadedDir() {
+        return isHeaded;
+    }
 
     /*==================================================================================================================
                                                         GETTEURS/SETTEURS
     ==================================================================================================================*/
-    public Position getPos(){return position;}
+    public Position getPos() {
+        return position;
+    }
 
-    public int getGoldLoot(){return goldLoot;}
+    public int getGoldLoot() {
+        return goldLoot;
+    }
 
-    public int getHealthLoot(){return healthLoot;}
+    public int getHealthLoot() {
+        return healthLoot;
+    }
 
-    public boolean getIsArrived(){return isArrived;}
+    public boolean getIsArrived() {
+        return isArrived;
+    }
 
-    public void setIsArrived(boolean isArrived){ this.isArrived = isArrived;}
+    public void setIsArrived(boolean isArrived) {
+        this.isArrived = isArrived;
+    }
 
-    public void setOnMap(boolean onMap){this.onMap = onMap;}
+    public void setOnMap(boolean onMap) {
+        this.onMap = onMap;
+    }
+
+    public double getWidth() {
+        return width;
+    }
+
+    public double getHeight() {
+        return height;
+    }
 
     /*==================================================================================================================
-                                                        AUTRES
-    ==================================================================================================================*/
+                                                                    AUTRES
+                ==================================================================================================================*/
     @Override
-    public String toString(){
+    public String toString() {
         return "- position: " + position + "\n" +
-                "- health: " + health + "\n"+
-                "- goldLoot: " + goldLoot + "\n"+
+                "- health: " + health + "\n" +
+                "- goldLoot: " + goldLoot + "\n" +
                 "- speed: " + speed + ".";
     }
 }

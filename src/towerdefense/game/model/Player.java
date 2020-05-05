@@ -3,11 +3,13 @@ package towerdefense.game.model;
 public class Player {
 
     private int health;
+    private int maxHealth;
     private int gold;
 
     public Player(int initialGold, int initialHealth){
-        health = initialHealth;
-        gold = initialGold;
+        this.health = initialHealth;
+        this.maxHealth = initialHealth;
+        this.gold = initialGold;
     }
 
     //******Gestion de l'or*******
@@ -27,5 +29,9 @@ public class Player {
 
     public int getGold() {
         return gold;
+    }
+
+    public int getMaxHealth() {
+        return maxHealth;
     }
 }
