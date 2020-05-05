@@ -167,9 +167,3 @@ public abstract class Tower implements Buyable, Upgradable, Placeable, Drawable,
         this.position = position;
     }
 }
-
-
-//TODO:
-// nouveau contructeur
-// passage de niveau
-// setposition

@@ -1,13 +1,11 @@
 package towerdefense.game.projectiles;
 
+import towerdefense.game.map.Map;
+import towerdefense.game.model.GameModel;
+
 public class Glue extends Projectile{
-    private int damage;
 
-    public Glue(int damage){
-        this.damage = damage;
-    }
-
-    public int getDamage() {
-        return damage;
+    public Glue(Map map, GameModel gameModel, int damage){
+        super(map, gameModel, damage);
     }
 }

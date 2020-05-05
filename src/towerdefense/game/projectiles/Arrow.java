@@ -1,14 +1,12 @@
 package towerdefense.game.projectiles;
 
+import towerdefense.game.map.Map;
+import towerdefense.game.model.GameModel;
+
 public class Arrow extends Projectile {
-    private int damage;
 
-    public Arrow(int damage){
-        this.damage = damage;
-    }
-
-    public int getDamage() {
-        return damage;
+    public Arrow(Map map, GameModel gameModel, int damage){
+    super(map, gameModel, damage);
     }
 
     //dissocier chaque flêche

@@ -5,6 +5,7 @@ import towerdefense.game.Hittable;
 import towerdefense.game.Movable;
 import towerdefense.game.map.Map;
 import towerdefense.game.map.Position;
+import towerdefense.game.map.Tile;
 import towerdefense.game.model.GameModel;
 import towerdefense.game.projectiles.Arrow;
 import towerdefense.game.projectiles.Glue;
@@ -37,8 +38,8 @@ public abstract class NPC implements Drawable, Movable, Runnable, Hittable {
     /*==================================================================================================================
                                                    CONSTRUCTEUR
     ==================================================================================================================*/
-    public NPC (Map map, GameModel gameModel, int health, int speed, int goldLoot, int scoreLoot){
-        position = new Position(map);
+    public NPC (Map map, GameModel gameModel, int health, int speed, int goldLoot, int scoreLoot, Tile gatePathTile){
+        position = gatePathTile.getPosition();
         onMap = false;
         isArrived = false;
         this.gameModel = gameModel;

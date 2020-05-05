@@ -25,15 +25,13 @@ public abstract class Projectile implements Runnable, Drawable, Movable {
         tProjectile.start();
     }
 
-
-
-    @Override
-    public void move(){
-
+    public int getDamage() {
+        return damage;
     }
 
     @Override
-    public void run(){
+    public void move(){}
 
-    }
+    @Override
+    public void run(){}
 }

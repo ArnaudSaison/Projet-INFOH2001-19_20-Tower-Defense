@@ -1,6 +1,7 @@
 package towerdefense.game.npcs;
 
 import towerdefense.game.map.Map;
+import towerdefense.game.map.Tile;
 import towerdefense.game.model.GameModel;
 import towerdefense.game.projectiles.Arrow;
 import towerdefense.game.projectiles.Glue;
@@ -8,8 +9,8 @@ import towerdefense.game.projectiles.Shell;
 
 public class GlueResistantNPC extends NPC {
 
-    public GlueResistantNPC(Map map, GameModel gameModel, int health, int speed, int goldLoot, int scoreLoot) {
-        super(map, gameModel, health, speed, goldLoot, scoreLoot);
+    public GlueResistantNPC(Map map, GameModel gameModel, int health, int speed, int goldLoot, int scoreLoot, Tile gatePathTile) {
+        super(map, gameModel, health, speed, goldLoot, scoreLoot, gatePathTile);
     }
 
     @Override
