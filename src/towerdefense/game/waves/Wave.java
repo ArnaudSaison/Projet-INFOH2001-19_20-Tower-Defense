@@ -12,14 +12,14 @@ public class Wave {
     // Prochain ennemi a entrer sur la carte:
     private NPC nextNPC;
 
-    // Occurrence de la vague:
-    private int occurrence;
+    // Itération de la vague:
+    private int waveIterator;
     private int cycle;
 
-    public Wave(ArrayList<NPC> NPCs, String difficulty, int occurrence, int cycle ) {
+    public Wave(ArrayList<NPC> NPCs, String difficulty, int waveIterator, int cycle ) {
         this.waveNPCs = NPCs;
         this.difficulty = difficulty;
-        this.occurrence = occurrence;
+        this.waveIterator = waveIterator;
         this.cycle = cycle;
     }
 
@@ -27,7 +27,9 @@ public class Wave {
         return difficulty;
     }
 
-    public int getOccurrence(){return occurrence;}
+    public int getWaveIteration(){return waveIterator;}
+
+    public int getCycle(){return cycle;}
 
     public NPC getNextEnemy(){
         setNextEnemy();
@@ -45,12 +47,13 @@ public class Wave {
         waveNPCs.remove(randomIndex);
     }
 
-    // tests:
+    //==============================================Tests===============================================================
+
     public void affiche(){
         for(NPC e :waveNPCs){
             System.out.println(e.toString());
         }
     }
 
-    public int getCycle(){return cycle;}
+
 }

@@ -1,58 +1,61 @@
 package towerdefense.game;
 
 import org.junit.Test;
+import towerdefense.game.map.Map;
+import towerdefense.game.map.MapFactory;
+import towerdefense.game.model.GameModel;
+import towerdefense.game.waves.Wave;
+import towerdefense.game.waves.WaveFactory;
 
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Random;
 
 public class TestGameModel {
     @Test
-    public void testGameModel() throws IOException {}
-
-    @Test
-    public void testRandomMethod(){
-        ArrayList<String> uneListe = new ArrayList<String>();
-        uneListe.add("a");
-        //uneListe.add("b");
-        //uneListe.add("c");
-
-        Random randomGenerator = new Random();
-
-        int randomIndex = randomGenerator.nextInt(uneListe.size());
-        System.out.println(uneListe.get(randomIndex));
+    /**Vérifie via un print que les vagues sont composées selon les indications fournies par les fichier properties.*/
+    public void testGameModel() throws IOException {
+        GameModel gameModelTest = new GameModel();
+        gameModelTest.initialize();
+        gameModelTest.run();
     }
 
-    @Test
-    public void test2() {
-        int i = 0;
-        while (i < 15) {
-            testRandomMethod();
-            i++;
-        }
+    //@Test
+    public void testWaveFactory() throws IOException {
+        MapFactory mapFactory = new MapFactory();
+        Map map = mapFactory.getMap("C:\\Users\\Pedro\\Desktop\\INFO\\Projet-INFOH2001-19_20-Tower-Defense\\resources\\maps\\map1");
+        GameModel gameModelTest = new GameModel();
+
+        WaveFactory waveFactory = new WaveFactory(map,gameModelTest,"C:\\Users\\Pedro\\Desktop\\INFO\\Projet-INFOH2001-19_20-Tower-Defense\\resources\\maps\\map1");
+        Wave wave = waveFactory.getWave("easy",0,0);
+
+        waveFactory.afficheFichiersSpec();
     }
 
-    File mappFolder = new File("C:\\Users\\Pedro\\Desktop\\INFO\\Projet-INFOH2001-19_20-Tower-Defense\\resources\\maps\\map1");
+    //=======================================test getAllMapSpecificationsFiles==========================================
+    ArrayList<File> res = new ArrayList<>();
 
-    public ArrayList<File> getAllMapSpecificationsFiles(File mapFolder){
-        ArrayList<File> res = new ArrayList<File>();
+    public void getAllMapSpecificationsFiles(File mapFolder){
         for (File fileEntry : mapFolder.listFiles()) {
             if (fileEntry.isDirectory()) {
                 getAllMapSpecificationsFiles(fileEntry);
             } else {
                 res.add(fileEntry);
-                System.out.println(fileEntry.getName());
             }
         }
-        return res;
     }
 
-    @Test
-    public void test4(){
-        int waveNumber = 1;
-        String a = waveNumber+"easyStandardProportion";
-        System.out.println(a);
+    String mapsFolderPath = "C:\\Users\\Pedro\\Desktop\\INFO\\Projet-INFOH2001-19_20-Tower-Defense\\resources\\maps\\map1";
+    File mapFolder = new File(mapsFolderPath);
 
+    //@Test
+    public void testGetAllMapsSpec(){
+        getAllMapSpecificationsFiles(mapFolder);
+        for (File file : res) {
+            System.out.println(file.getName());
+        }
     }
+
+    //==================================================================================================================
+
 }

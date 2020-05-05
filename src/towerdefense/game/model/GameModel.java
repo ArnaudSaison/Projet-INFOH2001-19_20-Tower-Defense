@@ -1,6 +1,5 @@
 package towerdefense.game.model;
 
-import towerdefense.Config;
 import towerdefense.game.map.Map;
 import towerdefense.game.map.MapFactory;
 import towerdefense.game.npcs.NPC;
@@ -34,15 +33,18 @@ public class GameModel implements Runnable{
     ==================================================================================================================*/
     /**Constructeur du jeu
      * */
-    public GameModel(Config config) throws IOException {
+    public GameModel() throws IOException { //TODO: rajouter config en argument!
         // ********** Initialisation des attributs **********
-        NPCsOnMap = new ArrayList<NPC>();
+        NPCsOnMap = new ArrayList<>();
+
         //************Map*********************
         MapFactory mapFactory = new MapFactory();
         map = mapFactory.getMap("C:\\Users\\Pedro\\Desktop\\INFO\\Projet-INFOH2001-19_20-Tower-Defense\\resources\\maps\\map1");
+
         // ********** Wave Factory **********
-        waveFactory = new WaveFactory(map,this,"C:\\Users\\Pedro\\Desktop\\INFO\\Projet-INFOH2001-19_20-Tower-Defense\\resources\\wave");
+        waveFactory = new WaveFactory(map,this,"C:\\Users\\Pedro\\Desktop\\INFO\\Projet-INFOH2001-19_20-Tower-Defense\\resources\\maps\\map1");
         wave = waveFactory.getWave("easy",0,0);
+
         // ********** initilisation du thread **********
         this.gameThread = new Thread();
     }
@@ -60,9 +62,12 @@ public class GameModel implements Runnable{
                         NPC nextNPC = wave.getNextEnemy();
                         placeNPC(nextNPC);
                         nextNPC.initialize();
-                        Thread.sleep(1000); // place et démarre un NPC toute les secondes.
+                        Thread.sleep(1000); // place et démarre un NPC toutes les secondes.
+                        wave.affiche();
+                        System.out.println("=========================================================================");
                     } else {
-                        waveFactory.getNextWave(wave);
+                        wave = waveFactory.getNextWave(wave);
+                        System.out.println("*************************Wave***************************************");
                     }
                 }
             } catch (IOException | InterruptedException e) {
@@ -80,6 +85,8 @@ public class GameModel implements Runnable{
 
     public void initialize(){
     gameThread.start();
+    running = true;
+    paused =false;
     }
 
     public void placeNPC(NPC npc) {
@@ -132,4 +139,12 @@ public class GameModel implements Runnable{
     public Player getPlayer(){return player;}
 
     public Boolean getPaused(){return paused;}
+
+    /*==================================================================================================================
+                                                       TESTS
+    ==================================================================================================================*/
+
+    public Wave donneVague() {
+        return wave;
+    }
 }

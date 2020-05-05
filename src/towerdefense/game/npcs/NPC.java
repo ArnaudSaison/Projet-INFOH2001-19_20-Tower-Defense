@@ -84,7 +84,9 @@ public abstract class NPC implements Drawable, Movable, Runnable {
     ==================================================================================================================*/
     public void initialize(){
         if(onMap){
-            tNPC.start();}
+            tNPC.start();
+            System.out.println("NPC : je suis initialisé.");
+        }
     }
 
     @Override
@@ -110,7 +112,7 @@ public abstract class NPC implements Drawable, Movable, Runnable {
 
     public Boolean getIsArrived(){return isArrived;}
 
-    public void setOnMap(Boolean OnMap){this.onMap = onMap;}
+    public void setOnMap(Boolean onMap){this.onMap = onMap;}
 
     /*==================================================================================================================
                                                         AUTRES
