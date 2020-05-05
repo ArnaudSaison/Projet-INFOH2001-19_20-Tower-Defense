@@ -4,73 +4,156 @@ import towerdefense.view.map.ObstacleTileView;
 
 import java.io.*;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Properties;
 
 public class MapFactory {
+    public enum TileType {TREE, ROCK, PATH, EXIT_PATH, GATE_PATH, EMPTY}
+    private int defaultPixelsPerMeter = 20;
+    private int defaultTileMetricWidth = 2;
+
     public Map getMap(String mapFilePath) throws IOException {
         // Lecture des propriétés de la carte
         final Properties mapProperties = new Properties();
         InputStream mapPropertiesFile = new FileInputStream(mapFilePath + "/map.properties");
         mapProperties.load(mapPropertiesFile);
 
-        String mapName = mapProperties.getProperty("mapName");
         double tileMetricWidth = Double.parseDouble(mapProperties.getProperty("tileMetricWidth"));
         double pixelsPerMeter = Integer.parseInt(mapProperties.getProperty("pixelsPerMeter"));
-
-        // éléments qui constitueront la carte
-        ArrayList<Tile> tiles = new ArrayList<>();
 
         // Nécessaire à la lecture du fichier représentant les cases de la carte
         BufferedReader mapFile = new BufferedReader(new FileReader(mapFilePath + "/map.txt"));
 
-        // Lecture de chaque caractère du fichier et création des cases
+        ArrayList<String> lines = new ArrayList<>();
         String line;
-        int rowCounter = 0;
-        int columnCounter = 0;
         while ((line = mapFile.readLine()) != null) {
-            columnCounter = 0;
-            for (char c : line.toCharArray()) {
-                switch (c) {
-                    case 'X': // vide
-                        tiles.add((Tile) new EmptyTile(columnCounter, rowCounter, tileMetricWidth));
-                        break;
-                    case 'O': // obstacle : type par défaut (arbre)
-                        tiles.add((Tile) new ObstacleTile(columnCounter, rowCounter, tileMetricWidth, ObstacleTileView.ObstacleType.TREE));
-                        break;
-                    case 'T': // obstacle : arbre
-                        tiles.add((Tile) new ObstacleTile(columnCounter, rowCounter, tileMetricWidth, ObstacleTileView.ObstacleType.TREE));
-                        break;
-                    case 'R': // obstacle : rock
-                        tiles.add((Tile) new ObstacleTile(columnCounter, rowCounter, tileMetricWidth, ObstacleTileView.ObstacleType.ROCK));
-                        break;
-                    case 'P': // chemin
-                        tiles.add((Tile) new PathTile(columnCounter, rowCounter, tileMetricWidth));
-                        break;
-                    case 'G': // entrée (gate)
-                        tiles.add((Tile) new GatePathTile(columnCounter, rowCounter, tileMetricWidth));
-                        break;
-                    case 'E': // sortie (exit)
-                        tiles.add((Tile) new ExitPathTile(columnCounter, rowCounter, tileMetricWidth));
-                        break;
-                    default:
-                        tiles.add((Tile) new EmptyTile(columnCounter, rowCounter, tileMetricWidth));
-                        break;
-                }
-                columnCounter++;
-            }
-            rowCounter++;
+            lines.add(line);
         }
         mapFile.close(); // fermeture du fichier
 
-        // Création et return de la carte créée
-        return new Map(tiles, pixelsPerMeter, tileMetricWidth, columnCounter, rowCounter, mapName);
+        return new Map(lines, pixelsPerMeter, tileMetricWidth);
     }
 
-    private void saveMap(Map map) {
-        System.out.println("Not implemented");
-        //TODO: implémenter la méthode saveMap pour l'éditeur de map
-        /* Pour l'éditeur :
-         * - Créer un fichier texte ne coomprtant que des cases vides,
-         * - le passer dans le getMap*/
+    public void saveMap(Map map, ArrayList<String> waves, String path) {
+        // Générer la chaîne de caractères pour chaque ligne et l'ajouter à un output
+
+    }
+
+    /**
+     * Crée une carte vide (que des EmptyTile)
+     */
+    public Map newMap(int columns, int rows) {
+        ArrayList<String> resLines = new ArrayList<>();
+        for (int i = 1; i <= rows; i++) {
+            StringBuilder line = new StringBuilder();
+            for (int j = 1; j <= columns; j++) {
+                line.append("X");
+            }
+            resLines.add(line.toString());
+        }
+
+        return new Map(resLines, defaultPixelsPerMeter, defaultTileMetricWidth);
+    }
+
+    // ==================== Méthodes pour récupérer des informations sur les cases ====================
+    public static ArrayList<TileType> getTileTypesList() {
+        return new ArrayList<>(Arrays.asList(TileType.values()));
+    }
+
+    public static String getTileGraphics(TileType type) {
+        String res = "";
+        switch (type) {
+            case EMPTY:
+                res = "tiles/grass.png";
+                break;
+            case ROCK:
+                res = "obstacles/rock.png";
+                break;
+            case TREE:
+                res = "obstacles/tree.png";
+                break;
+            case EXIT_PATH:
+            case GATE_PATH:
+            case PATH:
+                res = "tiles/grass —.png";
+                break;
+        }
+        return res;
+    }
+
+    public static String getTileDescription(TileType type) {
+        String res = "";
+        switch (type) {
+            case ROCK:
+                res = "NPCs can't walk on tiles with rocks and the player can't place anything on it.";
+                break;
+            case TREE:
+                res = "NPCs can't walk on tiles with trees and the player can't place anything on it.";
+                break;
+            case EXIT_PATH:
+                res = "This tile allows NPCs to exit the map.";
+                break;
+            case GATE_PATH:
+                res = "This tile allows NPCs to enter the map.";
+                break;
+            case PATH:
+                res = "This tile allows NPCs to walk on the map.";
+                break;
+            case EMPTY:
+                res = "This tile allows the player to place towers and goldmines, but NPCs can't walk on it.";
+                break;
+        }
+        return res;
+    }
+
+    public static String getTileName(TileType type) {
+        String res = "";
+        switch (type) {
+            case ROCK:
+                res = "Rock Tile";
+                break;
+            case TREE:
+                res = "Tree Tile";
+                break;
+            case EXIT_PATH:
+                res = "Exit Path Tile";
+                break;
+            case GATE_PATH:
+                res = "Gate Path Tile";
+                break;
+            case PATH:
+                res = "Path Tile";
+                break;
+            case EMPTY:
+                res = "Empty Tile";
+                break;
+        }
+        return res;
+    }
+
+    public static Tile getTile(TileType type, int x, int y, Map map) {
+        Tile res;
+        switch (type) {
+            case ROCK:
+                res = new ObstacleTile(x, y, map, ObstacleTileView.ObstacleType.ROCK);
+                break;
+            case TREE:
+                res = new ObstacleTile(x, y, map, ObstacleTileView.ObstacleType.TREE);
+                break;
+            case EXIT_PATH:
+                res = new ExitPathTile(x, y, map);
+                break;
+            case GATE_PATH:
+                res = new GatePathTile(x, y, map);
+                break;
+            case PATH:
+                res = new PathTile(x, y, map);
+                break;
+            default:
+            case EMPTY:
+                res = new EmptyTile(x, y, map);
+                break;
+        }
+        return res;
     }
 }

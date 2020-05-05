@@ -1,0 +1,177 @@
+.size-selector-hbox {
+    -fx-background-color: #a6a6a6;
+    -fx-background-radius: 15;
+}
+
+.size-selector-hbox .button {
+	-fx-background-radius: 0;
+
+    -fx-border-style: solid outside line-cap square;
+    -fx-border-insets: 3;
+	-fx-border-width: 0;
+
+	-fx-background-insets: 0;
+
+	-fx-cursor: hand;
+}
+
+.new-map-button {
+    -fx-background-color: #99a599;
+}
+
+.cancel-button {
+    -fx-background-color: #999999;
+}
+
+.size-selector-hbox .button:hover {
+    -fx-background-color: #888888;
+}
+
+.size-selector-hbox .button:disabled {
+    -fx-background-color: #a49999;
+}
+
+.reset-view-button {
+	-fx-background-color: rgba(217, 217, 217, 0.7);
+	-fx-background-radius: 7;
+	-fx-border-width: 0;
+	-fx-background-insets: 0;
+	-fx-cursor: hand;
+}
+
+.reset-view-button:focused {
+	-fx-background-color: rgba(217, 217, 217, 0.7);
+}
+
+.reset-view-button:hover {
+	-fx-background-color: rgba(150, 150, 150, 1);
+}
+
+
+
+
+
+.sidebar-map {
+
+}
+
+.sidebar-waves {
+
+}
+
+.sidebar-tiles {
+
+}
+
+
+.tab-pane .tab-header-area .tab-header-background {
+    -fx-background-color: #e6e6e6;
+}
+
+.tab-pane:top *.tab-header-area {
+    -fx-background-insets: 0;
+
+    -fx-border-width: 0;
+    -fx-border-insets: 0;
+
+    -fx-padding: 5 0 0 0;
+}
+
+.tab-pane {
+    -fx-tab-min-width: 50;
+    -fx-border-width: 0;
+    -fx-border-insets: 0;
+
+    -fx-border-style: solid;
+    -fx-border-width: 0 0 0 5;
+    -fx-border-color: gray;
+}
+
+.tab {
+    -fx-background-insets: 0;
+    -fx-border-width: 0;
+    -fx-border-insets: 0;
+    -fx-margin: 5;
+}
+
+.tab-pane .tab {
+    -fx-background-color: #888888;
+    -fx-background-radius: 7 7 0 0;
+
+    -fx-border-width: 0;
+    -fx-border-insets: 0;
+
+    -fx-cursor: hand;
+
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+}
+
+.tab-pane .tab:hover {
+    -fx-background-color: #a6a6a6;
+}
+
+.tab-pane .tab:selected {
+    -fx-background-color: #cccccc;
+    -fx-border-width: 0;
+    -fx-cursor: default;
+}
+
+.tab-pane .tab:focused {
+    -fx-border-width: 0;
+}
+
+.tab .tab-label {
+    -fx-text-font-size: 15;
+    -fx-alignement: CENTER;
+}
+
+
+
+
+
+
+
+.tile-selector-vbox {
+    -fx-spacing: 10;
+    -fx-alignment: top-left;
+    -fx-padding: 10;
+}
+
+.tile-selector-container-vbox {
+    -fx-spacing: 10;
+    -fx-background-color: #a6a6a6;
+    -fx-padding: 10;
+
+    -fx-border-width: 0;
+    -fx-border-color: black;
+    -fx-border-style: solid;
+}
+
+.tile-selector-container-vbox:hover {
+    -fx-border-width: 3;
+    -fx-cursor: hand;
+}
+
+.tile-selector-container-vbox-selected {
+    -fx-border-width: 3;
+    -fx-cursor: default;
+}
+
+.tile-selector-container-hbox {
+    -fx-spacing: 10;
+    -fx-background-color: #a6a6a6;
+}
+
+.tile-label-description {
+    -fx-wrap-text: true;
+}
+
+.tile-label-name {
+    -fx-wrap-text: false;
+    -fx-font-size: 14;
+    -fx-font-weight: bold;
+}
+
+
+

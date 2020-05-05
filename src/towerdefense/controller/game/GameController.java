@@ -5,6 +5,7 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.Cursor;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
@@ -132,10 +133,11 @@ public class GameController implements Initializable, GUIController {
 
         // Initialisation de la map
         String mapPath = mainApplication.getSelectedMapPath();
+        mainApplication.setSelectedMapPath(null); // Réinitilisation pour éviter que le jeu ne puisse se lancer sans avoir fait de sélection
 
         mapFactory = new MapFactory();
         try {
-            map = mapFactory.getMap(mapPath); // A supprimer
+            map = mapFactory.getMap(mapPath); //TODO: supprimer et remplacer par récupération dans le modèle
 
             map.initDrawing(); // initialisation de toutes les raprésentations graphiques
             mapView = (MapView) map.getDrawing(); // Ce casting est parmis par déifnition du MCV parttern
@@ -293,6 +295,7 @@ public class GameController implements Initializable, GUIController {
         if (event.isSecondaryButtonDown()) {
             deltaXDrag = mapView.getLayoutX() - event.getX();
             deltaYDrag = mapView.getLayoutY() - event.getY();
+
         }
     }
 

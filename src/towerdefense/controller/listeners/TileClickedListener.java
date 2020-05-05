@@ -15,12 +15,12 @@ public class TileClickedListener implements EventHandler<MouseEvent> {
 
     @Override
     public void handle(MouseEvent mouseEvent) {
-        if (mouseEvent.getEventType() == MouseEvent.MOUSE_CLICKED) {
+        if (mouseEvent.isPrimaryButtonDown()) {
             System.out.println(tile);
-        }
 
-        if (tile instanceof PathTile) {
-            System.out.println(((PathTile)tile).getConnections());
+            if (tile instanceof PathTile) {
+                System.out.println(((PathTile)tile).getConnections());
+            }
         }
     }
 }

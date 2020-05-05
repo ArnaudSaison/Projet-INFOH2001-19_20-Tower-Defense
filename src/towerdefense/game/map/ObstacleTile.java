@@ -11,8 +11,8 @@ public class ObstacleTile extends Tile {
     private ObstacleTileView.ObstacleType type;
 
     // ==================== Initilisation ====================
-    public ObstacleTile(int x, int y, double tileMetricWidth, ObstacleTileView.ObstacleType type) {
-        super(x, y, tileMetricWidth);
+    public ObstacleTile(int x, int y, Map map, ObstacleTileView.ObstacleType type) {
+        super(x, y, map);
         this.type = type;
         isBlocked = true;
     }

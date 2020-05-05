@@ -21,7 +21,7 @@
    <center>
       <StackPane fx:id="gameBox" prefHeight="150.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
-            <Pane fx:id="mapPlaceHolder" onMouseDragged="#handleMouseDraggedMap" onMousePressed="#handleMousePressedDelta" onScroll="#handleZoomScroll" prefHeight="200.0" prefWidth="200.0" />
+            <Pane fx:id="mapPlaceHolder" onMouseDragged="#handleMouseDraggedMap" onMousePressed="#handleMousePressedDelta" onScroll="#handleZoomScroll" prefHeight="200.0" prefWidth="200.0" styleClass="background" />
             <HBox fx:id="gameInfoBar" maxHeight="30.0" minHeight="30.0" prefHeight="30.0" spacing="30.0" StackPane.alignment="TOP_LEFT">
                <StackPane.margin>
                   <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />

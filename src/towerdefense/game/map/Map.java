@@ -3,6 +3,7 @@ package towerdefense.game.map;
 import towerdefense.game.Drawable;
 import towerdefense.view.map.MapView;
 import towerdefense.view.Printable;
+import towerdefense.view.map.ObstacleTileView;
 
 import java.util.ArrayList;
 
@@ -16,7 +17,6 @@ public class Map implements Drawable {
     private double settingsPixelsPerMeter;
     private double tileMetricWidth;
 
-    private String mapName;
     private int mapTileSizeX;
     private int mapTileSizeY;
 
@@ -32,32 +32,76 @@ public class Map implements Drawable {
     private MapView mapView;
     private ArrayList<Drawable> elementsOnMap; // éléments sur la map autres que des tiles
 
-    // ==================== Constructeur ====================
+    // ==================== Initilisation ====================
 
     /**
      * Constructeur de la carte.
      * la création d'une carte requérant une lecture complexe de fichier et gestion d'erreur,
      * celle-ci ne peut être instancée qu'au travers de la MapFactory
      */
-    public Map(ArrayList<Tile> tiles, double pixelsPerMeter, double tileMetricWidth, int mapTileSizeX, int mapTileSizeY, String mapName) {
+    public Map(ArrayList<String> lines, double pixelsPerMeter, double tileMetricWidth) {
         // Initialisation de tous les attributs
-        this.tiles = tiles;
+        this.tiles = new ArrayList<>();
         this.pixelsPerMeter = pixelsPerMeter;
         this.settingsPixelsPerMeter = pixelsPerMeter;
         this.tileMetricWidth = tileMetricWidth;
-        this.mapTileSizeX = mapTileSizeX;
-        this.mapTileSizeY = mapTileSizeY;
-        this.mapName = mapName;
+        this.mapTileSizeX = lines.get(0).length();
+        this.mapTileSizeY = lines.size();
+
+        // Lecture des lignes et construction de la carte
+        // éléments qui constitueront la carte
+        tiles = new ArrayList<>();
+
+        // Lecture de chaque caractère du fichier et création des cases
+        int rowCounter = 0;
+        int columnCounter = 0;
+        for (String line : lines) {
+            columnCounter = 0;
+            for (char c : line.toCharArray()) {
+                switch (c) {
+                    case 'X': // vide
+                        tiles.add((Tile) new EmptyTile(columnCounter, rowCounter, this));
+                        break;
+                    case 'O': // obstacle : type par défaut (arbre)
+                    case 'T': // obstacle : arbre
+                        tiles.add((Tile) new ObstacleTile(columnCounter, rowCounter, this, ObstacleTileView.ObstacleType.TREE));
+                        break;
+                    case 'R': // obstacle : rock
+                        tiles.add((Tile) new ObstacleTile(columnCounter, rowCounter, this, ObstacleTileView.ObstacleType.ROCK));
+                        break;
+                    case 'P': // chemin
+                        tiles.add((Tile) new PathTile(columnCounter, rowCounter, this));
+                        break;
+                    case 'G': // entrée (gate)
+                        tiles.add((Tile) new GatePathTile(columnCounter, rowCounter, this));
+                        break;
+                    case 'E': // sortie (exit)
+                        tiles.add((Tile) new ExitPathTile(columnCounter, rowCounter, this));
+                        break;
+                    default:
+                        tiles.add((Tile) new EmptyTile(columnCounter, rowCounter, this));
+                        break;
+                }
+                columnCounter++;
+            }
+            rowCounter++;
+        }
 
         // Initialisaiton des cases
         gates = new ArrayList<>();
         availablePaths = new ArrayList<>();
         obstacles = new ArrayList<>();
 
-        for (Tile t : tiles) {
-            // Initialisation de la forme
-            t.attachMap(this);
+        // Création des chemins
+        computePaths();
 
+        // Liste des autres éléments qui se trouvent sur la carte (NPC, tour, mine d'or, ...)
+        elementsOnMap = new ArrayList<>();
+    }
+
+    public void computePaths() {
+        gates.clear();
+        for (Tile t : tiles) {
             // création de liste des entrées de la carte
             if (t instanceof GatePathTile) {
                 gates.add((GatePathTile) t);
@@ -66,21 +110,14 @@ public class Map implements Drawable {
             }
         }
 
-        // Calcul des chemins valides grpace au PathFactory
+        // Calcul des chemins valides grâce au PathFactory
         PathFactory pathFactory = new PathFactory(this);
         for (GatePathTile gate : gates) {
             ArrayList<Path> computedPaths = pathFactory.getAllPaths(gate);
+            availablePaths.clear();
             availablePaths.addAll(computedPaths);
+            gate.clearPaths();
             gate.attachPaths(computedPaths);
-        }
-
-        // Liste des autres éléments qui se trouvent sur la carte (NPC, tour, mine d'or, ...)
-        elementsOnMap = new ArrayList<>();
-
-        // test
-        for (Path path : availablePaths) {
-            System.out.println(path);
-            System.out.println(path.getRandomPositions());
         }
     }
 
@@ -174,14 +211,20 @@ public class Map implements Drawable {
             // permet de retrouver une case particulière dans la liste des cases selon la positon qu'elle y occupe
             res = tiles.get((y) * mapTileSizeX + (x));
         }
+
         return res;
     }
 
     /**
-     * Récupére le nom de la carte lu dans le fichier map.properties
+     * Remplacer une case par une autre sur la carte.
+     * Attention : opération déifnitive et gourmande en ressource (recalcul de tous les chemins)
+     *
+     * @param tile case que l'on veut insérer
+     * @param x    abscisse de la position à laquelle on veut la mettre
+     * @param y    ordonnée de la position à laquelle on veut la mettre
      */
-    public String getMapName() {
-        return mapName;
+    public void setTile(Tile tile, int x, int y) {
+        tiles.set((y) * mapTileSizeX + (x), tile); // remplacement dans la liste des tiles
     }
 
     /**
@@ -198,6 +241,10 @@ public class Map implements Drawable {
      */
     public void setPixelsPerMeter(double pixelsPerMeter) {
         this.pixelsPerMeter = pixelsPerMeter;
+    }
+
+    public void setSettingsPixelsPerMeter(double pixelsPerMeter) {
+        this.settingsPixelsPerMeter = pixelsPerMeter;
     }
 
     /**

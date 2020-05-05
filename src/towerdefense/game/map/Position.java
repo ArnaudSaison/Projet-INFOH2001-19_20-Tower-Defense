@@ -42,6 +42,19 @@ public class Position {
     }
 
     /**
+     * Position en mètres à partir de coordonnées d'une case
+     *
+     * @param x   abscisse en cases
+     * @param y   ordonnée en cases
+     * @param map carte sur laquelle on représente la position
+     */
+    public Position(int x, int y, Map map) {
+        this.x = x * map.getTileMetricWidth();
+        this.y = y * map.getTileMetricWidth();
+        this.map = map;
+    }
+
+    /**
      * Position à partir de coordonnées en pixel
      *
      * @param x               abscisse en pixels
@@ -70,8 +83,8 @@ public class Position {
      * @param map      carte sur laquelle on place la position
      */
     public Position(double distance, double angle, Position origin, Map map) {
-        this.x = distance * Math.cos(angle);
-        this.y = distance * Math.sin(angle);
+        this.x = distance * Math.cos(angle) + origin.getX();
+        this.y = distance * Math.sin(angle) + origin.getY();
         this.map = map;
     }
 

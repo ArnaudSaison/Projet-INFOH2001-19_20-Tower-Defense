@@ -47,7 +47,7 @@ public abstract class TileView extends StackPane implements Printable {
 
         // Assemblage
         tileShape.getStyleClass().addAll("tile-shape");
-        setOnMouseClicked(new TileClickedListener(tile));
+        setOnMousePressed(new TileClickedListener(tile));
     }
 
     /**

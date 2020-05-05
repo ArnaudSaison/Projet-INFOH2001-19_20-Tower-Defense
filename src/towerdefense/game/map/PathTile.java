@@ -21,8 +21,8 @@ public class PathTile extends Tile {
     /**
      * Constructeur de la classe
      */
-    public PathTile(int x, int y, double tileMetricWidth) {
-        super(x, y, tileMetricWidth);
+    public PathTile(int x, int y, Map map) {
+        super(x, y, map);
         connections = new ArrayList<>();
     }
 

@@ -190,9 +190,6 @@ public class PathFactory {
     private PathTile.Connections getOppositeDir(PathTile.Connections dir) {
         PathTile.Connections res;
         switch (dir) {
-            case TOP:
-                res = PathTile.Connections.BOTTOM;
-                break;
             case BOTTOM:
                 res = PathTile.Connections.TOP;
                 break;
@@ -202,6 +199,7 @@ public class PathFactory {
             case RIGHT:
                 res = PathTile.Connections.LEFT;
                 break;
+            case TOP:
             default:
                 res = PathTile.Connections.BOTTOM;
         }

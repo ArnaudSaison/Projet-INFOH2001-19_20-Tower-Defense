@@ -14,8 +14,8 @@ public class GatePathTile extends PathTile {
     private Random random;
 
     // ==================== Initilisation ====================
-    public GatePathTile(int x, int y, double tileMetricWidth) {
-        super(x, y, tileMetricWidth);
+    public GatePathTile(int x, int y, Map map) {
+        super(x, y, map);
         this.paths = new ArrayList<>();
         random = new Random();
     }
@@ -43,6 +43,13 @@ public class GatePathTile extends PathTile {
      */
     public Path getRandomPath() {
         return paths.get(random.nextInt(paths.size()));
+    }
+
+    /**
+     * Vider la liste des chemins calculés
+     */
+    public void clearPaths() {
+        paths.clear();
     }
 
     //==================== Interface Drawable ====================
