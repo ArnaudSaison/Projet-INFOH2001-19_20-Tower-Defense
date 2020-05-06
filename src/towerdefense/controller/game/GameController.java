@@ -156,8 +156,8 @@ public class GameController implements Initializable, GUIController {
         // Démarrage de la GUI
         startAllTimers();
 
-        gameModel.placeNPC(new StandardNPC(map, gameModel, 10, 10, 10, 10, WaveFactory.NPCTypes.STANDARD_NPC));
-        gameModel.getNPCsOnMap().get(0).getPos().setX(5);
+//        gameModel.placeNPC(new StandardNPC(map, gameModel, 10, 10, 10, 10, WaveFactory.NPCTypes.STANDARD_NPC));
+//        gameModel.getNPCsOnMap().get(0).getPos().setX(5);
     }
 
     private void initPauseButton() {

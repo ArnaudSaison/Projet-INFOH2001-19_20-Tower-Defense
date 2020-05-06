@@ -28,7 +28,6 @@ public class GameModel implements Runnable {
 
     private Config config;
     private Wave wave;
-    private ArrayList<NPC> NPCsOnMap;
     private WaveFactory waveFactory;
     private Map map;
     private Player player;
@@ -69,13 +68,9 @@ public class GameModel implements Runnable {
     /*==================================================================================================================
                                                    GESTION DES THREADS
     ==================================================================================================================*/
-    /**Routine du thread
-     * */
-
     /**
      * Routine du thread
      */
-
     //TODO : mettre le gameModel en pause via le sleep, ça va freezer le jeu ?  ++Gérer la fin du jeu
     public void run() {
         while (running) {
@@ -173,6 +168,10 @@ public class GameModel implements Runnable {
     /*==================================================================================================================
                                                    GETTEURS/SETTEURS
     ==================================================================================================================*/
+    public Config getConfig() {
+        return config;
+    }
+
     public ArrayList<NPC> getNPCsOnMap() {
         return NPCsOnMap;
     }
@@ -204,4 +203,5 @@ public class GameModel implements Runnable {
     public Wave donneVague() {
         return wave;
     }
+
 }

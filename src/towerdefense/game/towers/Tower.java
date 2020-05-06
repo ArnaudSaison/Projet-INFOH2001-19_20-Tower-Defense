@@ -35,9 +35,6 @@ public abstract class Tower implements Buyable, Upgradable, Placeable, Drawable,
     protected Thread tTower;
     private Boolean running;
 
-    //Optionel:
-    //private int health; (optionnel)
-
     //TODO: gestion du prix via un fichier properties ?
     /*==================================================================================================================
                                                    CONSTRUCTEUR
@@ -141,7 +138,6 @@ public abstract class Tower implements Buyable, Upgradable, Placeable, Drawable,
      * Création d'un objet de la vue qui pourra ensuite être récupéré
      */
     public void initDrawing() {
-//        npcView = new NPCView(this, map, "");
     }
 
     /**
@@ -149,7 +145,6 @@ public abstract class Tower implements Buyable, Upgradable, Placeable, Drawable,
      * Ne peut être appelée que par la vue
      */
     public void updateDrawing() {
-//        npcView.update();
     }
 
     /**
@@ -159,7 +154,6 @@ public abstract class Tower implements Buyable, Upgradable, Placeable, Drawable,
      * @return représentation graphique de l'ojet
      */
     public Printable getDrawing() {
-//        return npcView;
         return null;
     }
 

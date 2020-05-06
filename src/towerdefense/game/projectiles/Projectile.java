@@ -7,6 +7,7 @@ import towerdefense.game.map.Position;
 import towerdefense.game.model.GameModel;
 import towerdefense.game.npcs.NPC;
 import towerdefense.view.Printable;
+import towerdefense.view.npc.NPCView;
 
 public abstract class Projectile implements Runnable, Drawable, Movable {
     protected int damage;
@@ -16,11 +17,12 @@ public abstract class Projectile implements Runnable, Drawable, Movable {
     protected Position position;
     protected Map map;
     protected GameModel gameModel;
+    private int FPS;
     protected Thread tProjectile;
     protected Boolean running;
     protected NPC target;
 
-    public Projectile(Map map,Position initialPosition, GameModel gameModel, int damage){
+    public Projectile(Map map, Position initialPosition, GameModel gameModel, int damage){
         this.damage = damage;
         position = initialPosition;
 
@@ -28,6 +30,8 @@ public abstract class Projectile implements Runnable, Drawable, Movable {
         this.gameModel = gameModel;
         tProjectile = new Thread();
         running = false;
+        
+        FPS = gameModel.getConfig().getModelFrameRate();
     }
 
     /*==================================================================================================================
@@ -38,12 +42,12 @@ public abstract class Projectile implements Runnable, Drawable, Movable {
         while(running){
             while (!gameModel.getPaused()){
                 try{
-                    int numberFPS = 24;
-                    move(numberFPS);
+                    int FPS = 24;
+                    move();
                     if (position == finalPosition){
                         doDamage(target);
                     }
-                    tProjectile.sleep(1000/numberFPS);
+                    tProjectile.sleep(1000/FPS);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -70,21 +74,37 @@ public abstract class Projectile implements Runnable, Drawable, Movable {
     /*==================================================================================================================
                                                GESTION DE LA REPRESENTATION
     ==================================================================================================================*/
-    @Override
-    public Printable getDrawing(){return null;}
+    /**
+     * Initilisation de la vue
+     * Création d'un objet de la vue qui pourra ensuite être récupéré
+     */
+    public void initDrawing() {
+    }
 
-    @Override
-    public void removeDrawing(){}
+    /**
+     * Mise à jour de la représentation graphique
+     * Ne peut être appelée que par la vue
+     */
+    public void updateDrawing() {
+    }
 
-    @Override
-    public void updateDrawing(){}
+    /**
+     * Récupérer la représentation graphique de l'ojet
+     * Ne peut être appelée que par la vue
+     *
+     * @return représentation graphique de l'ojet
+     */
+    public Printable getDrawing() {
+        return null;
+    }
 
     /*==================================================================================================================
                                                GESTION DU MOUVEMENT
     ==================================================================================================================*/
-    @Override
-    /** Permet au projectile d'atteindre sa cible via une trajectoire en ligne droite*/
-    public void move(int numberFPS){
+    /**
+     * Permet au projectile d'atteindre sa cible via une trajectoire en ligne droite
+     * */
+    public void move(){
         //Distance entre la tour et le point d'impact du projectile:
         double trajectoryNorm = position.getDistance(finalPosition);
 
@@ -99,7 +119,7 @@ public abstract class Projectile implements Runnable, Drawable, Movable {
         double alpha = Math.acos(adj/hyp); //  /!\ alpha est en radians. TODO: cdt sur hyp != 0 ?
 
         //Distance parcouru entre l'affichage de deux images à l'écran:
-        double distanceDone = velocity/numberFPS; //TODO: cdt sur numberFPS != 0 ?
+        double distanceDone = velocity / FPS; //TODO: cdt sur FPS != 0 ?
         double depX = Math.cos(alpha)*distanceDone;
         double depY = Math.sin(alpha)*distanceDone;
 

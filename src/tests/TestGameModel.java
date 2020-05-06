@@ -1,4 +1,4 @@
-package towerdefense.game;
+package tests;
 
 import org.junit.Test;
 import towerdefense.game.map.Map;

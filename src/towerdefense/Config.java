@@ -13,6 +13,7 @@ public class Config {
     private int screenHeight;
     private int frameRate;
     private int UIFrameRate;
+    private int ModelFrameRate;
     private double zoomFact;
     private int goldminesProductionRate;
     private int goldminesCost;
@@ -37,6 +38,7 @@ public class Config {
         screenHeight = Integer.parseInt(settings.getProperty("screenHeight"));
         frameRate = Integer.parseInt(settings.getProperty("frameRate"));
         UIFrameRate = Integer.parseInt(settings.getProperty("UIFrameRate"));
+        ModelFrameRate =  Integer.parseInt(settings.getProperty("ModelFrameRate"));
         zoomFact = Double.parseDouble(settings.getProperty("zoomFact"));
 
         // Cases
@@ -58,6 +60,10 @@ public class Config {
 
     public int getFrameRate() {
         return frameRate;
+    }
+
+    public int getModelFrameRate() {
+        return ModelFrameRate;
     }
 
     public double getZoomFact() {

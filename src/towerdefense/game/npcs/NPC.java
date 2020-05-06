@@ -118,7 +118,7 @@ public abstract class NPC implements Drawable, Movable, Runnable, Hittable {
     @Override
     public void run(){
         while(onMap && gameModel.getRunning()){
-    }
+        }
     }
 
     //todo : removeElementsOnMap(Drawable element)
@@ -155,8 +155,15 @@ public abstract class NPC implements Drawable, Movable, Runnable, Hittable {
     /*==================================================================================================================
                                                         GESTION DU DEPLACEMENT
     ==================================================================================================================*/
-    @Override
-    public void move(int numberFPS){
+    public void move() {
+    }
+
+    /**
+     * Donne la direction dans laquelle le NPC se dirige
+     * @return direction du NPC
+     */
+    public HeadedDir getHeadedDir() {
+        return isHeaded;
     }
 
     /*==================================================================================================================
@@ -181,6 +188,8 @@ public abstract class NPC implements Drawable, Movable, Runnable, Hittable {
     public void setIsArrived(boolean isArrived) {
         this.isArrived = isArrived;
     }
+
+    public void setOnMap(boolean onMap){this.onMap = onMap;}
 
     public double getWidth() {
         return width;
