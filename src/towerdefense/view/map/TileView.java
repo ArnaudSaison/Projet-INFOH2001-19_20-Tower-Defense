@@ -130,7 +130,7 @@ public abstract class TileView extends StackPane implements Printable {
     }
 
     /**
-     * Récupération de l'objet JavaFX qui permet d'afficher le contour de la case quand celle-ci
+     * Récupération de l'objet JavaFX qui permet d'afficher le contour de la case quand celle-ci est survolée
      * */
     protected Node getHoverIndicator() {
         return hoverIndicator;

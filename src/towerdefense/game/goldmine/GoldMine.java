@@ -14,7 +14,7 @@ public class GoldMine implements ProducesGold, Buyable, Upgradable, Placeable, D
     ==================================================================================================================*/
     //Attributs relatifs au passage de niveau:
     private int level;
-    static int maxLevel;
+    private int maxLevel;
 
     //Attributs de specification:
     private ArrayList<ArrayList<Integer>> goldMineSpe;
@@ -99,7 +99,7 @@ public class GoldMine implements ProducesGold, Buyable, Upgradable, Placeable, D
     public void run(){
         while (running) {
             while (!gameModel.getPaused()) {
-                try {
+                try {//TODO: définir par seconde, ça bloque tout si on doit attendre 1 minute
                     produceGold();
                     Thread.sleep(60000/productionRate);
                 } catch (InterruptedException e) {
@@ -119,18 +119,28 @@ public class GoldMine implements ProducesGold, Buyable, Upgradable, Placeable, D
     /*==================================================================================================================
                                                GESTION DE LA REPRESENTATION
     ==================================================================================================================*/
-
-    @Override
-    public void updateDrawing(){}
-
-    @Override
-    public Printable getDrawing() {
-        return null;
+    /**
+     * Initilisation de la vue
+     * Création d'un objet de la vue qui pourra ensuite être récupéré
+     */
+    public void initDrawing() {
     }
 
-    @Override
-    public void removeDrawing() {
+    /**
+     * Mise à jour de la représentation graphique
+     * Ne peut être appelée que par la vue
+     */
+    public void updateDrawing() {
+    }
 
+    /**
+     * Récupérer la représentation graphique de l'ojet
+     * Ne peut être appelée que par la vue
+     *
+     * @return représentation graphique de l'ojet
+     */
+    public Printable getDrawing() {
+        return null;
     }
 
     /*==================================================================================================================

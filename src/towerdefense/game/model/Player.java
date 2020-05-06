@@ -3,6 +3,7 @@ package towerdefense.game.model;
 public class Player {
 
     private int health;
+    private int maxHealth;
     private int gold;
     private int score;
     private Thread tPlayer;
@@ -13,6 +14,8 @@ public class Player {
         score = 0;
         tPlayer = new Thread();
         tPlayer.start();
+        this.health = initialHealth;
+        this.maxHealth = initialHealth;
     }
 
 
@@ -36,5 +39,9 @@ public class Player {
 
     public int getGold() {
         return gold;
+    }
+
+    public int getMaxHealth() {
+        return maxHealth;
     }
 }

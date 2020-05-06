@@ -11,6 +11,7 @@ import towerdefense.game.projectiles.Arrow;
 import towerdefense.game.projectiles.Glue;
 import towerdefense.game.projectiles.Shell;
 import towerdefense.view.Printable;
+import towerdefense.view.npc.NPCView;
 
 public abstract class NPC implements Drawable, Movable, Runnable, Hittable {
     //TODO: arriver au bout du chemin ! + (joueur).
@@ -19,6 +20,7 @@ public abstract class NPC implements Drawable, Movable, Runnable, Hittable {
     ==================================================================================================================*/
     protected Position position;
     protected GameModel gameModel;
+    protected Map map;
     protected Thread tNPC;
     protected Boolean running;
 
@@ -27,6 +29,10 @@ public abstract class NPC implements Drawable, Movable, Runnable, Hittable {
 
     //Permet de savoir si le NPC est arrivé au bout du chemin, donc sans se faire tuer:
     protected boolean isArrived;
+    protected HeadedDir isHeaded;
+
+    private double width = 1.0/4.0;
+    private double height = 1.0/4.0;
 
     //Attributs de spécification:
     protected int health;
@@ -37,6 +43,9 @@ public abstract class NPC implements Drawable, Movable, Runnable, Hittable {
     //Optionnel:
     //protected ArrayList<Weapon> inventaire ; (optionnel)
 
+    // JavaFX
+    private NPCView npcView;
+
     /*==================================================================================================================
                                                    CONSTRUCTEUR
     ==================================================================================================================*/
@@ -46,20 +55,23 @@ public abstract class NPC implements Drawable, Movable, Runnable, Hittable {
         isArrived = false;
         this.gameModel = gameModel;
         this.tNPC = new Thread();
+        this.map = map;
 
         this.health = health;
         this.speed = speed;
         this.goldLoot = goldLoot;
-        this.healthLoot= scoreLoot;
+        this.healthLoot = scoreLoot;
+        isHeaded = HeadedDir.DOWN;
 
         running= false;
-
     }
 
     /*==================================================================================================================
                                                         GESTION DES ATTAQUES
     ==================================================================================================================*/
-    /**Methode surchargée qui prend en argument un objet type Projectile*/
+    /**
+     * Methode surchargée qui prend en argument un objet type Projectile
+     * */
     @Override
     public void hit(Shell shell){
         injure(shell);
@@ -84,7 +96,7 @@ public abstract class NPC implements Drawable, Movable, Runnable, Hittable {
 
     public abstract void pierce(Arrow arrow);
 
-    public void decreaseHealth(int damage){
+    public void decreaseHealth(int damage) {
         if (health <= 0) {
             gameModel.killNPC(this);
         } else {
@@ -114,14 +126,31 @@ public abstract class NPC implements Drawable, Movable, Runnable, Hittable {
     /*==================================================================================================================
                                                GESTION DE LA REPRESENTATION
     ==================================================================================================================*/
-    @Override
-    public Printable getDrawing(){return null;}
+    /**
+     * Initilisation de la vue
+     * Création d'un objet de la vue qui pourra ensuite être récupéré
+     */
+    public void initDrawing() {
+        npcView = new NPCView(this, map, "generic");
+    }
 
-    @Override
-    public void removeDrawing(){}
+    /**
+     * Mise à jour de la représentation graphique
+     * Ne peut être appelée que par la vue
+     */
+    public void updateDrawing() {
+        npcView.update();
+    }
 
-    @Override
-    public void updateDrawing(){}
+    /**
+     * Récupérer la représentation graphique de l'ojet
+     * Ne peut être appelée que par la vue
+     *
+     * @return représentation graphique de l'ojet
+     */
+    public Printable getDrawing() {
+        return npcView;
+    }
 
     /*==================================================================================================================
                                                         GESTION DU DEPLACEMENT
@@ -133,17 +162,33 @@ public abstract class NPC implements Drawable, Movable, Runnable, Hittable {
     /*==================================================================================================================
                                                         GETTEURS/SETTEURS
     ==================================================================================================================*/
-    public Position getPos(){return position;}
+    public Position getPos() {
+        return position;
+    }
 
-    public int getGoldLoot(){return goldLoot;}
+    public int getGoldLoot() {
+        return goldLoot;
+    }
 
-    public int getHealthLoot(){return healthLoot;}
+    public int getHealthLoot() {
+        return healthLoot;
+    }
 
-    public boolean getIsArrived(){return isArrived;}
+    public boolean getIsArrived() {
+        return isArrived;
+    }
 
-    public void setIsArrived(boolean isArrived){ this.isArrived = isArrived;}
+    public void setIsArrived(boolean isArrived) {
+        this.isArrived = isArrived;
+    }
 
-    public void setOnMap(boolean onMap){this.onMap = onMap;}
+    public double getWidth() {
+        return width;
+    }
+
+    public double getHeight() {
+        return height;
+    }
 
     /*==================================================================================================================
                                                         AUTRES

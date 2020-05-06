@@ -2,10 +2,12 @@ package towerdefense.game.model;
 
 import towerdefense.game.Hittable;
 import towerdefense.game.goldmine.GoldMine;
+import towerdefense.Config;
 import towerdefense.game.map.Map;
 import towerdefense.game.map.MapFactory;
 import towerdefense.game.npcs.NPC;
 import towerdefense.game.towers.Tower;
+import towerdefense.game.npcs.StandardNPC;
 import towerdefense.game.waves.Wave;
 import towerdefense.game.waves.WaveFactory;
 
@@ -23,10 +25,13 @@ public class GameModel implements Runnable {
 
     // Attributs du jeu:
     private int timeBeforeBeginning;
+
+    private Config config;
     private Wave wave;
+    private ArrayList<NPC> NPCsOnMap;
     private WaveFactory waveFactory;
     private Map map;
-    Player player;
+    private Player player;
 
     // Eléments de la carte:
     private ArrayList<Hittable> hittables; //listeners des projectiles à effet de zone.
@@ -41,17 +46,17 @@ public class GameModel implements Runnable {
     /**
      * Constructeur du jeu
      */
-    public GameModel() throws IOException { //TODO: rajouter config en argument!
+    public GameModel(Config config, String mapPath) throws IOException {
         //Initialisation des éléments de la carte:
         NPCsOnMap = new ArrayList<>();
         hittables = new ArrayList<>();
 
         //Initialisation de la carte:
         MapFactory mapFactory = new MapFactory();
-        map = mapFactory.getMap("C:\\Users\\Pedro\\Desktop\\INFO\\Projet-INFOH2001-19_20-Tower-Defense\\resources\\maps\\map1");
+        map = mapFactory.getMap(mapPath);
 
-        //Initialisation de la première vague:
-        waveFactory = new WaveFactory(map, this, "C:\\Users\\Pedro\\Desktop\\INFO\\Projet-INFOH2001-19_20-Tower-Defense\\resources\\maps\\map1");
+        // ********** Wave Factory **********
+        waveFactory = new WaveFactory(map, this, mapPath);
         wave = waveFactory.getWave("easy", 0, 0);
 
         //Initilisation du thread:
@@ -64,6 +69,8 @@ public class GameModel implements Runnable {
     /*==================================================================================================================
                                                    GESTION DES THREADS
     ==================================================================================================================*/
+    /**Routine du thread
+     * */
 
     /**
      * Routine du thread
@@ -98,6 +105,7 @@ public class GameModel implements Runnable {
             e.printStackTrace();
         }
     }
+
 
     public void initialize() {
         gameThread.start();
@@ -181,7 +189,13 @@ public class GameModel implements Runnable {
         return running;
     }
 
-    public ArrayList<Hittable> getHittables(){return hittables;}
+    public ArrayList<Hittable> getHittables(){
+        return hittables;
+    }
+
+    public Map getMap() {
+        return map;
+    }
 
     /*==================================================================================================================
                                                        TESTS

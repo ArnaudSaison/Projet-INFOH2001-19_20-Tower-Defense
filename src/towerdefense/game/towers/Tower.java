@@ -75,7 +75,7 @@ public abstract class Tower implements Buyable, Upgradable, Placeable, Drawable,
         }
     }
 
-    public void attack(){
+    public void attack() {
         targetAcquisition();
     }
 
@@ -83,13 +83,13 @@ public abstract class Tower implements Buyable, Upgradable, Placeable, Drawable,
                                                     PASSAGE DE NIVEAU
     ==================================================================================================================*/
     @Override
-    public boolean canBeLeveledUp(){
+    public boolean canBeLeveledUp() {
         return level<maxLevel;
     }
 
     @Override
-    public void levelUp(){
-        if(canBeLeveledUp()){
+    public void levelUp() {
+        if(canBeLeveledUp()) {
             level++;
             ArrayList<Integer> levelSpe = towerSpe.get(level-1);
             setAttributes(levelSpe);
@@ -134,16 +134,34 @@ public abstract class Tower implements Buyable, Upgradable, Placeable, Drawable,
     }
 
     /*==================================================================================================================
-                                               GESTION DE LA REPRESENTATION
+                                                    JavaFX
     ==================================================================================================================*/
-    @Override
-    public Printable getDrawing(){return null;}
+    /**
+     * Initilisation de la vue
+     * Création d'un objet de la vue qui pourra ensuite être récupéré
+     */
+    public void initDrawing() {
+//        npcView = new NPCView(this, map, "");
+    }
 
-    @Override
-    public void removeDrawing(){}
+    /**
+     * Mise à jour de la représentation graphique
+     * Ne peut être appelée que par la vue
+     */
+    public void updateDrawing() {
+//        npcView.update();
+    }
 
-    @Override
-    public void updateDrawing(){}
+    /**
+     * Récupérer la représentation graphique de l'ojet
+     * Ne peut être appelée que par la vue
+     *
+     * @return représentation graphique de l'ojet
+     */
+    public Printable getDrawing() {
+//        return npcView;
+        return null;
+    }
 
     /*==================================================================================================================
                                                     AUTRES
@@ -165,9 +183,13 @@ public abstract class Tower implements Buyable, Upgradable, Placeable, Drawable,
                                                  GETTEURS/SETTEURS
     ==================================================================================================================*/
     @Override
-    public int getCost(){return price;}
+    public int getCost(){
+        return price;
+    }
 
-    public Position getPos(){return position;}
+    public Position getPos(){
+        return position;
+    }
 
     @Override
     public void setPosition(Position position){

@@ -24,6 +24,7 @@ public class Position {
      * @param map carte sur laquelle on place la position
      */
     public Position(Map map) {
+        this.map = map;
         x = 0;
         y = 0;
     }

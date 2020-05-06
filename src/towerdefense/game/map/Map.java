@@ -161,7 +161,8 @@ public class Map implements Drawable {
      */
     public void addElementOnMap(Drawable element) {
         elementsOnMap.add(element);
-        mapView.addDrawable(element.getDrawing());
+        element.initDrawing();
+        mapView.addPrintable(element.getDrawing());
     }
 
     /**
@@ -169,7 +170,7 @@ public class Map implements Drawable {
      */
     public void removeElementOnMap(Drawable element) {
         elementsOnMap.remove(element);
-        mapView.removeDrawable(element.getDrawing());
+        mapView.removePrintable(element.getDrawing());
     }
 
     // ==================== Getters et Setters ====================

@@ -21,6 +21,11 @@ import towerdefense.game.map.Map;
 import towerdefense.game.map.MapFactory;
 import towerdefense.controller.generic.GUIController;
 import towerdefense.game.map.PathTile;
+import towerdefense.game.model.GameModel;
+import towerdefense.game.model.Player;
+import towerdefense.game.model.Shop;
+import towerdefense.game.npcs.StandardNPC;
+import towerdefense.game.waves.WaveFactory;
 import towerdefense.view.map.MapView;
 import towerdefense.view.shop.ShopItem;
 
@@ -48,6 +53,10 @@ public class GameController implements Initializable, GUIController {
     @FXML
     private Text gameRoundInfoBarText;
     @FXML
+    private HBox gameScoreInfoBar;
+    @FXML
+    private Text gameScoreInfoBarText;
+    @FXML
     private Pane mapPlaceHolder;
     @FXML
     private StackPane gameBox;
@@ -66,9 +75,9 @@ public class GameController implements Initializable, GUIController {
     private Map map;
     private MapView mapView;
 
-//    private GameModel gameModel;
-//    private Shop shop;
-//    private Player player;
+    private GameModel gameModel;
+    private Shop shop;
+    private Player player;
 
     // liaison avec l'application principale
     private Config config;
@@ -118,11 +127,19 @@ public class GameController implements Initializable, GUIController {
         this.mainApplication = main;
 
         // Initilisation du modèle
+        String mapPath = mainApplication.getSelectedMapPath();
+        mainApplication.setSelectedMapPath(null); // Réinitilisation pour éviter que le jeu ne puisse se lancer sans avoir fait de sélection
+
         config = mainApplication.getConfig();
-//        gameModel = new GameModel(mainApplication.getConfig(), );
-//        map = gameModel.getMap();
+        try {
+            gameModel = new GameModel(mainApplication.getConfig(), mapPath);
+        } catch (IOException exception) {
+            exception.printStackTrace();
+        }
+
+        map = gameModel.getMap();
 //        shop = gameModel.getShop();
-//        player = gameModel.getPlayer();
+        player = gameModel.getPlayer();
 //        shop.initDrawing();
 
         // Initilisation du bouton de pause
@@ -132,23 +149,15 @@ public class GameController implements Initializable, GUIController {
         initShopView();
 
         // Initialisation de la map
-        String mapPath = mainApplication.getSelectedMapPath();
-        mainApplication.setSelectedMapPath(null); // Réinitilisation pour éviter que le jeu ne puisse se lancer sans avoir fait de sélection
-
-        mapFactory = new MapFactory();
-        try {
-            map = mapFactory.getMap(mapPath); //TODO: supprimer et remplacer par récupération dans le modèle
-
-            map.initDrawing(); // initialisation de toutes les raprésentations graphiques
-            mapView = (MapView) map.getDrawing(); // Ce casting est parmis par déifnition du MCV parttern
-            mapPlaceHolder.getChildren().add(0, mapView); // Ajout de la carte à la vue FXML
-
-        } catch (IOException exception) {
-            exception.printStackTrace();
-        }
+        map.initDrawing(); // initialisation de toutes les raprésentations graphiques
+        mapView = (MapView) map.getDrawing(); // Ce casting est parmis par déifnition du MCV parttern
+        mapPlaceHolder.getChildren().add(0, mapView); // Ajout de la carte à la vue FXML
 
         // Démarrage de la GUI
         startAllTimers();
+
+        gameModel.placeNPC(new StandardNPC(map, gameModel, 10, 10, 10, 10, WaveFactory.NPCTypes.STANDARD_NPC));
+        gameModel.getNPCsOnMap().get(0).getPos().setX(5);
     }
 
     private void initPauseButton() {
@@ -173,8 +182,8 @@ public class GameController implements Initializable, GUIController {
      */
     private void updateUI() {
 //        gameRoundInfoBarText.setText("Round" + gameModel.getCurrentRound());
-//        gameHealthInfoBarText.setText(player.getHealth() + "/" + player.getMaxHealth());
-//        gameGoldInfoBarText.setText(player.getGold());
+        gameHealthInfoBarText.setText(player.getHealth() + "/" + player.getMaxHealth());
+        gameGoldInfoBarText.setText(String.valueOf(player.getGold()));
 //        j ++;
     }
 
@@ -266,14 +275,14 @@ public class GameController implements Initializable, GUIController {
             isGamePaused = false;
             pauseButton.setText("Pause Game");
             pauseButtonView.setImage(pauseIcon);
-//            gameModel.resumeGame();
+            gameModel.resumeGame();
 
         } else {
             isGamePaused = true;
             pauseButton.setText("Resume Game");
             pauseButtonView.setImage(resumeIcon);
 
-//            gameModel.pauseGame();
+            gameModel.pauseGame();
         }
     }
 

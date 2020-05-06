@@ -90,7 +90,7 @@ public class MapView extends Pane implements Printable {
         Position deltaPos = pos1.getMultiplied((-1) * deltaPPM / oldPPM);
 
         // Mise à jour des tiles
-        updateTiles();
+        update();
 
         // Translation de Map
         this.setLayoutX(this.getLayoutX() + deltaPos.getX());
@@ -117,8 +117,6 @@ public class MapView extends Pane implements Printable {
         }
     }
 
-    // TODO: ajouter possibilité de supprimer les tiles, les remplacer, ...
-
     /**
      * Mise à jours de tous les éléments présents sur la carte qui ne sont pas des cases
      */
@@ -137,7 +135,7 @@ public class MapView extends Pane implements Printable {
     /**
      * Ajouter un élément Printable à cet objet JavaFX
      */
-    public void addDrawable(Printable elem) {
+    public void addPrintable(Printable elem) {
         // Liste buffer afin de laisser le thread JavaFX ajouter sans risque
         elementsToAdd.add((Node) elem);
     }
@@ -145,7 +143,7 @@ public class MapView extends Pane implements Printable {
     /**
      * Supprimer un élément Printable déjà ajouté à cet objet JavaFX
      */
-    public void removeDrawable(Printable elem) {
+    public void removePrintable(Printable elem) {
         // Liste buffer afin de laisser le thread JavaFX supprimer sans risque
         elementsToRemove.add((Node) elem);
     }

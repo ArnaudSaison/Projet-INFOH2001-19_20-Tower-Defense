@@ -13,7 +13,7 @@ public class StandardNPC extends NPC {
 
     public StandardNPC(Map map, GameModel gameModel, int health, int speed, int goldLoot, int healthLoot, Tile gatePathTile, WaveFactory.NPCTypes type) {
         super(map, gameModel, health, speed, goldLoot, healthLoot, gatePathTile);
-        this.type=type;
+        this.type = type;
     }
 
     @Override
