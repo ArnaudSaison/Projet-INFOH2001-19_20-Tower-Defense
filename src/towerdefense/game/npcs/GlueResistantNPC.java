@@ -18,12 +18,12 @@ public class GlueResistantNPC extends NPC {
     public void stick(Glue glue){}
 
     @Override
-    public void explode(Shell shell){
+    public void injure(Shell shell){
         decreaseHealth(shell.getDamage());
     }
 
     @Override
-    public void injure(Arrow arrow){
+    public void pierce(Arrow arrow){
         decreaseHealth(arrow.getDamage());
     }
 

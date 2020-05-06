@@ -8,6 +8,7 @@ import towerdefense.game.map.Map;
 import towerdefense.game.map.Position;
 import towerdefense.game.model.GameModel;
 import towerdefense.game.npcs.NPC;
+import towerdefense.view.Printable;
 
 import java.util.ArrayList;
 
@@ -23,7 +24,7 @@ public abstract class Tower implements Buyable, Upgradable, Placeable, Drawable,
     //Attributs de specification:
     ArrayList<ArrayList<Integer>> towerSpe;
     protected double range;
-    protected int fireRate;
+    protected int fireRate; //en coups par seconde.
     protected int damageDeal;
     protected ArrayList<NPC> targets;
     protected int maxTargetNumber;
@@ -32,7 +33,7 @@ public abstract class Tower implements Buyable, Upgradable, Placeable, Drawable,
     protected Position position;
     protected GameModel gameModel;
     protected Thread tTower;
-    private Boolean runing;
+    private Boolean running;
 
     //Optionel:
     //private int health; (optionnel)
@@ -57,10 +58,7 @@ public abstract class Tower implements Buyable, Upgradable, Placeable, Drawable,
 
         //Initialisation du thread:
         tTower = new Thread();
-        runing = false;
-
-        //
-
+        running = false;
     }
 
     /*==================================================================================================================
@@ -110,16 +108,17 @@ public abstract class Tower implements Buyable, Upgradable, Placeable, Drawable,
                                                      GESTION DU THREAD
     ==================================================================================================================*/
     public void initialize(){
-        runing = true;
+        running = true;
         tTower.start();
     }
 
     @Override
     public void run(){
-        while (runing) {
+        while (running) {
             while (!gameModel.getPaused()) {
                 try {
                     attack();
+                    tTower.sleep(1000/fireRate);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -127,12 +126,21 @@ public abstract class Tower implements Buyable, Upgradable, Placeable, Drawable,
         }
         while (gameModel.getPaused()) {
             try {
-                Thread.sleep(10);
+                Thread.sleep(100);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
     }
+
+    /*==================================================================================================================
+                                               GESTION DE LA REPRESENTATION
+    ==================================================================================================================*/
+    @Override
+    public Printable getDrawing(){return null;}
+
+    @Override
+    public void removeDrawing(){}
 
     @Override
     public void updateDrawing(){}
@@ -159,7 +167,6 @@ public abstract class Tower implements Buyable, Upgradable, Placeable, Drawable,
     @Override
     public int getCost(){return price;}
 
-    @Override
     public Position getPos(){return position;}
 
     @Override

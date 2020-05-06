@@ -12,13 +12,14 @@ public class GlueTower extends Tower {
 
     public GlueTower(Map map, GameModel gameModel,ArrayList<ArrayList<Integer>> towerSpe){
         super(map, gameModel,towerSpe);
+        glue = new Glue(map,super.position, gameModel, damageDeal);
     }
 
     @Override
     public void attack(){
         super.attack();
         for (NPC target : super.targets){
-            target.hit(glue);
+            glue.initialize(target);
         }
     }
 

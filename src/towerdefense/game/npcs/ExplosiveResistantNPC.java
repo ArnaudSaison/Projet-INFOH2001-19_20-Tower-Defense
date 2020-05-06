@@ -20,10 +20,10 @@ public class ExplosiveResistantNPC extends NPC {
 
     //Ne fait rien ici car ce NPC est résistant aux explosifs.
     @Override
-    public void explode(Shell shell){}
+    public void injure(Shell shell){}
 
     @Override
-    public void injure(Arrow arrow){
+    public void pierce(Arrow arrow){
         decreaseHealth(arrow.getDamage());
     }
 

@@ -1,5 +1,5 @@
 package towerdefense.game;
 
 public interface Movable {
-    public void move();
+    public void move(int numberFPS);
 }

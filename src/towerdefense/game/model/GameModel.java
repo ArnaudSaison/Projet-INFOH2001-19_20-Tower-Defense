@@ -1,5 +1,6 @@
 package towerdefense.game.model;
 
+import towerdefense.game.Hittable;
 import towerdefense.game.goldmine.GoldMine;
 import towerdefense.game.map.Map;
 import towerdefense.game.map.MapFactory;
@@ -28,6 +29,7 @@ public class GameModel implements Runnable {
     Player player;
 
     // Eléments de la carte:
+    private ArrayList<Hittable> hittables; //listeners des projectiles à effet de zone.
     private ArrayList<NPC> NPCsOnMap;
     private ArrayList<Tower> towers;
     private ArrayList<GoldMine> goldMines;
@@ -41,6 +43,7 @@ public class GameModel implements Runnable {
     public GameModel() throws IOException { //TODO: rajouter config en argument!
         //Initialisation des éléments de la carte:
         NPCsOnMap = new ArrayList<>();
+        hittables = new ArrayList<>();
 
         //Initialisation de la carte:
         MapFactory mapFactory = new MapFactory();
@@ -178,8 +181,7 @@ public class GameModel implements Runnable {
         return running;
     }
 
-    //todo : hittable
-
+    public ArrayList<Hittable> getHittables(){return hittables;}
 
     /*==================================================================================================================
                                                        TESTS

@@ -111,6 +111,7 @@ public class Position {
     //}
 
     //***** Autres *****
+
     public double getDistance(Position p) {
         double varX = x - p.getX();
         double varY = y - p.getY();

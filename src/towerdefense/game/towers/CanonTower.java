@@ -12,14 +12,15 @@ public class CanonTower extends Tower {
 
     public CanonTower(Map map, GameModel gameModel,ArrayList<ArrayList<Integer>> towerSpe){
         super(map, gameModel,towerSpe);
+        int shellRadius = 5;
+        shell = new Shell(map, super.position, gameModel, super.damageDeal, shellRadius);
     }
 
     @Override
     public void attack(){
         super.attack();
-        shell = new Shell(damageDeal);
         for (NPC target : super.targets){
-            target.hit(shell);
+            shell.initialize(target);
         }
     }
 

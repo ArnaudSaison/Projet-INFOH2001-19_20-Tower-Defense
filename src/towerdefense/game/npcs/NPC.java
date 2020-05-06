@@ -10,6 +10,7 @@ import towerdefense.game.model.GameModel;
 import towerdefense.game.projectiles.Arrow;
 import towerdefense.game.projectiles.Glue;
 import towerdefense.game.projectiles.Shell;
+import towerdefense.view.Printable;
 
 public abstract class NPC implements Drawable, Movable, Runnable, Hittable {
     //TODO: arriver au bout du chemin ! + (joueur).
@@ -19,6 +20,7 @@ public abstract class NPC implements Drawable, Movable, Runnable, Hittable {
     protected Position position;
     protected GameModel gameModel;
     protected Thread tNPC;
+    protected Boolean running;
 
     //Permet de savoir si le NPC est sur la carte:
     protected boolean onMap;
@@ -50,6 +52,8 @@ public abstract class NPC implements Drawable, Movable, Runnable, Hittable {
         this.goldLoot = goldLoot;
         this.healthLoot= scoreLoot;
 
+        running= false;
+
     }
 
     /*==================================================================================================================
@@ -58,7 +62,7 @@ public abstract class NPC implements Drawable, Movable, Runnable, Hittable {
     /**Methode surchargée qui prend en argument un objet type Projectile*/
     @Override
     public void hit(Shell shell){
-        explode(shell);
+        injure(shell);
     }
 
     @Override
@@ -68,7 +72,7 @@ public abstract class NPC implements Drawable, Movable, Runnable, Hittable {
 
     @Override
     public void hit(Arrow arrow){
-        injure(arrow);
+        pierce(arrow);
     }
 
     /*==================================================================================================================
@@ -76,9 +80,9 @@ public abstract class NPC implements Drawable, Movable, Runnable, Hittable {
     ==================================================================================================================*/
     public abstract void stick(Glue glue);
 
-    public abstract void explode(Shell shell);
+    public abstract void injure(Shell shell);
 
-    public abstract void injure(Arrow arrow);
+    public abstract void pierce(Arrow arrow);
 
     public void decreaseHealth(int damage){
         if (health <= 0) {
@@ -93,6 +97,7 @@ public abstract class NPC implements Drawable, Movable, Runnable, Hittable {
     ==================================================================================================================*/
     public void initialize(){
         if(onMap){
+            running = true;
             tNPC.start();
             System.out.println("NPC : je suis initialisé.");
         }
@@ -104,8 +109,16 @@ public abstract class NPC implements Drawable, Movable, Runnable, Hittable {
     }
     }
 
-    //todo : remove element
+    //todo : removeElementsOnMap(Drawable element)
 
+    /*==================================================================================================================
+                                               GESTION DE LA REPRESENTATION
+    ==================================================================================================================*/
+    @Override
+    public Printable getDrawing(){return null;}
+
+    @Override
+    public void removeDrawing(){}
 
     @Override
     public void updateDrawing(){}
@@ -114,7 +127,8 @@ public abstract class NPC implements Drawable, Movable, Runnable, Hittable {
                                                         GESTION DU DEPLACEMENT
     ==================================================================================================================*/
     @Override
-    public void move(){}
+    public void move(int numberFPS){
+    }
 
     /*==================================================================================================================
                                                         GETTEURS/SETTEURS

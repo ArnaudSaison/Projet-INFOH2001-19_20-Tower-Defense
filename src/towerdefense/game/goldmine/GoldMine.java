@@ -4,6 +4,7 @@ import towerdefense.game.*;
 import towerdefense.game.map.Map;
 import towerdefense.game.map.Position;
 import towerdefense.game.model.GameModel;
+import towerdefense.view.Printable;
 
 import java.util.ArrayList;
 
@@ -96,7 +97,6 @@ public class GoldMine implements ProducesGold, Buyable, Upgradable, Placeable, D
     }
 
     public void run(){
-//todo: production rate
         while (running) {
             while (!gameModel.getPaused()) {
                 try {
@@ -116,8 +116,22 @@ public class GoldMine implements ProducesGold, Buyable, Upgradable, Placeable, D
         }
     }
 
+    /*==================================================================================================================
+                                               GESTION DE LA REPRESENTATION
+    ==================================================================================================================*/
+
     @Override
     public void updateDrawing(){}
+
+    @Override
+    public Printable getDrawing() {
+        return null;
+    }
+
+    @Override
+    public void removeDrawing() {
+
+    }
 
     /*==================================================================================================================
                                                    GETTEURS/SETTEURS
@@ -127,7 +141,6 @@ public class GoldMine implements ProducesGold, Buyable, Upgradable, Placeable, D
         return price;
     }
 
-    @Override
     public Position getPos(){
         return position;
     }
