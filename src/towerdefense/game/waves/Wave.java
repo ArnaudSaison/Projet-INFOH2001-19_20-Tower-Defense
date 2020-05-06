@@ -6,34 +6,33 @@ import java.util.ArrayList;
 import java.util.Random;
 
 public class Wave {
+    /*==================================================================================================================
+                                                   ATTRIBUTS
+    ==================================================================================================================*/
     // Liste des ennemis qui composent la vague:
     private ArrayList<NPC> waveNPCs;
-    private String difficulty;
-    // Prochain ennemi a entrer sur la carte:
+
+    // Prochain ennemi à entrer sur la carte:
     private NPC nextNPC;
 
-    // Itération de la vague:
-    private int waveIterator;
-    private int cycle;
-
-    public Wave(ArrayList<NPC> NPCs, String difficulty, int waveIterator, int cycle ) {
+    private String difficulty;
+    /*==================================================================================================================
+                                                   METHODES
+    ==================================================================================================================*/
+    public Wave(ArrayList<NPC> NPCs, String difficulty) {
         this.waveNPCs = NPCs;
         this.difficulty = difficulty;
-        this.waveIterator = waveIterator;
-        this.cycle = cycle;
     }
 
     public String getDifficulty() {
         return difficulty;
     }
 
-    public int getWaveIteration(){return waveIterator;}
-
-    public int getCycle(){return cycle;}
-
     public NPC getNextEnemy(){
         setNextEnemy();
         return nextNPC;}
+
+    public int getLength(){return waveNPCs.size();}
 
     public boolean isFinished() {
         return waveNPCs.isEmpty();
@@ -48,12 +47,9 @@ public class Wave {
     }
 
     //==============================================Tests===============================================================
-
-    public void affiche(){
+    public void toPrint(){
         for(NPC e :waveNPCs){
             System.out.println(e.toString());
         }
     }
-
-
 }

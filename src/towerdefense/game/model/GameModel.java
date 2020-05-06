@@ -23,12 +23,15 @@ public class GameModel implements Runnable {
 
     // Attributs du jeu:
     private int timeBeforeBeginning;
-    private Wave wave;
+    private Shop shop;
     private WaveFactory waveFactory;
-    private Map map;
-    Player player;
+    private Wave wave;
+    private Player player;
 
-    // Eléments de la carte:
+    //Eléments de la carte:
+    private Map map;
+
+    // Objets sur la carte:
     private ArrayList<Hittable> hittables; //listeners des projectiles à effet de zone.
     private ArrayList<NPC> NPCsOnMap;
     private ArrayList<Tower> towers;
@@ -38,13 +41,12 @@ public class GameModel implements Runnable {
     /*==================================================================================================================
                                                    CONSTRUCTEUR
     ==================================================================================================================*/
-    /**
-     * Constructeur du jeu
-     */
     public GameModel() throws IOException { //TODO: rajouter config en argument!
         //Initialisation des éléments de la carte:
         NPCsOnMap = new ArrayList<>();
         hittables = new ArrayList<>();
+        towers = new ArrayList<>();
+        goldMines = new ArrayList<>();
 
         //Initialisation de la carte:
         MapFactory mapFactory = new MapFactory();
@@ -52,13 +54,18 @@ public class GameModel implements Runnable {
 
         //Initialisation de la première vague:
         waveFactory = new WaveFactory(map, this, "C:\\Users\\Pedro\\Desktop\\INFO\\Projet-INFOH2001-19_20-Tower-Defense\\resources\\maps\\map1");
-        wave = waveFactory.getWave("easy", 0, 0);
+        wave = waveFactory.getWave("easy");
 
         //Initilisation du thread:
         this.gameThread = new Thread();
+        running = false;
+        paused = true;
 
         //Initialisation du joueur:
         player = new Player(100, 100);
+
+        //Initialisation du magasin:
+        shop = new Shop(map,this,"C:\\Users\\Pedro\\Desktop\\INFO\\Projet-INFOH2001-19_20-Tower-Defense\\resources\\shops\\shop");
     }
 
     /*==================================================================================================================
@@ -68,34 +75,32 @@ public class GameModel implements Runnable {
     /**
      * Routine du thread
      */
-
-    //TODO : mettre le gameModel en pause via le sleep, ça va freezer le jeu ?  ++Gérer la fin du jeu
     public void run() {
         while (running) {
             try {
                 while (!paused) {
-                    if (!wave.isFinished()) {
+                    int max = wave.getLength();
+                    for (int i = 0; i < max; i++){
                         NPC nextNPC = wave.getNextEnemy();
                         initializeNPC(nextNPC);
-                        Thread.sleep(1000); // place et démarre un NPC toutes les secondes.
-                        wave.affiche();
-                        System.out.println("=========================================================================");
-                    } else if (!NPCsOnMap.isEmpty()) {
-                        Thread.sleep(100); //Attend qu'il n'y ait plus de NPC sur la carte avant de relancer une nouvelle vague.
+                        Thread.sleep(2000); // place et démarre un NPC toutes les secondes.
+                        player.increaseScore(); //augmentation du score du joueur.
+                        System.out.println("============================Vague actuelle==============================");
+                        wave.toPrint();
+                        System.out.println("============================Le prochain NPC est : \n" + nextNPC.toString());
+                    }if(!NPCsOnMap.isEmpty()) {
+                        Thread.sleep(5000);//Attend qu'il n'y ait plus de NPC sur la carte avant de relancer une nouvelle vague.
+                        pauseGame();
                     }
                     wave = waveFactory.getNextWave(wave);
-                    System.out.println("*************************Wave***************************************");
+                }
+                while (paused) {
+                Thread.sleep(1000);
+                System.out.println("Le jeu est en pause");
                 }
             } catch (InterruptedException | IOException e) {
                 e.printStackTrace();
             }
-        }
-        try {
-            while (paused) {
-                Thread.sleep(100);
-            }
-        } catch (InterruptedException e) {
-            e.printStackTrace();
         }
     }
 
@@ -133,10 +138,24 @@ public class GameModel implements Runnable {
                                             GESTION ELEMENTS SUR LA CARTE
     ==================================================================================================================*/
     public void initializeNPC(NPC npc) {
-        //map.addElementOnMap(npc);
-        npc.initialize();
+        //map.addElementOnMap(npc); TODO à remettre
+        //npc.initialize();
         NPCsOnMap.add(npc);
         npc.setOnMap(true);
+    }
+
+    public void initializeTower(Tower tower) {
+        //map.addElementOnMap(tower); TODO à remettre
+        tower.initialize(); //Démarre le tread de la tour.
+        player.decreaseGold(tower.getCost());// le joueur paie uniquement au moment où la mine d'or est placée sur la carte
+        towers.add(tower);
+    }
+
+    public void initializeGoldMine(GoldMine goldMine) {
+        //map.addElementOnMap(goldMine); TODO à remettre
+        goldMine.initialize();
+        player.decreaseGold(goldMine.getCost());
+        goldMines.add(goldMine);
     }
 
     public void killNPC(NPC npc) {
@@ -148,26 +167,14 @@ public class GameModel implements Runnable {
         NPCsOnMap.remove(npc);
     }
 
-    public void initializeTower(Tower tower) {
-        //map.addElementOnMap(tower);
-        tower.initialize(); //Démarre le tread de la tour.
-        player.decreaseGold(tower.getCost());// le joueur paie uniquement au moment où la mine d'or est placée sur la carte
-        towers.add(tower);
-    }
-
-    public void initializeGoldMine(GoldMine goldMine) {
-        //map.addElementOnMap(goldMine);
-        goldMine.initialize();
-        player.decreaseGold(goldMine.getCost());
-        goldMines.add(goldMine);
-    }
-
     /*==================================================================================================================
                                                    GETTEURS/SETTEURS
     ==================================================================================================================*/
     public ArrayList<NPC> getNPCsOnMap() {
         return NPCsOnMap;
     }
+
+    public Wave getWave(){ return wave;}
 
     public Player getPlayer() {
         return player;
@@ -190,4 +197,11 @@ public class GameModel implements Runnable {
     public Wave donneVague() {
         return wave;
     }
+
+    public Shop getShop() {
+        return shop;
+    }
+
+    public ArrayList<GoldMine> getGoldMines(){return goldMines;}
+    public ArrayList<Tower> getTowers(){return towers;}
 }

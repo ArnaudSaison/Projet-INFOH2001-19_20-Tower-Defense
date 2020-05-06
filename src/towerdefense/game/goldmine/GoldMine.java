@@ -18,20 +18,24 @@ public class GoldMine implements ProducesGold, Buyable, Upgradable, Placeable, D
 
     //Attributs de specification:
     private ArrayList<ArrayList<Integer>> goldMineSpe;
-    private int price;
+    private int price; //prix que le joueur doit payer pour acheter/améliorer la mine d'or.
     private int productionRate; //quantité d'or produit en une minute.
-    private int goldStorage;
-    private int maxGoldStorage;
+    private int goldStorage; //quantité d'or stockée par la mine d'or, nécessite une action du joueur pour être récupérée.
+    private int maxGoldStorage; //quantité d'or maximale que la mine d'or peut stocker.
 
     //Autres:
     private Position position;
     private GameModel gameModel;
     private Thread tGoldMine;
-    private Boolean running;
+    private Boolean running; //Permet de vérifier que le thread de la mine d'or est activé.
 
     /*==================================================================================================================
                                                    CONSTRUCTEUR
     ==================================================================================================================*/
+    /**
+     * Constructeur.
+     * @param goldMineSpe = [[level1Spec], ..., [levelNSpec]]
+     */
     public GoldMine(Map map, GameModel gameModel, ArrayList<ArrayList<Integer>> goldMineSpe) {
         this.gameModel = gameModel;
 
@@ -41,7 +45,7 @@ public class GoldMine implements ProducesGold, Buyable, Upgradable, Placeable, D
         maxLevel = 3;
 
         //Initialisation des attributs:
-        ArrayList<Integer> level1Spe = goldMineSpe.get(1);
+        ArrayList<Integer> level1Spe = goldMineSpe.get(0);
         setAttributes(level1Spe);
 
         //Initialisation de la position et du thread:
@@ -53,13 +57,15 @@ public class GoldMine implements ProducesGold, Buyable, Upgradable, Placeable, D
     /*==================================================================================================================
                                                    PRODUCTION DE L'OR
     ==================================================================================================================*/
+    /**Permet de produire de l'or qui sera ensuite stocké*/
     public void produceGold(){
         if(goldStorage < maxGoldStorage){
             goldStorage++;
         }
     }
 
-    public int retrieveGold(){
+    /**Permet de récupérer l'or stocké*/
+    public int retrieveGold(){                     //TODO: récuperer l'action du joueur.
         int res = goldStorage;
         goldStorage = 0;
         return res;
@@ -68,12 +74,11 @@ public class GoldMine implements ProducesGold, Buyable, Upgradable, Placeable, D
     /*==================================================================================================================
                                                    PASSAGE DE NIVEAU
     ==================================================================================================================*/
-    @Override
     public boolean canBeLeveledUp() {
         return level < maxLevel;
     }
 
-    @Override
+    /**Si le niveau maximal n'est pas atteint, passe les attributs à leur valeur spécifiée par la liste levelSpe (cf: setAttributes()) */
     public void levelUp() {
         if (canBeLeveledUp()) {
             level++;
@@ -82,6 +87,9 @@ public class GoldMine implements ProducesGold, Buyable, Upgradable, Placeable, D
         }
     }
 
+    /**Passe tous les attributs à leur valeur spécifiée par la liste prise en argument.
+     * @param levelSpe = [int price, int productionRate, int maxGoldStorage].
+     */
     private void setAttributes(ArrayList<Integer> levelSpe){
         price = levelSpe.get(0);
         productionRate = levelSpe.get(1);
@@ -91,11 +99,14 @@ public class GoldMine implements ProducesGold, Buyable, Upgradable, Placeable, D
     /*==================================================================================================================
                                                    GESTION DU THREAD
     ==================================================================================================================*/
+    /**Démarre le thread de la mine d'or*/
     public void initialize(){
         running = true;
         tGoldMine.start();
     }
 
+    /**Définition du thread de la mine d'or: si le jeu n'est pas en pause alors produit de l'or à la cadence imposée par
+     * l'attribut productionRate, sinon place le thread en pause*/
     public void run(){
         while (running) {
             while (!gameModel.getPaused()) {
@@ -119,33 +130,21 @@ public class GoldMine implements ProducesGold, Buyable, Upgradable, Placeable, D
     /*==================================================================================================================
                                                GESTION DE LA REPRESENTATION
     ==================================================================================================================*/
-
-    @Override
     public void updateDrawing(){}
 
-    @Override
     public Printable getDrawing() {
         return null;
     }
 
-    @Override
-    public void removeDrawing() {
-
-    }
+    public void removeDrawing() {}
 
     /*==================================================================================================================
                                                    GETTEURS/SETTEURS
     ==================================================================================================================*/
-    @Override
     public int getCost(){
         return price;
     }
 
-    public Position getPos(){
-        return position;
-    }
-
-    @Override
     public void setPosition(Position position){
         this.position = position;
     }

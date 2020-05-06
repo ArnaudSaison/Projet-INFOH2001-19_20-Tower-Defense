@@ -3,7 +3,6 @@ package towerdefense.game.npcs;
 import towerdefense.game.Drawable;
 import towerdefense.game.Hittable;
 import towerdefense.game.Movable;
-import towerdefense.game.map.Map;
 import towerdefense.game.map.Position;
 import towerdefense.game.map.Tile;
 import towerdefense.game.model.GameModel;
@@ -15,13 +14,8 @@ import towerdefense.view.Printable;
 public abstract class NPC implements Drawable, Movable, Runnable, Hittable {
     //TODO: arriver au bout du chemin ! + (joueur).
     /*==================================================================================================================
-                                                   ATTRIBUTS
+                                                     ATTRIBUTS
     ==================================================================================================================*/
-    protected Position position;
-    protected GameModel gameModel;
-    protected Thread tNPC;
-    protected Boolean running;
-
     //Permet de savoir si le NPC est sur la carte:
     protected boolean onMap;
 
@@ -34,13 +28,21 @@ public abstract class NPC implements Drawable, Movable, Runnable, Hittable {
     protected int goldLoot;
     protected int healthLoot;
 
-    //Optionnel:
-    //protected ArrayList<Weapon> inventaire ; (optionnel)
+    //Autres:
+    protected Position position;
+    protected GameModel gameModel;
+    protected Thread tNPC;
+    protected Boolean running;
 
     /*==================================================================================================================
-                                                   CONSTRUCTEUR
+                                                     CONSTRUCTEUR
     ==================================================================================================================*/
-    public NPC (Map map, GameModel gameModel, int health, int speed, int goldLoot, int scoreLoot, Tile gatePathTile){
+    /**Constructeur de la super classe NPC (Non PLayable Character):
+     * @param goldLoot Or récupéré par le joueur si le NPC est tué.
+     * @param healthLoot Vie du joueur amputée si le NPC arrive au bout du chemin.
+     * @param gatePathTile Case par laquelle le NPC arrive sur la carte
+     */
+    public NPC (GameModel gameModel, int health, int speed, int goldLoot, int healthLoot, Tile gatePathTile){
         position = gatePathTile.getPosition();
         onMap = false;
         isArrived = false;
@@ -50,40 +52,43 @@ public abstract class NPC implements Drawable, Movable, Runnable, Hittable {
         this.health = health;
         this.speed = speed;
         this.goldLoot = goldLoot;
-        this.healthLoot= scoreLoot;
+        this.healthLoot= healthLoot;
 
         running= false;
 
     }
 
     /*==================================================================================================================
-                                                        GESTION DES ATTAQUES
+                                                  GESTION DES ATTAQUES
     ==================================================================================================================*/
     /**Methode surchargée qui prend en argument un objet type Projectile*/
-    @Override
     public void hit(Shell shell){
         injure(shell);
     }
 
-    @Override
     public void hit(Glue glue){
         stick(glue);
     }
 
-    @Override
     public void hit(Arrow arrow){
         pierce(arrow);
     }
 
     /*==================================================================================================================
-                                                        GESTION DES DEGATS
+                                                GESTION DES DEGATS
     ==================================================================================================================*/
+    //En fonction du type de projectile, applique un effet sur le NPC:
+
+    /**Si non résistant, ralenti le NPC*/
     public abstract void stick(Glue glue);
 
+    /**Si non résistant, blesse le NPC*/
     public abstract void injure(Shell shell);
 
+    /**Blesse le NPC*/
     public abstract void pierce(Arrow arrow);
 
+    /**Retire de la vie au NPC*/
     public void decreaseHealth(int damage){
         if (health <= 0) {
             gameModel.killNPC(this);
@@ -93,17 +98,16 @@ public abstract class NPC implements Drawable, Movable, Runnable, Hittable {
     }
 
     /*==================================================================================================================
-                                                        GESTION DU THREAD
+                                                  GESTION DU THREAD
     ==================================================================================================================*/
     public void initialize(){
         if(onMap){
             running = true;
             tNPC.start();
-            System.out.println("NPC : je suis initialisé.");
+            System.out.println("NPC : je suis initialisé."); //TODO: à enlever dans la version finale.
         }
     }
 
-    @Override
     public void run(){
         while(onMap && gameModel.getRunning()){
     }
@@ -112,26 +116,23 @@ public abstract class NPC implements Drawable, Movable, Runnable, Hittable {
     //todo : removeElementsOnMap(Drawable element)
 
     /*==================================================================================================================
-                                               GESTION DE LA REPRESENTATION
+                                             GESTION DE LA REPRESENTATION
     ==================================================================================================================*/
-    @Override
     public Printable getDrawing(){return null;}
 
-    @Override
     public void removeDrawing(){}
 
-    @Override
     public void updateDrawing(){}
 
     /*==================================================================================================================
-                                                        GESTION DU DEPLACEMENT
+                                                 GESTION DU DEPLACEMENT
     ==================================================================================================================*/
-    @Override
-    public void move(int numberFPS){
+    public void move(int frameRate){
+
     }
 
     /*==================================================================================================================
-                                                        GETTEURS/SETTEURS
+                                                    GETTEURS/SETTEURS
     ==================================================================================================================*/
     public Position getPos(){return position;}
 

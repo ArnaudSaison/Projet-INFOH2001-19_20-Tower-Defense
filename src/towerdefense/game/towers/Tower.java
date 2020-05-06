@@ -42,6 +42,10 @@ public abstract class Tower implements Buyable, Upgradable, Placeable, Drawable,
     /*==================================================================================================================
                                                    CONSTRUCTEUR
     ==================================================================================================================*/
+
+    /**Constructeur
+     * @param towerSpe [[level1Spec], ..., [levelNSpec]]
+     */
     public Tower(Map map, GameModel gameModel, ArrayList<ArrayList<Integer>> towerSpe){
         this.gameModel = gameModel;
 
@@ -51,7 +55,7 @@ public abstract class Tower implements Buyable, Upgradable, Placeable, Drawable,
         maxLevel = 3;
 
         //Initialisation des attributs:
-        ArrayList<Integer> level1Spe = towerSpe.get(1);
+        ArrayList<Integer> level1Spe = towerSpe.get(0);
         setAttributes(level1Spe);
         position = new Position(map);
         targets = new ArrayList<>();
@@ -82,12 +86,11 @@ public abstract class Tower implements Buyable, Upgradable, Placeable, Drawable,
     /*==================================================================================================================
                                                     PASSAGE DE NIVEAU
     ==================================================================================================================*/
-    @Override
     public boolean canBeLeveledUp(){
         return level<maxLevel;
     }
 
-    @Override
+    /**Si le niveau maximal n'est pas atteint, passe les attributs à leur valeur spécifiée par la liste levelSpe (cf: setAttributes()) */
     public void levelUp(){
         if(canBeLeveledUp()){
             level++;
@@ -96,6 +99,9 @@ public abstract class Tower implements Buyable, Upgradable, Placeable, Drawable,
         }
     }
 
+    /**Passe tous les attributs à leur valeur spécifiée par la liste prise en argument.
+     * @param levelSpe [int price, int range, int fireRate, int damageDeal, maxEnemyNumber]
+     */
     private void setAttributes(ArrayList<Integer> levelSpe){
         price = levelSpe.get(0);
         range = levelSpe.get(1);
@@ -107,27 +113,24 @@ public abstract class Tower implements Buyable, Upgradable, Placeable, Drawable,
     /*==================================================================================================================
                                                      GESTION DU THREAD
     ==================================================================================================================*/
+    /**Démarre le thread de la tour*/
     public void initialize(){
         running = true;
         tTower.start();
     }
-
-    @Override
+    /**Si le jeu tourne, vérifie sa distance aux NPCs sur la carte, si à porté alors attaque*/
     public void run(){
-        while (running) {
-            while (!gameModel.getPaused()) {
-                try {
+        while (gameModel.getRunning() && running) {
+            try{
+                if (!gameModel.getPaused()) {
                     attack();
-                    tTower.sleep(1000/fireRate);
-                } catch (Exception e) {
-                    e.printStackTrace();
+                    Thread.sleep(1000/fireRate);
+                    System.out.println("==========la tour attaque");
+                }else {
+                    Thread.sleep(1000);
+                    System.out.println("==========la tour est en pause");
                 }
-            }
-        }
-        while (gameModel.getPaused()) {
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
+            }catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
@@ -136,13 +139,10 @@ public abstract class Tower implements Buyable, Upgradable, Placeable, Drawable,
     /*==================================================================================================================
                                                GESTION DE LA REPRESENTATION
     ==================================================================================================================*/
-    @Override
     public Printable getDrawing(){return null;}
 
-    @Override
     public void removeDrawing(){}
 
-    @Override
     public void updateDrawing(){}
 
     /*==================================================================================================================
@@ -164,12 +164,8 @@ public abstract class Tower implements Buyable, Upgradable, Placeable, Drawable,
     /*==================================================================================================================
                                                  GETTEURS/SETTEURS
     ==================================================================================================================*/
-    @Override
     public int getCost(){return price;}
 
-    public Position getPos(){return position;}
-
-    @Override
     public void setPosition(Position position){
         this.position = position;
     }
