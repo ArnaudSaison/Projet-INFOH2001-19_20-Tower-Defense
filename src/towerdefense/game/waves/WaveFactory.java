@@ -1,6 +1,7 @@
 package towerdefense.game.waves;
 
 import towerdefense.game.map.Map;
+import towerdefense.game.map.Tile;
 import towerdefense.game.model.GameModel;
 import towerdefense.game.npcs.NPC;
 import towerdefense.game.npcs.NPCFactory;
@@ -42,9 +43,9 @@ public class WaveFactory {
 
     /**Retourne un objet Wave contenant une liste de NPC dont la proportion et les caractéristiques de chaque type est
      * défini ici sur base de la lecture des fichiers properties correspondant*/
+    //TODO: enlever iterator
     public Wave getWave(String difficulty, int waveIterator, int cycleIterator) throws IOException {
         //====================================Variables locales=========================================================
-
         //Récupérations des fichiers properties:
         File npcProperties = allMapSpecificationsFiles.get(2);
         File waveProperties = allMapSpecificationsFiles.get(3+waveIterator);
@@ -74,8 +75,11 @@ public class WaveFactory {
 
         //Instanciation de la NPC Factory:
         NPCFactory npcFactory = new NPCFactory();
-        //===============================================Gestion des cas================================================
 
+        //Tile par laquelle les NPCs entre sur la carte:
+        Tile gatePathTile = map.getGates().get(waveSpecifications.get(0).get(1).intValue());
+
+        //===============================================Gestion des cas================================================
         switch (difficulty.toLowerCase()) {
             case "easy":
                 increment = npcSpecifications.get(2).get(0);
@@ -96,23 +100,23 @@ public class WaveFactory {
         enemyNumber = initialEnemyNumber + cycleIterator*increment;
 
         while(standard < enemyNumber*proportions.get(0)) {
-            npcList.add(npcFactory.getInstance(NPCTypes.STANDARD_NPC, map, gameModel, npcSpecifications.get(0)));
+            npcList.add(npcFactory.getInstance(NPCTypes.STANDARD_NPC, map, gameModel, npcSpecifications.get(0), gatePathTile));
             standard++;
         }
         while(rapid < enemyNumber*proportions.get(1)) {
-            npcList.add(npcFactory.getInstance(NPCTypes.RAPID_NPC, map, gameModel, npcSpecifications.get(0)));
+            npcList.add(npcFactory.getInstance(NPCTypes.RAPID_NPC, map, gameModel, npcSpecifications.get(0), gatePathTile));
             rapid++;
         }
         while(superHealth < enemyNumber*proportions.get(2)) {
-            npcList.add(npcFactory.getInstance(NPCTypes.SUPER_HEALTH_NPC, map, gameModel, npcSpecifications.get(0)));
+            npcList.add(npcFactory.getInstance(NPCTypes.SUPER_HEALTH_NPC, map, gameModel, npcSpecifications.get(0), gatePathTile));
             superHealth++;
         }
         while(explosiveResistant < enemyNumber*proportions.get(3)) {
-            npcList.add(npcFactory.getInstance(NPCTypes.EXPLOSIVE_RESISTANT_NPC, map, gameModel, npcSpecifications.get(1)));
+            npcList.add(npcFactory.getInstance(NPCTypes.EXPLOSIVE_RESISTANT_NPC, map, gameModel, npcSpecifications.get(1), gatePathTile));
             explosiveResistant++;
         }
         while(glueResistant < enemyNumber*proportions.get(4)) {
-            npcList.add(npcFactory.getInstance(NPCTypes.GLUE_RESISTANT_NPC, map, gameModel, npcSpecifications.get(1)));
+            npcList.add(npcFactory.getInstance(NPCTypes.GLUE_RESISTANT_NPC, map, gameModel, npcSpecifications.get(1), gatePathTile));
             glueResistant++;
         }
 

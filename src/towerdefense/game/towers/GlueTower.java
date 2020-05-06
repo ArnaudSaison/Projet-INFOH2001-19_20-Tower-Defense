@@ -5,19 +5,21 @@ import towerdefense.game.model.GameModel;
 import towerdefense.game.npcs.NPC;
 import towerdefense.game.projectiles.Glue;
 
+import java.util.ArrayList;
+
 public class GlueTower extends Tower {
     private Glue glue;
 
-    public GlueTower(Map map, GameModel gameModel,int price, int range, int fireRate, int damageDeal, int maxTargetNumber){
-        super(map, gameModel,price, range, fireRate, damageDeal, maxTargetNumber);
-        glue = new Glue(damageDeal);
+    public GlueTower(Map map, GameModel gameModel,ArrayList<ArrayList<Integer>> towerSpe){
+        super(map, gameModel,towerSpe);
+        glue = new Glue(map,super.position, gameModel, damageDeal);
     }
 
     @Override
-    public void hit(){
-        super.hit();
+    public void attack(){
+        super.attack();
         for (NPC target : super.targets){
-            target.hit(glue);
+            glue.initialize(target);
         }
     }
 

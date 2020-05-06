@@ -1,8 +1,9 @@
 package towerdefense.game.npcs;
 
 import towerdefense.game.map.Map;
+import towerdefense.game.map.Tile;
 import towerdefense.game.model.GameModel;
-import towerdefense.game.projectiles.Bullet;
+import towerdefense.game.projectiles.Arrow;
 import towerdefense.game.projectiles.Glue;
 import towerdefense.game.projectiles.Shell;
 import towerdefense.game.waves.WaveFactory;
@@ -10,8 +11,8 @@ import towerdefense.game.waves.WaveFactory;
 public class StandardNPC extends NPC {
     private WaveFactory.NPCTypes type;
 
-    public StandardNPC(Map map, GameModel gameModel, int health, int speed, int goldLoot,int healthLoot, WaveFactory.NPCTypes type) {
-        super(map, gameModel, health, speed, goldLoot, healthLoot);
+    public StandardNPC(Map map, GameModel gameModel, int health, int speed, int goldLoot, int healthLoot, Tile gatePathTile, WaveFactory.NPCTypes type) {
+        super(map, gameModel, health, speed, goldLoot, healthLoot, gatePathTile);
         this.type=type;
     }
 
@@ -21,13 +22,13 @@ public class StandardNPC extends NPC {
     }
 
     @Override
-    public void explode(Shell shell){
+    public void injure(Shell shell){
         decreaseHealth(shell.getDamage());
     }
 
     @Override
-    public void injure(Bullet bullet){
-        decreaseHealth(bullet.getDamage());
+    public void pierce(Arrow arrow){
+        decreaseHealth(arrow.getDamage());
     }
 
     @Override

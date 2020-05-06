@@ -1,6 +1,7 @@
 package towerdefense.game.npcs;
 
 import towerdefense.game.map.Map;
+import towerdefense.game.map.Tile;
 import towerdefense.game.model.GameModel;
 import towerdefense.game.waves.WaveFactory;
 
@@ -8,7 +9,7 @@ import java.util.ArrayList;
 
 public class NPCFactory {
 
-    public NPC getInstance(WaveFactory.NPCTypes type, Map map, GameModel gameModel, ArrayList<Integer> specifications) {
+    public NPC getInstance(WaveFactory.NPCTypes type, Map map, GameModel gameModel, ArrayList<Integer> specifications, Tile gatePathTile) {
         NPC res = null;
 
         //Lecture des attributs des NPCs:
@@ -28,15 +29,15 @@ public class NPCFactory {
         //TODO: scoreLoot
         //Gestion des différents cas:
         switch (type){
-            case STANDARD_NPC: res = new StandardNPC(map, gameModel, health, speed, goldLoot, healthLoot, type);
+            case STANDARD_NPC: res = new StandardNPC(map, gameModel, health, speed, goldLoot, healthLoot,gatePathTile, type);
             break;
-            case RAPID_NPC: res = new StandardNPC(map, gameModel, health, speed+extraSpeed, goldLoot+extraGoldLoot, healthLoot+extraHealthLoot, type);
+            case RAPID_NPC: res = new StandardNPC(map, gameModel, health, speed+extraSpeed, goldLoot+extraGoldLoot, healthLoot+extraHealthLoot,gatePathTile, type);
                 break;
-            case SUPER_HEALTH_NPC: res = new StandardNPC(map, gameModel, health+extraHealth, speed, goldLoot+extraGoldLoot, healthLoot+extraHealthLoot, type);
+            case SUPER_HEALTH_NPC: res = new StandardNPC(map, gameModel, health+extraHealth, speed, goldLoot+extraGoldLoot, healthLoot+extraHealthLoot, gatePathTile, type);
                 break;
-            case EXPLOSIVE_RESISTANT_NPC: res = new ExplosiveResistantNPC(map, gameModel, health, speed, goldLoot, healthLoot);
+            case EXPLOSIVE_RESISTANT_NPC: res = new ExplosiveResistantNPC(map, gameModel, health, speed, goldLoot, healthLoot, gatePathTile);
                 break;
-            case GLUE_RESISTANT_NPC: res = new GlueResistantNPC(map, gameModel, health, speed, goldLoot, healthLoot);
+            case GLUE_RESISTANT_NPC: res = new GlueResistantNPC(map, gameModel, health, speed, goldLoot, healthLoot, gatePathTile);
                 break;
 
             default : System.out.println("Invalid NPC type");

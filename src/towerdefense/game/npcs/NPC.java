@@ -1,15 +1,18 @@
 package towerdefense.game.npcs;
 
 import towerdefense.game.Drawable;
+import towerdefense.game.Hittable;
 import towerdefense.game.Movable;
 import towerdefense.game.map.Map;
 import towerdefense.game.map.Position;
+import towerdefense.game.map.Tile;
 import towerdefense.game.model.GameModel;
-import towerdefense.game.projectiles.Bullet;
+import towerdefense.game.projectiles.Arrow;
 import towerdefense.game.projectiles.Glue;
 import towerdefense.game.projectiles.Shell;
+import towerdefense.view.Printable;
 
-public abstract class NPC implements Drawable, Movable, Runnable {
+public abstract class NPC implements Drawable, Movable, Runnable, Hittable {
     //TODO: arriver au bout du chemin ! + (joueur).
     /*==================================================================================================================
                                                    ATTRIBUTS
@@ -17,8 +20,11 @@ public abstract class NPC implements Drawable, Movable, Runnable {
     protected Position position;
     protected GameModel gameModel;
     protected Thread tNPC;
+    protected Boolean running;
+
     //Permet de savoir si le NPC est sur la carte:
     protected boolean onMap;
+
     //Permet de savoir si le NPC est arrivé au bout du chemin, donc sans se faire tuer:
     protected boolean isArrived;
 
@@ -34,8 +40,8 @@ public abstract class NPC implements Drawable, Movable, Runnable {
     /*==================================================================================================================
                                                    CONSTRUCTEUR
     ==================================================================================================================*/
-    public NPC (Map map, GameModel gameModel, int health, int speed, int goldLoot, int scoreLoot){
-        position = new Position(map);
+    public NPC (Map map, GameModel gameModel, int health, int speed, int goldLoot, int scoreLoot, Tile gatePathTile){
+        position = gatePathTile.getPosition();
         onMap = false;
         isArrived = false;
         this.gameModel = gameModel;
@@ -46,22 +52,27 @@ public abstract class NPC implements Drawable, Movable, Runnable {
         this.goldLoot = goldLoot;
         this.healthLoot= scoreLoot;
 
+        running= false;
+
     }
 
     /*==================================================================================================================
                                                         GESTION DES ATTAQUES
     ==================================================================================================================*/
     /**Methode surchargée qui prend en argument un objet type Projectile*/
+    @Override
     public void hit(Shell shell){
-        explode(shell);
+        injure(shell);
     }
 
+    @Override
     public void hit(Glue glue){
         stick(glue);
     }
 
-    public void hit(Bullet bullet){
-        injure(bullet);
+    @Override
+    public void hit(Arrow arrow){
+        pierce(arrow);
     }
 
     /*==================================================================================================================
@@ -69,9 +80,9 @@ public abstract class NPC implements Drawable, Movable, Runnable {
     ==================================================================================================================*/
     public abstract void stick(Glue glue);
 
-    public abstract void explode(Shell shell);
+    public abstract void injure(Shell shell);
 
-    public abstract void injure(Bullet bullet);
+    public abstract void pierce(Arrow arrow);
 
     public void decreaseHealth(int damage){
         if (health <= 0) {
@@ -86,13 +97,28 @@ public abstract class NPC implements Drawable, Movable, Runnable {
     ==================================================================================================================*/
     public void initialize(){
         if(onMap){
+            running = true;
             tNPC.start();
             System.out.println("NPC : je suis initialisé.");
         }
     }
 
     @Override
-    public void run(){}
+    public void run(){
+        while(onMap && gameModel.getRunning()){
+    }
+    }
+
+    //todo : removeElementsOnMap(Drawable element)
+
+    /*==================================================================================================================
+                                               GESTION DE LA REPRESENTATION
+    ==================================================================================================================*/
+    @Override
+    public Printable getDrawing(){return null;}
+
+    @Override
+    public void removeDrawing(){}
 
     @Override
     public void updateDrawing(){}
@@ -101,7 +127,8 @@ public abstract class NPC implements Drawable, Movable, Runnable {
                                                         GESTION DU DEPLACEMENT
     ==================================================================================================================*/
     @Override
-    public void move(){}
+    public void move(int numberFPS){
+    }
 
     /*==================================================================================================================
                                                         GETTEURS/SETTEURS

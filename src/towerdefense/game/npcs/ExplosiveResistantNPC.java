@@ -1,15 +1,16 @@
 package towerdefense.game.npcs;
 
 import towerdefense.game.map.Map;
+import towerdefense.game.map.Tile;
 import towerdefense.game.model.GameModel;
-import towerdefense.game.projectiles.Bullet;
+import towerdefense.game.projectiles.Arrow;
 import towerdefense.game.projectiles.Glue;
 import towerdefense.game.projectiles.Shell;
 
 public class ExplosiveResistantNPC extends NPC {
 
-    public ExplosiveResistantNPC(Map map, GameModel gameModel, int health, int speed, int goldLoot, int scoreLoot) {
-        super(map, gameModel, health, speed, goldLoot, scoreLoot);
+    public ExplosiveResistantNPC(Map map, GameModel gameModel, int health, int speed, int goldLoot, int scoreLoot, Tile gatePathTile) {
+        super(map, gameModel, health, speed, goldLoot, scoreLoot, gatePathTile);
     }
 
     @Override
@@ -19,11 +20,11 @@ public class ExplosiveResistantNPC extends NPC {
 
     //Ne fait rien ici car ce NPC est résistant aux explosifs.
     @Override
-    public void explode(Shell shell){}
+    public void injure(Shell shell){}
 
     @Override
-    public void injure(Bullet bullet){
-        decreaseHealth(bullet.getDamage());
+    public void pierce(Arrow arrow){
+        decreaseHealth(arrow.getDamage());
     }
 
     @Override

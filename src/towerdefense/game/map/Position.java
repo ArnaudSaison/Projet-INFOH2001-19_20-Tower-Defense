@@ -229,13 +229,14 @@ public class Position {
     public static double getNorm(double X, double Y) {
         return Math.sqrt(Math.pow(X, 2) + Math.pow(Y, 2));
     }
-
+  
     /**
      * Récupérer la distance par rapport à un autre point
      *
      * @param p point par rapport auquel on veut récupérer la distance
      * @return norme entre les points
      */
+
     public double getDistance(Position p) {
         double varX = x - p.getX();
         double varY = y - p.getY();

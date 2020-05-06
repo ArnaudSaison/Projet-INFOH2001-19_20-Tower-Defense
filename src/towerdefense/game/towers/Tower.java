@@ -8,6 +8,7 @@ import towerdefense.game.map.Map;
 import towerdefense.game.map.Position;
 import towerdefense.game.model.GameModel;
 import towerdefense.game.npcs.NPC;
+import towerdefense.view.Printable;
 
 import java.util.ArrayList;
 
@@ -19,11 +20,11 @@ public abstract class Tower implements Buyable, Upgradable, Placeable, Drawable,
     protected int level;
     static int maxLevel;
     protected int price;
-    protected int priceIncrement;
 
     //Attributs de specification:
+    ArrayList<ArrayList<Integer>> towerSpe;
     protected double range;
-    protected int fireRate;
+    protected int fireRate; //en coups par seconde.
     protected int damageDeal;
     protected ArrayList<NPC> targets;
     protected int maxTargetNumber;
@@ -32,7 +33,7 @@ public abstract class Tower implements Buyable, Upgradable, Placeable, Drawable,
     protected Position position;
     protected GameModel gameModel;
     protected Thread tTower;
-    private Boolean runing;
+    private Boolean running;
 
     //Optionel:
     //private int health; (optionnel)
@@ -41,21 +42,23 @@ public abstract class Tower implements Buyable, Upgradable, Placeable, Drawable,
     /*==================================================================================================================
                                                    CONSTRUCTEUR
     ==================================================================================================================*/
-    public Tower(Map map, GameModel gameModel,int price, int range, int fireRate, int damageDeal, int maxTargetNumber){
+    public Tower(Map map, GameModel gameModel, ArrayList<ArrayList<Integer>> towerSpe){
+        this.gameModel = gameModel;
+
+        //Initialisation du niveau:
+        this.towerSpe = towerSpe;
         level = 1;
         maxLevel = 3;
 
+        //Initialisation des attributs:
+        ArrayList<Integer> level1Spe = towerSpe.get(1);
+        setAttributes(level1Spe);
         position = new Position(map);
         targets = new ArrayList<>();
-        tTower = new Thread();
-        runing = false;
 
-        this.gameModel = gameModel;
-        this.price = price;
-        this.range = range;
-        this.fireRate = fireRate;
-        this.damageDeal = damageDeal;
-        this.maxTargetNumber = maxTargetNumber;
+        //Initialisation du thread:
+        tTower = new Thread();
+        running = false;
     }
 
     /*==================================================================================================================
@@ -72,7 +75,7 @@ public abstract class Tower implements Buyable, Upgradable, Placeable, Drawable,
         }
     }
 
-    public void hit(){
+    public void attack(){
         targetAcquisition();
     }
 
@@ -87,24 +90,35 @@ public abstract class Tower implements Buyable, Upgradable, Placeable, Drawable,
     @Override
     public void levelUp(){
         if(canBeLeveledUp()){
-            price = +priceIncrement;
+            level++;
+            ArrayList<Integer> levelSpe = towerSpe.get(level-1);
+            setAttributes(levelSpe);
         }
-    } //TODO: à redéfinir dans les sous-classes.
+    }
+
+    private void setAttributes(ArrayList<Integer> levelSpe){
+        price = levelSpe.get(0);
+        range = levelSpe.get(1);
+        fireRate = levelSpe.get(2);
+        damageDeal = levelSpe.get(3);
+        maxTargetNumber = levelSpe.get(4);
+    }
 
     /*==================================================================================================================
                                                      GESTION DU THREAD
     ==================================================================================================================*/
     public void initialize(){
-        runing = true;
+        running = true;
         tTower.start();
     }
 
     @Override
     public void run(){
-        while (runing) {
+        while (running) {
             while (!gameModel.getPaused()) {
                 try {
-                    hit();
+                    attack();
+                    tTower.sleep(1000/fireRate);
                 } catch (Exception e) {
                     e.printStackTrace();
                 }
@@ -112,12 +126,21 @@ public abstract class Tower implements Buyable, Upgradable, Placeable, Drawable,
         }
         while (gameModel.getPaused()) {
             try {
-                Thread.sleep(10);
+                Thread.sleep(100);
             } catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
     }
+
+    /*==================================================================================================================
+                                               GESTION DE LA REPRESENTATION
+    ==================================================================================================================*/
+    @Override
+    public Printable getDrawing(){return null;}
+
+    @Override
+    public void removeDrawing(){}
 
     @Override
     public void updateDrawing(){}
@@ -139,11 +162,15 @@ public abstract class Tower implements Buyable, Upgradable, Placeable, Drawable,
     }
 
     /*==================================================================================================================
-                                                    GETTEURS
+                                                 GETTEURS/SETTEURS
     ==================================================================================================================*/
     @Override
     public int getCost(){return price;}
 
-    @Override
     public Position getPos(){return position;}
+
+    @Override
+    public void setPosition(Position position){
+        this.position = position;
+    }
 }

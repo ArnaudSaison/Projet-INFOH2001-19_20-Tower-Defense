@@ -4,6 +4,9 @@ import towerdefense.game.*;
 import towerdefense.game.map.Map;
 import towerdefense.game.map.Position;
 import towerdefense.game.model.GameModel;
+import towerdefense.view.Printable;
+
+import java.util.ArrayList;
 
 public class GoldMine implements ProducesGold, Buyable, Upgradable, Placeable, Drawable, Runnable {
     /*==================================================================================================================
@@ -11,40 +14,40 @@ public class GoldMine implements ProducesGold, Buyable, Upgradable, Placeable, D
     ==================================================================================================================*/
     //Attributs relatifs au passage de niveau:
     private int level;
-    private int maxLevel;
+    static int maxLevel;
 
     //Attributs de specification:
+    private ArrayList<ArrayList<Integer>> goldMineSpe;
     private int price;
-    private int priceIncrement;
-    private int productionRate; //temps de pause du thread (en milliseconde).
-    private int productionRateIncrement;
+    private int productionRate; //quantité d'or produit en une minute.
     private int goldStorage;
     private int maxGoldStorage;
-    private int maxGoldStorageIncrement;
 
     //Autres:
     private Position position;
     private GameModel gameModel;
     private Thread tGoldMine;
-    private Boolean runing;
+    private Boolean running;
 
     /*==================================================================================================================
                                                    CONSTRUCTEUR
     ==================================================================================================================*/
-    public GoldMine(Map map, int maxLevel, int price, int priceIncrement, int productionRate,int productionRateIncrement, int maxGoldStorage, int maxGoldStorageIncrement ) {
+    public GoldMine(Map map, GameModel gameModel, ArrayList<ArrayList<Integer>> goldMineSpe) {
+        this.gameModel = gameModel;
+
+        //Initialisation du niveau:
+        this.goldMineSpe = goldMineSpe;
         level = 1;
-        this.maxLevel = maxLevel;
+        maxLevel = 3;
 
-        this.price = price;
-        this.priceIncrement = priceIncrement;
-        this.productionRate = productionRate;
-        this.productionRateIncrement = productionRateIncrement;
-        this.maxGoldStorage = maxGoldStorage;
-        this.maxGoldStorageIncrement = maxGoldStorageIncrement;
+        //Initialisation des attributs:
+        ArrayList<Integer> level1Spe = goldMineSpe.get(1);
+        setAttributes(level1Spe);
 
+        //Initialisation de la position et du thread:
         position = new Position(map);
         tGoldMine = new Thread(this);
-        runing = false;
+        running = false;
     }
 
     /*==================================================================================================================
@@ -74,27 +77,31 @@ public class GoldMine implements ProducesGold, Buyable, Upgradable, Placeable, D
     public void levelUp() {
         if (canBeLeveledUp()) {
             level++;
-            price += priceIncrement;
-            productionRate += productionRateIncrement;
-            maxGoldStorage += maxGoldStorageIncrement;
+            ArrayList<Integer> levelSpe = goldMineSpe.get(level-1);
+            setAttributes(levelSpe);
         }
+    }
+
+    private void setAttributes(ArrayList<Integer> levelSpe){
+        price = levelSpe.get(0);
+        productionRate = levelSpe.get(1);
+        maxGoldStorage = levelSpe.get(2);
     }
 
     /*==================================================================================================================
                                                    GESTION DU THREAD
     ==================================================================================================================*/
     public void initialize(){
-        runing = true;
+        running = true;
         tGoldMine.start();
     }
 
     public void run(){
-
-        while (runing) {
+        while (running) {
             while (!gameModel.getPaused()) {
                 try {
                     produceGold();
-                    Thread.sleep(productionRate);
+                    Thread.sleep(60000/productionRate);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -109,20 +116,38 @@ public class GoldMine implements ProducesGold, Buyable, Upgradable, Placeable, D
         }
     }
 
+    /*==================================================================================================================
+                                               GESTION DE LA REPRESENTATION
+    ==================================================================================================================*/
+
     @Override
     public void updateDrawing(){}
 
+    @Override
+    public Printable getDrawing() {
+        return null;
+    }
+
+    @Override
+    public void removeDrawing() {
+
+    }
+
     /*==================================================================================================================
-                                                   GETTEURS
+                                                   GETTEURS/SETTEURS
     ==================================================================================================================*/
     @Override
     public int getCost(){
         return price;
-    } //static ?
+    }
 
-    @Override
     public Position getPos(){
         return position;
+    }
+
+    @Override
+    public void setPosition(Position position){
+        this.position = position;
     }
 
     /*==================================================================================================================

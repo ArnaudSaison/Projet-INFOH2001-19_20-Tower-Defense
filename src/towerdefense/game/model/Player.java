@@ -4,11 +4,20 @@ public class Player {
 
     private int health;
     private int gold;
+    private int score;
+    private Thread tPlayer;
 
     public Player(int initialGold, int initialHealth){
         health = initialHealth;
         gold = initialGold;
+        score = 0;
+        tPlayer = new Thread();
+        tPlayer.start();
     }
+
+
+    //******Gestion du score*******
+
 
     //******Gestion de l'or*******
     public void increaseGold(int goldIncrement){gold += goldIncrement;}
