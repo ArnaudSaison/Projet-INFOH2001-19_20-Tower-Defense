@@ -20,6 +20,7 @@ public class MainApplication extends Application {
     private Config config;
 
     public enum SceneType {MENU, EDITOR, GAME, SELECTOR}
+
     private String selectedMapPath;
     private SceneType nextScene;
 
@@ -29,15 +30,17 @@ public class MainApplication extends Application {
     private GUIController currentController;
 
     /**
-    Méthode appelée par JavaFX lors de l'ouverture de l'application.
-    Par défaut, ouvre et active la scène "menu"
-    Le reste du programme est géré par les controllers de chaque scène.
+     * Méthode appelée par JavaFX lors de l'ouverture de l'application.
+     * Par défaut, ouvre et active la scène "menu"
+     * Le reste du programme est géré par les controllers de chaque scène.
      */
     @Override
     public void start(Stage stage) throws IOException {
         //========== Initialisation du modèle de la l'application ==========
         assertDirectoryStructure();
-        Config config = new Config(defaultResourcesPath);
+        config = new Config(defaultResourcesPath);
+        System.setProperty("prism.lcdtext", "false");
+        System.setProperty("prism.lcdtext", "false");
 
         //========== Initialisation de javafx ==========
         mainWindow = stage;
@@ -65,9 +68,9 @@ public class MainApplication extends Application {
         if (file.isDirectory()) {
             // On vérifie que ce dossier contient tous les sous-dossiers nécessaires
             ArrayList<String> subFiles = new ArrayList<>(Arrays.asList(Objects.requireNonNull(file.list())));
-            for (String f: assumedFileStructure){
+            for (String f : assumedFileStructure) {
                 if (!(subFiles.contains(f))) {
-                    throw new IOException("'"+ f + errorMsg);
+                    throw new IOException("'" + f + errorMsg);
                 }
             }
 
@@ -75,7 +78,7 @@ public class MainApplication extends Application {
             File configDir = new File(defaultResourcesPath + "/config");
             ArrayList<String> configDirFiles = new ArrayList<>(Arrays.asList(Objects.requireNonNull(configDir.list())));
             if (!(configDirFiles.contains("config.properties"))) {
-                throw new IOException("'"+ "config.properties" + errorMsg);
+                throw new IOException("'" + "config.properties" + errorMsg);
             }
         } else {
             throw new IOException(errorMsg);
@@ -86,7 +89,7 @@ public class MainApplication extends Application {
         return config;
     }
 
-    public String getDefaultResourcesPath(){
+    public String getDefaultResourcesPath() {
         return defaultResourcesPath;
     }
 
@@ -107,7 +110,7 @@ public class MainApplication extends Application {
     }
 
     /**
-    Méthode permettant de changer de scène
+     * Méthode permettant de changer de scène
      */
     public void setCurrentSceneTo(SceneType sceneType) throws IOException {
         String sceneTypePath;
@@ -132,20 +135,26 @@ public class MainApplication extends Application {
 
         loader.setLocation(getClass().getResource(sceneTypePath)); // Initialisation du loader avec le bon chemin
         currentPane = loader.load(); // On récupère le contenu de la scène
-        
+
         currentController = loader.getController(); // On récupère le controlleur associé au FXML
         currentController.setMainApplication(this); // On passe la référence de l'applicatin au controller
 
         currentScene.setRoot(currentPane);
     }
 
-    public boolean confirmWindow(String msg, String msgYES, String msgNO, String windowTitle){
+    public boolean confirmWindow(String msg, String msgYES, String msgNO, String windowTitle) {
         return ConfirmWindow.askUser(msg, msgYES, msgNO, windowTitle, mainWindow);
     }
 
+    public Stage getMainWindow() {
+        return mainWindow;
+    }
+
+    public Scene getCurrentScene() {return currentScene;}
+
     /**
-    Méthode main qui est exécutée par Java lors du démarrage du programme.
-    Charge le fichier de réglages (config.properties)
+     * Méthode main qui est exécutée par Java lors du démarrage du programme.
+     * Charge le fichier de réglages (config.properties)
      */
     public static void main(String[] args) {
         launch(args);

@@ -22,6 +22,8 @@ public class ConfirmWindow {
     private static boolean answer;
 
     public static boolean askUser(String msg, String msgYES, String msgNO, String windowTitle, Stage primaryStage) {
+        answer = false;
+
         // Création d'une fenêtre spéciale
         Stage confirmWindow = new Stage();
         confirmWindow.initModality(Modality.APPLICATION_MODAL);

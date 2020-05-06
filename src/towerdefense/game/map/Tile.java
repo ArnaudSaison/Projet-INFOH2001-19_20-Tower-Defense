@@ -1,9 +1,8 @@
 package towerdefense.game.map;
 
-import javafx.scene.Node;
 import towerdefense.game.Drawable;
 import towerdefense.view.Printable;
-import towerdefense.view.TileView;
+import towerdefense.view.map.TileView;
 
 /**
  * Une Tile représente une case de la carte
@@ -20,17 +19,10 @@ public abstract class Tile implements Drawable {
     /**
      * Consructeur commun à toutes les cases
      */
-    public Tile(int x, int y, double tileMetricWidth) {
-        tilePosition = new Position(x, y, tileMetricWidth);
-        isBlocked = false;
-    }
-
-    /**
-     * Cette méthode permet de créer une case et de l'attacher ensuite à une carte
-     */
-    public void attachMap(Map map) {
+    public Tile(int x, int y, Map map) {
         this.map = map;
-        tilePosition.attachMap(map);
+        tilePosition = new Position(x, y, map);
+        isBlocked = false;
     }
 
     //==================== Getters et setters ====================

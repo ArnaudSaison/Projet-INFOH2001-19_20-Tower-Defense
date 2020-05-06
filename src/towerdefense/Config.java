@@ -12,6 +12,7 @@ public class Config {
     private int screenWidth;
     private int screenHeight;
     private int frameRate;
+    private int UIFrameRate;
     private double zoomFact;
     private int goldminesProductionRate;
     private int goldminesCost;
@@ -35,6 +36,7 @@ public class Config {
         screenWidth = Integer.parseInt(settings.getProperty("screenWidth"));
         screenHeight = Integer.parseInt(settings.getProperty("screenHeight"));
         frameRate = Integer.parseInt(settings.getProperty("frameRate"));
+        UIFrameRate = Integer.parseInt(settings.getProperty("UIFrameRate"));
         zoomFact = Double.parseDouble(settings.getProperty("zoomFact"));
 
         // Cases
@@ -80,5 +82,9 @@ public class Config {
 
     public String getArrowGatePathTileImageURL() {
         return arrowGatePathTileImageURL;
+    }
+
+    public int getUIFrameRate() {
+        return UIFrameRate;
     }
 }

@@ -34,6 +34,7 @@ public class GameModel implements Runnable {
     private ArrayList<Tower> towers;
     private ArrayList<GoldMine> goldMines;
 
+  
     /*==================================================================================================================
                                                    CONSTRUCTEUR
     ==================================================================================================================*/
@@ -97,7 +98,6 @@ public class GameModel implements Runnable {
             e.printStackTrace();
         }
     }
-
 
     public void initialize() {
         gameThread.start();
