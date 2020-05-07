@@ -72,7 +72,7 @@ public class GameModel implements Runnable {
         wave = waveFactory.getWave("easy");
 
         //Initilisation du thread:
-        this.gameThread = new Thread();
+        this.gameThread = new Thread(this);
         running = false;
         paused = true;
 
@@ -91,7 +91,7 @@ public class GameModel implements Runnable {
         while (running) {
             try {
                 while (!paused) {
-                    int max = wave.getLength();
+                    int max = wave.getLength() ;
                     for (int i = 0; i < max; i++){
                         NPC nextNPC = wave.getNextEnemy();
                         initializeElement(nextNPC);
@@ -162,7 +162,7 @@ public class GameModel implements Runnable {
         } else {
             player.decreaseHealth(npc.getHealthLoot());
         }
-        map.removeElementOnMap(npc);
+        map.removeElementOnMap(npc); //TODO: à mettre/remettre pour test
         NPCsOnMap.remove(npc);
     }
 
@@ -182,7 +182,7 @@ public class GameModel implements Runnable {
     }
 
     public void initializePlaceable(Placeable element) {
-        map.addElementOnMap((Drawable) element); // Ajoute l'élément sur la carte
+        map.addElementOnMap((Drawable) element); // Ajoute l'élément sur la carte TODO: mettre/remettre
         element.initialize(); // Démarre le thread
     }
 

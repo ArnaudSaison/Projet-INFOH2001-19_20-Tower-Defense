@@ -76,7 +76,7 @@ public class Position {
 
     /**
      * Constructeur de Position permettant de créer une position
-     * autour de l'origine fournie à partir d'une angle et d'une distance
+     * autour de l'origine fournie à partir d'un angle et d'une distance
      *
      * @param distance (en mètres) distance autour de l'orgine
      * @param angle    (en radians) angle formé par la droite passant par l'origine et la position que l'on souhaite créer
