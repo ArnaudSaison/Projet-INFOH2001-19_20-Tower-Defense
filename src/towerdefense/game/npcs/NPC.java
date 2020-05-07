@@ -59,7 +59,7 @@ public abstract class NPC implements Drawable, Movable, Placeable, Runnable, Hit
         onMap = false; //TODO: set sur false dans le gameModel
         isArrived = false;
         this.gameModel = gameModel;
-        this.tNPC = new Thread();
+        this.tNPC = new Thread(this);
         this.map = map;
 
         this.maxHealth = health;

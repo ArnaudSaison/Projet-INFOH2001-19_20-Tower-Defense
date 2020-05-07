@@ -35,7 +35,7 @@ public abstract class Projectile implements Runnable, Drawable, Movable {
 
         position = initialPosition;
         running = false;
-        tProjectile = new Thread();
+        tProjectile = new Thread(this);
     }
 
     /*==================================================================================================================

@@ -64,7 +64,7 @@ public abstract class Tower implements Buyable, Upgradable, Placeable, Drawable,
         targets = new ArrayList<>();
 
         //Initialisation du thread:
-        tTower = new Thread();
+        tTower = new Thread(this);
         running = false;
     }
 
