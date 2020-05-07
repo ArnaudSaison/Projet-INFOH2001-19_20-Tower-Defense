@@ -9,13 +9,13 @@ public class Player {
     private Thread tPlayer;
 
     public Player(int initialGold, int initialHealth){
-        health = initialHealth;
-        gold = initialGold;
-        score = 0;
-        tPlayer = new Thread();
-        tPlayer.start();
         this.health = initialHealth;
         this.maxHealth = initialHealth;
+        this.gold = initialGold;
+        this.score = 0;
+
+        tPlayer = new Thread();
+        tPlayer.start();
     }
 
 
@@ -43,5 +43,9 @@ public class Player {
 
     public int getMaxHealth() {
         return maxHealth;
+    }
+
+    public int getScore() {
+        return score;
     }
 }

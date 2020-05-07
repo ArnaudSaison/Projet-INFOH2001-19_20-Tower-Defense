@@ -24,7 +24,6 @@ public abstract class TileView extends StackPane implements Printable {
     protected final Tile tile;
 
     // JavFX
-    private final Rectangle tileShape;
     private Rectangle hoverIndicator;
     private ImageView texture;
     private double zoomFact = 1.0;
@@ -41,12 +40,6 @@ public abstract class TileView extends StackPane implements Printable {
         this.tile = tile;
         this.map = map;
 
-        // Contenu
-        tileShape = new Rectangle();
-        //getChildren().add(tileShape);
-
-        // Assemblage
-        tileShape.getStyleClass().addAll("tile-shape");
         setOnMousePressed(new TileClickedListener(tile));
     }
 
@@ -113,21 +106,12 @@ public abstract class TileView extends StackPane implements Printable {
         this.setLayoutX(tile.getPosition().getPixelX());
         this.setLayoutY(tile.getPosition().getPixelY());
 
-        tileShape.setHeight(height);
-        tileShape.setWidth(width);
         hoverIndicator.setHeight(height);
         hoverIndicator.setWidth(width);
         texture.setFitWidth(width);
     }
 
     // ==================== Getters et Setters ====================
-
-    /**
-     * Récupération de l'objet sous forme d'une superclasse de JavaFX qui décrit un objet affichable en général
-     */
-    protected Node getTileShape() {
-        return tileShape;
-    }
 
     /**
      * Récupération de l'objet JavaFX qui permet d'afficher le contour de la case quand celle-ci est survolée

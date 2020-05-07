@@ -15,11 +15,10 @@ public class Config {
     private int UIFrameRate;
     private int ModelFrameRate;
     private double zoomFact;
-    private int goldminesProductionRate;
-    private int goldminesCost;
-    private int wavesTimeBeforeFirstWave;
-    private int wavesNewEnemiesPerWave;
-    private String arrowGatePathTileImageURL;
+
+    // Jeu
+    private int initPlayerGold;
+    private int initPlayerHealth;
 
     //
 
@@ -41,12 +40,9 @@ public class Config {
         ModelFrameRate =  Integer.parseInt(settings.getProperty("ModelFrameRate"));
         zoomFact = Double.parseDouble(settings.getProperty("zoomFact"));
 
-        // Cases
-        arrowGatePathTileImageURL = settings.getProperty("arrowGatePathTileImageURL");
-
-        // Miens d'or
-        goldminesProductionRate = Integer.parseInt(settings.getProperty("goldminesProductionRate"));
-        goldminesCost = Integer.parseInt(settings.getProperty("goldminesCost"));
+        // Jeu
+        initPlayerGold = Integer.parseInt(settings.getProperty("initPlayerGold"));
+        initPlayerHealth = Integer.parseInt(settings.getProperty("initPlayerHealth"));
     }
 
     // getters
@@ -70,27 +66,23 @@ public class Config {
         return zoomFact;
     }
 
-    public int getGoldminesProductionRate() {
-        return goldminesProductionRate;
-    }
-
-    public int getGoldminesCost() {
-        return goldminesCost;
-    }
-
-    public int getWavesTimeBeforeFirstWave() {
-        return wavesTimeBeforeFirstWave;
-    }
-
-    public int getWavesNewEnemiesPerWave() {
-        return wavesNewEnemiesPerWave;
-    }
-
-    public String getArrowGatePathTileImageURL() {
-        return arrowGatePathTileImageURL;
-    }
-
     public int getUIFrameRate() {
         return UIFrameRate;
+    }
+
+    public int getInitPlayerGold() {
+        return initPlayerGold;
+    }
+
+    public void setInitPlayerGold(int initPlayerGold) {
+        this.initPlayerGold = initPlayerGold;
+    }
+
+    public int getInitPlayerHealth() {
+        return initPlayerHealth;
+    }
+
+    public void setInitPlayerHealth(int initPlayerHealth) {
+        this.initPlayerHealth = initPlayerHealth;
     }
 }

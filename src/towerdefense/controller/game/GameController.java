@@ -5,29 +5,30 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.Cursor;
 import javafx.scene.control.Button;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
-import javafx.scene.layout.*;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Text;
 import javafx.util.Duration;
 import towerdefense.Config;
 import towerdefense.MainApplication;
-import towerdefense.game.Buyable;
+import towerdefense.controller.generic.GUIController;
 import towerdefense.game.map.Map;
 import towerdefense.game.map.MapFactory;
-import towerdefense.controller.generic.GUIController;
-import towerdefense.game.map.PathTile;
+import towerdefense.game.map.Position;
 import towerdefense.game.model.GameModel;
 import towerdefense.game.model.Player;
 import towerdefense.game.model.Shop;
 import towerdefense.game.npcs.StandardNPC;
+import towerdefense.game.towers.StandardTower;
 import towerdefense.game.waves.WaveFactory;
 import towerdefense.view.map.MapView;
-import towerdefense.view.shop.ShopItem;
 
 import java.io.IOException;
 import java.net.URL;
@@ -82,8 +83,6 @@ public class GameController implements Initializable, GUIController {
     // liaison avec l'application principale
     private Config config;
     private MainApplication mainApplication;
-    private boolean isGameFinished;
-    private boolean isGamePaused;
 
     // Timers
     private Timeline UITimer;
@@ -105,8 +104,6 @@ public class GameController implements Initializable, GUIController {
      * Constructeur du controller : est exécuté avant la lecture du FXML
      */
     public GameController() {
-        isGameFinished = false;
-        isGamePaused = true;
     }
 
     /**
@@ -138,7 +135,7 @@ public class GameController implements Initializable, GUIController {
         }
 
         map = gameModel.getMap();
-//        shop = gameModel.getShop();
+        shop = gameModel.getShop();
         player = gameModel.getPlayer();
 //        shop.initDrawing();
 
@@ -155,9 +152,6 @@ public class GameController implements Initializable, GUIController {
 
         // Démarrage de la GUI
         startAllTimers();
-
-//        gameModel.placeNPC(new StandardNPC(map, gameModel, 10, 10, 10, 10, WaveFactory.NPCTypes.STANDARD_NPC));
-//        gameModel.getNPCsOnMap().get(0).getPos().setX(5);
     }
 
     private void initPauseButton() {
@@ -184,6 +178,7 @@ public class GameController implements Initializable, GUIController {
 //        gameRoundInfoBarText.setText("Round" + gameModel.getCurrentRound());
         gameHealthInfoBarText.setText(player.getHealth() + "/" + player.getMaxHealth());
         gameGoldInfoBarText.setText(String.valueOf(player.getGold()));
+        gameScoreInfoBarText.setText("Score: " + player.getScore());
 //        j ++;
     }
 
@@ -239,6 +234,7 @@ public class GameController implements Initializable, GUIController {
 
     // Arrêter le jeu et revenir au menu
     private void quitGame() throws IOException {
+        gameModel.stopGame();
         stopAllTimers();
         mainApplication.setCurrentSceneTo(MainApplication.SceneType.MENU);
     }
@@ -252,7 +248,7 @@ public class GameController implements Initializable, GUIController {
     @FXML
     public void handleQuitGameButtonClicked(MouseEvent event) throws IOException {
 //        if (!gameModel.getIsRunning) {
-        if (isGameFinished) {
+        if (gameModel.getRunning()) {
             boolean answer = mainApplication.confirmWindow(
                     "The Game is not finished yet. Do you want to quit anyway ?",
                     "Quit Game",
@@ -271,18 +267,28 @@ public class GameController implements Initializable, GUIController {
      */
     @FXML
     public void handlePauseGameButtonClicked(MouseEvent event) {
-        if (isGamePaused) {
-            isGamePaused = false;
+        if (gameModel.getPaused()) {
             pauseButton.setText("Pause Game");
             pauseButtonView.setImage(pauseIcon);
+
             gameModel.resumeGame();
 
         } else {
-            isGamePaused = true;
             pauseButton.setText("Resume Game");
             pauseButtonView.setImage(resumeIcon);
 
             gameModel.pauseGame();
+        }
+
+        if (!gameModel.getRunning()) {
+            gameModel.initialize();
+
+            //TODO: supprimer (test)
+            gameModel.initializeElement(new StandardNPC(map, gameModel, 100, 10, 100, 10, map.getGates().get(0), WaveFactory.NPCTypes.STANDARD_NPC));
+            boolean placed1 = shop.buyPlaceable(Shop.ShopCases.STANDARD_TOWER, new Position(3, 4, map));
+            player.increaseGold(500);
+            boolean placed2 = shop.buyPlaceable(Shop.ShopCases.GOLD_MINE, new Position(3, 6, map));
+            System.out.println(placed1 + " " + placed2);
         }
     }
 

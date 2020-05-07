@@ -10,7 +10,7 @@ import javafx.scene.text.Text;
 import towerdefense.MainApplication;
 import towerdefense.controller.generic.GUIController;
 
-import java.awt.*;
+import java.awt.Desktop;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;

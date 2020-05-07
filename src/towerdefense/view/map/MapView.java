@@ -1,12 +1,12 @@
 package towerdefense.view.map;
 
-import javafx.geometry.Point3D;
 import javafx.scene.Node;
 import javafx.scene.input.ScrollEvent;
-import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import towerdefense.game.Drawable;
-import towerdefense.game.map.*;
+import towerdefense.game.map.Map;
+import towerdefense.game.map.Position;
+import towerdefense.game.map.Tile;
 import towerdefense.view.Printable;
 
 import java.util.ArrayList;
@@ -121,8 +121,8 @@ public class MapView extends Pane implements Printable {
      * Mise à jours de tous les éléments présents sur la carte qui ne sont pas des cases
      */
     public void updateDrawables() {
-        getChildren().removeAll(elementsToRemove);
         getChildren().addAll(elementsToAdd);
+        getChildren().removeAll(elementsToRemove);
         elementsToRemove.clear();
         elementsToAdd.clear();
 

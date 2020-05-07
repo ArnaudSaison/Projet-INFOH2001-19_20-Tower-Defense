@@ -3,6 +3,7 @@ package towerdefense.game.npcs;
 import towerdefense.game.Drawable;
 import towerdefense.game.Hittable;
 import towerdefense.game.Movable;
+import towerdefense.game.Placeable;
 import towerdefense.game.map.Map;
 import towerdefense.game.map.Position;
 import towerdefense.game.map.Tile;
@@ -13,7 +14,7 @@ import towerdefense.game.projectiles.Shell;
 import towerdefense.view.Printable;
 import towerdefense.view.npc.NPCView;
 
-public abstract class NPC implements Drawable, Movable, Runnable, Hittable {
+public abstract class NPC implements Drawable, Movable, Placeable, Runnable, Hittable {
     //TODO: arriver au bout du chemin ! + (joueur).
     /*==================================================================================================================
                                                    ATTRIBUTS
@@ -22,7 +23,6 @@ public abstract class NPC implements Drawable, Movable, Runnable, Hittable {
     protected GameModel gameModel;
     protected Map map;
     protected Thread tNPC;
-    protected Boolean running;
 
     //Permet de savoir si le NPC est sur la carte:
     protected boolean onMap;
@@ -36,6 +36,7 @@ public abstract class NPC implements Drawable, Movable, Runnable, Hittable {
 
     //Attributs de spécification:
     protected int health;
+    private int maxHealth;
     protected int speed;
     protected int goldLoot;
     protected int healthLoot;
@@ -54,16 +55,16 @@ public abstract class NPC implements Drawable, Movable, Runnable, Hittable {
         onMap = false;
         isArrived = false;
         this.gameModel = gameModel;
-        this.tNPC = new Thread();
+        this.tNPC = new Thread(this);
         this.map = map;
 
+        this.maxHealth = health;
         this.health = health;
+
         this.speed = speed;
         this.goldLoot = goldLoot;
         this.healthLoot = scoreLoot;
         isHeaded = HeadedDir.DOWN;
-
-        running= false;
     }
 
     /*==================================================================================================================
@@ -97,7 +98,7 @@ public abstract class NPC implements Drawable, Movable, Runnable, Hittable {
     public abstract void pierce(Arrow arrow);
 
     public void decreaseHealth(int damage) {
-        if (health <= 0) {
+        if (health - damage <= 0) {
             gameModel.killNPC(this);
         } else {
             health -= damage;
@@ -108,16 +109,21 @@ public abstract class NPC implements Drawable, Movable, Runnable, Hittable {
                                                         GESTION DU THREAD
     ==================================================================================================================*/
     public void initialize(){
-        if(onMap){
-            running = true;
-            tNPC.start();
-            System.out.println("NPC : je suis initialisé.");
-        }
+        tNPC.start();
     }
 
     @Override
     public void run(){
-        while(onMap && gameModel.getRunning()){
+        try {
+            while(gameModel.getRunning()){
+                while(!gameModel.getPaused()) {
+                    // code
+                    Thread.sleep(1000);
+                }
+                Thread.sleep(1);
+            }
+        } catch (InterruptedException e) {
+            e.printStackTrace();
         }
     }
 
@@ -173,6 +179,10 @@ public abstract class NPC implements Drawable, Movable, Runnable, Hittable {
         return position;
     }
 
+    public void setPosition(Position position) {
+        this.position = position;
+    }
+
     public int getGoldLoot() {
         return goldLoot;
     }
@@ -197,6 +207,14 @@ public abstract class NPC implements Drawable, Movable, Runnable, Hittable {
 
     public double getHeight() {
         return height;
+    }
+
+    public int getMaxHealth() {
+        return maxHealth;
+    }
+
+    public int getHealth() {
+        return health;
     }
 
     /*==================================================================================================================

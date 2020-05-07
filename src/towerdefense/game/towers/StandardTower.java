@@ -1,6 +1,7 @@
 package towerdefense.game.towers;
 
 import towerdefense.game.map.Map;
+import towerdefense.game.map.Position;
 import towerdefense.game.model.GameModel;
 import towerdefense.game.npcs.NPC;
 import towerdefense.game.projectiles.Arrow;
@@ -9,19 +10,17 @@ import java.util.ArrayList;
 
 public class StandardTower extends Tower{
     private String type;
-    private Arrow arrow;
 
-    public StandardTower(Map map, GameModel gameModel, ArrayList<ArrayList<Integer>> towerSpe, String type){
-        super(map, gameModel,towerSpe);
+    public StandardTower(Map map, Position pos, GameModel gameModel, ArrayList<ArrayList<Integer>> towerSpe, String type){
+        super(map, pos, gameModel, towerSpe);
         this.type = type;
-        arrow = new Arrow(map,super.position, gameModel, damageDeal);
+        this.graphicsName = "archer_tower/";
     }
 
     @Override
     public void attack(){
         super.attack();
         for (NPC target : super.targets){
-            arrow.initialize(target);
         }
     }
 

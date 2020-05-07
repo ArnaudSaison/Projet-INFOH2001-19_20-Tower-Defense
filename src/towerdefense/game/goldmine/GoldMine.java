@@ -5,6 +5,7 @@ import towerdefense.game.map.Map;
 import towerdefense.game.map.Position;
 import towerdefense.game.model.GameModel;
 import towerdefense.view.Printable;
+import towerdefense.view.goldmines.GoldMineView;
 
 import java.util.ArrayList;
 
@@ -24,16 +25,21 @@ public class GoldMine implements ProducesGold, Buyable, Upgradable, Placeable, D
     private int maxGoldStorage;
 
     //Autres:
+    private Map map;
     private Position position;
     private GameModel gameModel;
     private Thread tGoldMine;
     private Boolean running;
 
+    // javaFX
+    private GoldMineView goldMineView;
+
     /*==================================================================================================================
                                                    CONSTRUCTEUR
     ==================================================================================================================*/
-    public GoldMine(Map map, GameModel gameModel, ArrayList<ArrayList<Integer>> goldMineSpe) {
+    public GoldMine(Map map, Position pos, GameModel gameModel, ArrayList<ArrayList<Integer>> goldMineSpe) {
         this.gameModel = gameModel;
+        this.map = map;
 
         //Initialisation du niveau:
         this.goldMineSpe = goldMineSpe;
@@ -45,7 +51,7 @@ public class GoldMine implements ProducesGold, Buyable, Upgradable, Placeable, D
         setAttributes(level1Spe);
 
         //Initialisation de la position et du thread:
-        position = new Position(map);
+        position = pos;
         tGoldMine = new Thread(this);
         running = false;
     }
@@ -124,6 +130,7 @@ public class GoldMine implements ProducesGold, Buyable, Upgradable, Placeable, D
      * Création d'un objet de la vue qui pourra ensuite être récupéré
      */
     public void initDrawing() {
+        goldMineView = new GoldMineView(this, map);
     }
 
     /**
@@ -131,6 +138,7 @@ public class GoldMine implements ProducesGold, Buyable, Upgradable, Placeable, D
      * Ne peut être appelée que par la vue
      */
     public void updateDrawing() {
+        goldMineView.update();
     }
 
     /**
@@ -140,7 +148,7 @@ public class GoldMine implements ProducesGold, Buyable, Upgradable, Placeable, D
      * @return représentation graphique de l'ojet
      */
     public Printable getDrawing() {
-        return null;
+        return goldMineView;
     }
 
     /*==================================================================================================================

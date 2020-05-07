@@ -1,6 +1,7 @@
 package towerdefense.game.towers;
 
 import towerdefense.game.map.Map;
+import towerdefense.game.map.Position;
 import towerdefense.game.model.GameModel;
 import towerdefense.game.npcs.NPC;
 import towerdefense.game.projectiles.Shell;
@@ -8,19 +9,15 @@ import towerdefense.game.projectiles.Shell;
 import java.util.ArrayList;
 
 public class CanonTower extends Tower {
-    private Shell shell;
-
-    public CanonTower(Map map, GameModel gameModel,ArrayList<ArrayList<Integer>> towerSpe){
-        super(map, gameModel,towerSpe);
-        int shellRadius = 5;
-        shell = new Shell(map, super.position, gameModel, super.damageDeal, shellRadius);
+    public CanonTower(Map map, Position pos, GameModel gameModel, ArrayList<ArrayList<Integer>> towerSpe){
+        super(map, pos, gameModel, towerSpe);
+        this.graphicsName = "cannon_tower/";
     }
 
     @Override
     public void attack(){
         super.attack();
         for (NPC target : super.targets){
-            shell.initialize(target);
         }
     }
 

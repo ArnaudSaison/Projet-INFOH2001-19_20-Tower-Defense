@@ -25,7 +25,6 @@ public class ObstacleTileView extends TileView {
      */
     public ObstacleTileView(Map map, Tile tile, ObstacleType type) {
         super(map, tile); // Appel au constructeur de TileView
-        getTileShape().getStyleClass().addAll("obstacle-tile-shape");
 
         initTexture("grass.png", getRandomRotation(0, 3, 90), 1, 1);
         initObstacle(type);

@@ -1,6 +1,7 @@
 package towerdefense.game.towers;
 
 import towerdefense.game.map.Map;
+import towerdefense.game.map.Position;
 import towerdefense.game.model.GameModel;
 import towerdefense.game.npcs.NPC;
 import towerdefense.game.projectiles.Glue;
@@ -8,18 +9,15 @@ import towerdefense.game.projectiles.Glue;
 import java.util.ArrayList;
 
 public class GlueTower extends Tower {
-    private Glue glue;
-
-    public GlueTower(Map map, GameModel gameModel,ArrayList<ArrayList<Integer>> towerSpe){
-        super(map, gameModel,towerSpe);
-        glue = new Glue(map,super.position, gameModel, damageDeal);
+    public GlueTower(Map map, Position pos, GameModel gameModel, ArrayList<ArrayList<Integer>> towerSpe){
+        super(map, pos, gameModel, towerSpe);
+        this.graphicsName = "glue_tower/";
     }
 
     @Override
     public void attack(){
         super.attack();
         for (NPC target : super.targets){
-            glue.initialize(target);
         }
     }
 
