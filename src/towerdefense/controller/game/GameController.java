@@ -262,6 +262,7 @@ public class GameController implements Initializable, GUIController {
         }
     }
 
+    //TODO: mauvais bouton
     /**
      * Bouton qui gère le démarrage, la mise en pause et la reprise du jeu
      */
@@ -285,6 +286,7 @@ public class GameController implements Initializable, GUIController {
 
             //TODO: supprimer (test)
             gameModel.initializeElement(new StandardNPC(map, gameModel, 100, 10, 100, 10, map.getGates().get(0), WaveFactory.NPCTypes.STANDARD_NPC));
+            gameModel.getNPCsOnMap().get(0).decreaseHealth(20);
             boolean placed1 = shop.buyPlaceable(Shop.ShopCases.STANDARD_TOWER, new Position(3, 4, map));
             player.increaseGold(500);
             boolean placed2 = shop.buyPlaceable(Shop.ShopCases.GOLD_MINE, new Position(3, 6, map));
