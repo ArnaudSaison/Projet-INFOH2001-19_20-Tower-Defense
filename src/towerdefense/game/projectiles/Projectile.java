@@ -7,11 +7,12 @@ import towerdefense.game.map.Position;
 import towerdefense.game.model.GameModel;
 import towerdefense.game.npcs.NPC;
 import towerdefense.view.Printable;
+import towerdefense.view.towers.TowerView;
 
 public abstract class Projectile implements Runnable, Drawable, Movable {
     //Spécification:
     protected int damage;
-    protected int velocity;
+    protected double velocity;
 
     //Positon:
     protected Position finalPosition;
@@ -45,7 +46,7 @@ public abstract class Projectile implements Runnable, Drawable, Movable {
             try{
                 if (!gameModel.getPaused()){
                     int frameRate = 24;//TODO : récupérer la frameRate du mainApplication ?
-                    move(frameRate);
+                    move();
                     System.out.println("La position du projectile est" + getPos().toString());
                     if (position == finalPosition){
                         doDamage(target);
@@ -79,17 +80,38 @@ public abstract class Projectile implements Runnable, Drawable, Movable {
     /*==================================================================================================================
                                                GESTION DE LA REPRESENTATION
     ==================================================================================================================*/
-    public Printable getDrawing(){return null;}
 
-    public void removeDrawing(){}
+    /**
+     * Initilisation de la vue
+     * Création d'un objet de la vue qui pourra ensuite être récupéré
+     */
+    public void initDrawing() {
+//        towerView = new TowerView(this, map, graphicsName);
+    }
 
-    public void updateDrawing(){}
+    /**
+     * Mise à jour de la représentation graphique
+     * Ne peut être appelée que par la vue
+     */
+    public void updateDrawing() {
+//        towerView.update();
+    }
+
+    /**
+     * Récupérer la représentation graphique de l'ojet
+     * Ne peut être appelée que par la vue
+     *
+     * @return représentation graphique de l'ojet
+     */
+    public Printable getDrawing() {
+        return null;
+    }
 
     /*==================================================================================================================
                                                GESTION DU MOUVEMENT
     ==================================================================================================================*/
     /** Permet au projectile d'atteindre sa cible via une trajectoire en ligne droite*/
-    public void move(int numberFPS){
+    public void move(){
         //Distance entre la tour et le point d'impact du projectile:
         double trajectoryNorm = position.getDistance(finalPosition);
 
@@ -104,7 +126,7 @@ public abstract class Projectile implements Runnable, Drawable, Movable {
         double alpha = Math.acos(adj/hyp); //  /!\ alpha est en radians. TODO: cdt sur hyp != 0 ?
 
         //Distance parcouru entre l'affichage de deux images à l'écran:
-        double distanceDone = velocity/numberFPS; //TODO: cdt sur numberFPS != 0 ?
+        double distanceDone = velocity / gameModel.getConfig().getModelFrameRate(); //TODO: cdt sur numberFPS != 0 ?
         double depX = Math.cos(alpha)*distanceDone;
         double depY = Math.sin(alpha)*distanceDone;
 

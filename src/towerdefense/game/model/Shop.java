@@ -47,7 +47,7 @@ public class Shop {
 
         //================================Lecture des propriétés du magasin============================================
         shopProperties = new Properties();
-        InputStream shopPropertiesFile = new FileInputStream(shopFilePath+".properties");
+        InputStream shopPropertiesFile = new FileInputStream(shopFilePath);
         shopProperties.load(shopPropertiesFile);
 
         //Initialisation des listes de spécification:
@@ -127,9 +127,11 @@ public class Shop {
         //===============================================Gestion des cas================================================
         int price = getItemProp(type, ItemProp.PRICE, 0); // récupération du prix
         boolean canBeBought = player.getGold() >= price;
+        System.out.println(price);
 
         if (canBeBought) { // vérification que le joueur a assez d'argent
             player.decreaseGold(price); // on prend l'argent
+            System.out.println(player.getGold());
 
             Buyable bought = null; // initialisation
             switch (type) { // Récupération de ce qui a été acheté

@@ -18,7 +18,7 @@ public abstract class Tower implements Buyable, Upgradable, Placeable, Drawable,
                                                    ATTRIBUTS
     ==================================================================================================================*/
     //Attributs relatifs au passage de niveau:
-    private Map map;
+    protected Map map;
     protected int level;
     static int maxLevel;
     protected int price;

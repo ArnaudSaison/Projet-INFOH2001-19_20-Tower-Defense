@@ -1,4 +1,4 @@
-package towerdefense.game;
+package towerdefense.tests;
 
 import org.junit.Test;
 import towerdefense.game.goldmine.GoldMine;

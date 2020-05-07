@@ -21,7 +21,7 @@ public class StandardTower extends Tower{
     public void attack(){
         super.attack();
         for (NPC target : super.targets){
-            new Arrow(map, super.position, NPC target, gameModel, damageDeal);
+//            new Arrow(map, super.position, NPC target, gameModel, damageDeal);
         }
     }
 

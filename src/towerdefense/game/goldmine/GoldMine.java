@@ -45,6 +45,7 @@ public class GoldMine implements ProducesGold, Buyable, Upgradable, Placeable, D
      */
     public GoldMine(Map map, Position pos, GameModel gameModel, ArrayList<ArrayList<Integer>> goldMineSpe) {
         this.gameModel = gameModel;
+        this.map = map;
 
         //Initialisation du niveau:
         this.goldMineSpe = goldMineSpe;
@@ -77,10 +78,9 @@ public class GoldMine implements ProducesGold, Buyable, Upgradable, Placeable, D
     /**
      * Permet de récupérer l'or stocké
      */
-    public void retrieveGold() {                     //TODO: modifier l'interface
-        int res = goldStorage;
+    public void retrieveGold() {
+        gameModel.getPlayer().increaseGold(goldStorage);
         goldStorage = 0;
-        return res;
     }
 
     /*==================================================================================================================
