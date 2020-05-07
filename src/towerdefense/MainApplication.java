@@ -63,6 +63,7 @@ public class MainApplication extends Application {
         assumedFileStructure.add("config");
         assumedFileStructure.add("graphics");
         assumedFileStructure.add("maps");
+        assumedFileStructure.add("shops");
 
         // On vérifie d'abord que le dossier 'resources' existe
         if (file.isDirectory()) {

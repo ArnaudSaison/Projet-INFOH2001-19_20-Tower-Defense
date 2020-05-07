@@ -17,12 +17,13 @@ import towerdefense.view.npc.NPCView;
 public abstract class NPC implements Drawable, Movable, Placeable, Runnable, Hittable {
     //TODO: arriver au bout du chemin ! + (joueur).
     /*==================================================================================================================
-                                                   ATTRIBUTS
+                                                     ATTRIBUTS
     ==================================================================================================================*/
     protected Position position;
     protected GameModel gameModel;
     protected Map map;
     protected Thread tNPC;
+    protected Boolean running;
 
     //Permet de savoir si le NPC est sur la carte:
     protected boolean onMap;
@@ -52,10 +53,10 @@ public abstract class NPC implements Drawable, Movable, Placeable, Runnable, Hit
     ==================================================================================================================*/
     public NPC (Map map, GameModel gameModel, int health, int speed, int goldLoot, int scoreLoot, Tile gatePathTile){
         position = gatePathTile.getPosition();
-        onMap = false;
+        onMap = false; //TODO: set sur false dans le gameModel
         isArrived = false;
         this.gameModel = gameModel;
-        this.tNPC = new Thread(this);
+        this.tNPC = new Thread();
         this.map = map;
 
         this.maxHealth = health;
@@ -91,13 +92,19 @@ public abstract class NPC implements Drawable, Movable, Placeable, Runnable, Hit
     /*==================================================================================================================
                                                         GESTION DES DEGATS
     ==================================================================================================================*/
+    //En fonction du type de projectile, applique un effet sur le NPC:
+
+    /**Si non résistant, ralenti le NPC*/
     public abstract void stick(Glue glue);
 
+    /**Si non résistant, blesse le NPC*/
     public abstract void injure(Shell shell);
 
+    /**Blesse le NPC*/
     public abstract void pierce(Arrow arrow);
 
-    public void decreaseHealth(int damage) {
+    /**Retire de la vie au NPC*/
+    public void decreaseHealth(int damage){
         if (health - damage <= 0) {
             gameModel.killNPC(this);
         } else {
@@ -109,7 +116,11 @@ public abstract class NPC implements Drawable, Movable, Placeable, Runnable, Hit
                                                         GESTION DU THREAD
     ==================================================================================================================*/
     public void initialize(){
-        tNPC.start();
+        if(onMap){
+            running = true;
+            tNPC.start();
+            System.out.println("NPC : je suis initialisé.");
+        }
     }
 
     @Override
@@ -173,7 +184,7 @@ public abstract class NPC implements Drawable, Movable, Placeable, Runnable, Hit
     }
 
     /*==================================================================================================================
-                                                        GETTEURS/SETTEURS
+                                                    GETTEURS/SETTEURS
     ==================================================================================================================*/
     public Position getPos() {
         return position;

@@ -15,12 +15,14 @@ public class Player {
         this.score = 0;
 
         tPlayer = new Thread();
+    }
+
+    public void initialize() {
         tPlayer.start();
     }
 
-
     //******Gestion du score*******
-
+    public void increaseScore(){score++;}
 
     //******Gestion de l'or*******
     public void increaseGold(int goldIncrement){gold += goldIncrement;}
@@ -47,5 +49,12 @@ public class Player {
 
     public int getScore() {
         return score;
+    }
+
+    public String toString(){
+        return ("Player : \n"
+                + "-score: " + score+ "\n"
+                + "-gold: " + gold+ "\n"
+                + "-health: " + health+ "\n");
     }
 }

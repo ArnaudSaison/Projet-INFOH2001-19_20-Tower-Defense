@@ -54,6 +54,8 @@ public class GameModel implements Runnable {
         //Initialisation des éléments de la carte:
         NPCsOnMap = new ArrayList<>();
         hittables = new ArrayList<>();
+        towers = new ArrayList<>();
+        goldMines = new ArrayList<>();
 
         //Initialisation du joueur:
         player = new Player(config.getInitPlayerGold(), config.getInitPlayerHealth());
@@ -65,53 +67,63 @@ public class GameModel implements Runnable {
         // Initialisation du shop
         shop = new Shop(map, this, "resources/shops/shop.properties");
 
-        // ********** Wave Factory **********
-//        waveFactory = new WaveFactory(map, this, mapPath);
-//        wave = waveFactory.getWave("easy", 0, 0);
+        //Initialisation de la première vague:
+        waveFactory = new WaveFactory(map, this, mapPath);
+        wave = waveFactory.getWave("easy");
 
         //Initilisation du thread:
         this.gameThread = new Thread();
+        running = false;
+        paused = true;
+
+        //Initialisation du joueur:
+        player = new Player(100, 100);
     }
 
     /*==================================================================================================================
                                                    GESTION DES THREADS
     ==================================================================================================================*/
+
     /**
      * Routine du thread
      */
-    //TODO : mettre le gameModel en pause via le sleep, ça va freezer le jeu ?  ++Gérer la fin du jeu
     public void run() {
         while (running) {
             try {
                 while (!paused) {
-                    if (!wave.isFinished()) {
+                    int max = wave.getLength();
+                    for (int i = 0; i < max; i++){
                         NPC nextNPC = wave.getNextEnemy();
                         initializeElement(nextNPC);
-                        Thread.sleep(1000); // place et démarre un NPC toutes les secondes.
-                        wave.affiche();
-                        System.out.println("=========================================================================");
-                    } else if (!NPCsOnMap.isEmpty()) {
-                        Thread.sleep(100); //Attend qu'il n'y ait plus de NPC sur la carte avant de relancer une nouvelle vague.
+                        Thread.sleep(2000); // place et démarre un NPC toutes les secondes.
+                        player.increaseScore(); //augmentation du score du joueur.
+
+                        // tests
+                        System.out.println("============================Vague actuelle==============================");
+                        wave.toPrint();
+                        System.out.println("============================Le prochain NPC est : \n" + nextNPC.toString());
+
+                    }if(!NPCsOnMap.isEmpty()) {
+                        Thread.sleep(5000);//Attend qu'il n'y ait plus de NPC sur la carte avant de relancer une nouvelle vague.
+                        pauseGame();
                     }
                     wave = waveFactory.getNextWave(wave);
-                    System.out.println("*************************Wave***************************************");
                 }
+                while (paused) {
+                Thread.sleep(1000);
+                System.out.println("Le jeu est en pause");
+                }
+
+                Thread.sleep(1 / config.getModelFrameRate());
             } catch (InterruptedException | IOException e) {
                 e.printStackTrace();
             }
-        }
-        try {
-            while (paused) {
-                Thread.sleep(100);
-            }
-        } catch (InterruptedException e) {
-            e.printStackTrace();
         }
     }
 
 
     public void initialize() {
-//        gameThread.start();
+        gameThread.start();
         running = true;
         paused = false;
     }
@@ -186,6 +198,8 @@ public class GameModel implements Runnable {
         return NPCsOnMap;
     }
 
+    public Wave getWave(){ return wave;}
+
     public Player getPlayer() {
         return player;
     }
@@ -210,11 +224,11 @@ public class GameModel implements Runnable {
         return shop;
     }
 
-    /*==================================================================================================================
-                                                       TESTS
-    ==================================================================================================================*/
+    public ArrayList<GoldMine> getGoldMines(){
+        return goldMines;
+    }
 
-    public Wave donneVague() {
-        return wave;
+    public ArrayList<Tower> getTowers(){
+        return towers;
     }
 }

@@ -21,7 +21,6 @@ public class GlueTower extends Tower {
         }
     }
 
-    @Override
     public void levelUp() {
         super.levelUp();
     }

@@ -45,6 +45,9 @@ public abstract class Tower implements Buyable, Upgradable, Placeable, Drawable,
     /*==================================================================================================================
                                                    CONSTRUCTEUR
     ==================================================================================================================*/
+    /**Constructeur
+     * @param towerSpe [[level1Spec], ..., [levelNSpec]]
+     */
     public Tower(Map map, Position pos, GameModel gameModel, ArrayList<ArrayList<Integer>> towerSpe) {
         this.gameModel = gameModel;
         this.map = map;
@@ -55,7 +58,7 @@ public abstract class Tower implements Buyable, Upgradable, Placeable, Drawable,
         maxLevel = 3;
 
         //Initialisation des attributs:
-        ArrayList<Integer> level1Spe = towerSpe.get(1);
+        ArrayList<Integer> level1Spe = towerSpe.get(0);
         setAttributes(level1Spe);
         position = pos;
         targets = new ArrayList<>();
@@ -89,21 +92,24 @@ public abstract class Tower implements Buyable, Upgradable, Placeable, Drawable,
     /*==================================================================================================================
                                                     PASSAGE DE NIVEAU
     ==================================================================================================================*/
-    @Override
-    public boolean canBeLeveledUp() {
+    public boolean canBeLeveledUp(){
         return level < maxLevel;
     }
 
-    @Override
-    public void levelUp() {
-        if (canBeLeveledUp()) {
+    /**
+     * Si le niveau maximal n'est pas atteint, passe les attributs à leur valeur spécifiée par la liste levelSpe (cf: setAttributes()) */
+    public void levelUp(){
+        if(canBeLeveledUp()){
             level++;
             ArrayList<Integer> levelSpe = towerSpe.get(level - 1);
             setAttributes(levelSpe);
         }
     }
 
-    private void setAttributes(ArrayList<Integer> levelSpe) {
+    /**Passe tous les attributs à leur valeur spécifiée par la liste prise en argument.
+     * @param levelSpe [int price, int range, int fireRate, int damageDeal, maxEnemyNumber]
+     */
+    private void setAttributes(ArrayList<Integer> levelSpe){
         price = levelSpe.get(0);
         range = levelSpe.get(1);
         fireRate = levelSpe.get(2);
@@ -114,30 +120,30 @@ public abstract class Tower implements Buyable, Upgradable, Placeable, Drawable,
     /*==================================================================================================================
                                                      GESTION DU THREAD
     ==================================================================================================================*/
-    public void initialize() {
-        running = true;
+    /**Démarre le thread de la tour*/
+    public void initialize(){
         tTower.start();
     }
-
-    @Override
-    public void run() {
-        try {
-            while (running) {
-                while (!gameModel.getPaused()) {
+    /**Si le jeu tourne, vérifie sa distance aux NPCs sur la carte, si à porté alors attaque*/
+    public void run(){
+        while (gameModel.getRunning()) {
+            try{
+                if (!gameModel.getPaused()) {
                     attack();
-                    Thread.sleep(1000 / fireRate);
+                    Thread.sleep(1000/fireRate);
+                    System.out.println("==========la tour attaque");
+                }else {
+                    Thread.sleep(1 / gameModel.getConfig().getModelFrameRate());
+                    System.out.println("==========la tour est en pause");
                 }
+            }catch (InterruptedException e) {
+                e.printStackTrace();
             }
-            while (gameModel.getPaused()) {
-                Thread.sleep(100);
-            }
-        } catch (InterruptedException e) {
-            e.printStackTrace();
         }
     }
 
     /*==================================================================================================================
-                                                    JavaFX
+                                               GESTION DE LA REPRESENTATION
     ==================================================================================================================*/
 
     /**
@@ -170,32 +176,30 @@ public abstract class Tower implements Buyable, Upgradable, Placeable, Drawable,
                                                     AUTRES
     ==================================================================================================================*/
     @Override
-    public String toString() {
+    public String toString(){
         return "Tour :\n - position: " + position + "\n" +
-                "- level: " + level + "\n" +
-                "- maxLevel: " + maxLevel + "\n" +
-                "- range: " + range + "\n" +
-                "- fireRate: " + fireRate + "\n" +
-                "- damageDeal: " + damageDeal + "\n" +
-                "- maxTargetNumber: " + maxTargetNumber + "\n" +
-                "- Nombre de cibles attaquées: " + targets.size() + "\n" +
+                "- level: " + level + "\n"+
+                "- maxLevel: " + maxLevel + "\n"+
+                "- range: " + range + "\n"+
+                "- fireRate: " + fireRate + "\n"+
+                "- damageDeal: " + damageDeal + "\n"+
+                "- maxTargetNumber: " + maxTargetNumber + "\n"+
+                "- Nombre de cibles attaquées: " + targets.size() + "\n"+
                 "- price: " + price;
     }
 
     /*==================================================================================================================
                                                  GETTEURS/SETTEURS
     ==================================================================================================================*/
-    @Override
-    public int getCost() {
+    public int getCost(){
         return price;
     }
 
-    public Position getPos() {
+    public Position getPos(){
         return position;
     }
 
-    @Override
-    public void setPosition(Position position) {
+    public void setPosition(Position position){
         this.position = position;
     }
 }

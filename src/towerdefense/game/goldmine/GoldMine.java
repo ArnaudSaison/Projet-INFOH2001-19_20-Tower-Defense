@@ -15,21 +15,21 @@ public class GoldMine implements ProducesGold, Buyable, Upgradable, Placeable, D
     ==================================================================================================================*/
     //Attributs relatifs au passage de niveau:
     private int level;
-    private int maxLevel;
+    private int maxLevel; //TODO: mettre en static ?
 
     //Attributs de specification:
     private ArrayList<ArrayList<Integer>> goldMineSpe;
-    private int price;
+    private int price; //prix que le joueur doit payer pour acheter/améliorer la mine d'or.
     private int productionRate; //quantité d'or produit en une minute.
-    private int goldStorage;
-    private int maxGoldStorage;
+    private int goldStorage; //quantité d'or stockée par la mine d'or, nécessite une action du joueur pour être récupérée.
+    private int maxGoldStorage; //quantité d'or maximale que la mine d'or peut stocker.
 
     //Autres:
     private Map map;
     private Position position;
     private GameModel gameModel;
     private Thread tGoldMine;
-    private Boolean running;
+    private Boolean running; //Permet de vérifier que le thread de la mine d'or est activé.
 
     // javaFX
     private GoldMineView goldMineView;
@@ -37,9 +37,14 @@ public class GoldMine implements ProducesGold, Buyable, Upgradable, Placeable, D
     /*==================================================================================================================
                                                    CONSTRUCTEUR
     ==================================================================================================================*/
+
+    /**
+     * Constructeur.
+     *
+     * @param goldMineSpe = [[level1Spec], ..., [levelNSpec]]
+     */
     public GoldMine(Map map, Position pos, GameModel gameModel, ArrayList<ArrayList<Integer>> goldMineSpe) {
         this.gameModel = gameModel;
-        this.map = map;
 
         //Initialisation du niveau:
         this.goldMineSpe = goldMineSpe;
@@ -47,7 +52,7 @@ public class GoldMine implements ProducesGold, Buyable, Upgradable, Placeable, D
         maxLevel = 3;
 
         //Initialisation des attributs:
-        ArrayList<Integer> level1Spe = goldMineSpe.get(1);
+        ArrayList<Integer> level1Spe = goldMineSpe.get(0);
         setAttributes(level1Spe);
 
         //Initialisation de la position et du thread:
@@ -59,13 +64,20 @@ public class GoldMine implements ProducesGold, Buyable, Upgradable, Placeable, D
     /*==================================================================================================================
                                                    PRODUCTION DE L'OR
     ==================================================================================================================*/
-    public void produceGold(){
-        if(goldStorage < maxGoldStorage){
+
+    /**
+     * Permet de produire de l'or qui sera ensuite stocké
+     */
+    public void produceGold() {
+        if (goldStorage < maxGoldStorage) {
             goldStorage++;
         }
     }
 
-    public int retrieveGold(){
+    /**
+     * Permet de récupérer l'or stocké
+     */
+    public void retrieveGold() {                     //TODO: modifier l'interface
         int res = goldStorage;
         goldStorage = 0;
         return res;
@@ -74,21 +86,27 @@ public class GoldMine implements ProducesGold, Buyable, Upgradable, Placeable, D
     /*==================================================================================================================
                                                    PASSAGE DE NIVEAU
     ==================================================================================================================*/
-    @Override
     public boolean canBeLeveledUp() {
         return level < maxLevel;
     }
 
-    @Override
+    /**
+     * Si le niveau maximal n'est pas atteint, passe les attributs à leur valeur spécifiée par la liste levelSpe (cf: setAttributes())
+     */
     public void levelUp() {
         if (canBeLeveledUp()) {
             level++;
-            ArrayList<Integer> levelSpe = goldMineSpe.get(level-1);
+            ArrayList<Integer> levelSpe = goldMineSpe.get(level - 1);
             setAttributes(levelSpe);
         }
     }
 
-    private void setAttributes(ArrayList<Integer> levelSpe){
+    /**
+     * Passe tous les attributs à leur valeur spécifiée par la liste prise en argument.
+     *
+     * @param levelSpe = [int price, int productionRate, int maxGoldStorage].
+     */
+    private void setAttributes(ArrayList<Integer> levelSpe) {
         price = levelSpe.get(0);
         productionRate = levelSpe.get(1);
         maxGoldStorage = levelSpe.get(2);
@@ -97,17 +115,25 @@ public class GoldMine implements ProducesGold, Buyable, Upgradable, Placeable, D
     /*==================================================================================================================
                                                    GESTION DU THREAD
     ==================================================================================================================*/
-    public void initialize(){
+
+    /**
+     * Démarre le thread de la mine d'or
+     */
+    public void initialize() {
         running = true;
         tGoldMine.start();
     }
 
-    public void run(){
+    /**
+     * Définition du thread de la mine d'or: si le jeu n'est pas en pause alors produit de l'or à la cadence imposée par
+     * l'attribut productionRate, sinon place le thread en pause
+     */
+    public void run() {
         while (running) {
             while (!gameModel.getPaused()) {
                 try {//TODO: définir par seconde, ça bloque tout si on doit attendre 1 minute
                     produceGold();
-                    Thread.sleep(60000/productionRate);
+                    Thread.sleep(60000 / productionRate);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
@@ -125,6 +151,7 @@ public class GoldMine implements ProducesGold, Buyable, Upgradable, Placeable, D
     /*==================================================================================================================
                                                GESTION DE LA REPRESENTATION
     ==================================================================================================================*/
+
     /**
      * Initilisation de la vue
      * Création d'un objet de la vue qui pourra ensuite être récupéré
@@ -151,20 +178,23 @@ public class GoldMine implements ProducesGold, Buyable, Upgradable, Placeable, D
         return goldMineView;
     }
 
+    public void removeDrawing() {
+    }
+
     /*==================================================================================================================
                                                    GETTEURS/SETTEURS
     ==================================================================================================================*/
     @Override
-    public int getCost(){
+    public int getCost() {
         return price;
     }
 
-    public Position getPos(){
+    public Position getPos() {
         return position;
     }
 
     @Override
-    public void setPosition(Position position){
+    public void setPosition(Position position) {
         this.position = position;
     }
 
@@ -172,13 +202,13 @@ public class GoldMine implements ProducesGold, Buyable, Upgradable, Placeable, D
                                                    AUTRES
     ==================================================================================================================*/
     @Override
-    public String toString(){
+    public String toString() {
         return "Mine d'or :\n - position: " + position + "\n" +
-                "- level: " + level + "\n"+
-                "- maxLevel: " + maxLevel + "\n"+
-                "- maxGoldStorage: " + maxGoldStorage + "\n"+
-                "- goldStorage: " + goldStorage + "\n"+
-                "- productionRate: " + productionRate + "\n"+
+                "- level: " + level + "\n" +
+                "- maxLevel: " + maxLevel + "\n" +
+                "- maxGoldStorage: " + maxGoldStorage + "\n" +
+                "- goldStorage: " + goldStorage + "\n" +
+                "- productionRate: " + productionRate + "\n" +
                 "- price: " + price + ".";
     }
 }

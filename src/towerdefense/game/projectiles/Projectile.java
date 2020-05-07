@@ -7,61 +7,65 @@ import towerdefense.game.map.Position;
 import towerdefense.game.model.GameModel;
 import towerdefense.game.npcs.NPC;
 import towerdefense.view.Printable;
-import towerdefense.view.npc.NPCView;
 
 public abstract class Projectile implements Runnable, Drawable, Movable {
+    //Spécification:
     protected int damage;
     protected int velocity;
-    protected Position finalPosition;
 
+    //Positon:
+    protected Position finalPosition;
     protected Position position;
+
+    //Autres:
     protected Map map;
     protected GameModel gameModel;
-    private int FPS;
     protected Thread tProjectile;
     protected Boolean running;
-    protected NPC target;
+    protected NPC target; //cible sur laquelle est vérouiller le projectile.
 
+    /**Construteur:
+     * @param initialPosition Position de la tour depuis laquelle le projectile est tirer.
+     */
     public Projectile(Map map, Position initialPosition, GameModel gameModel, int damage){
         this.damage = damage;
-        position = initialPosition;
-
         this.map = map;
         this.gameModel = gameModel;
-        tProjectile = new Thread();
+
+        position = initialPosition;
         running = false;
-        
-        FPS = gameModel.getConfig().getModelFrameRate();
+        tProjectile = new Thread();
     }
 
     /*==================================================================================================================
                                                GESTION DU THREAD
     ==================================================================================================================*/
-    @Override
     public void run(){
         while(running){
-            while (!gameModel.getPaused()){
-                try{
-                    int FPS = 24;
-                    move();
+            try{
+                if (!gameModel.getPaused()){
+                    int frameRate = 24;//TODO : récupérer la frameRate du mainApplication ?
+                    move(frameRate);
+                    System.out.println("La position du projectile est" + getPos().toString());
                     if (position == finalPosition){
                         doDamage(target);
+                        System.out.println("Le projectile a atteint sa cible");
                     }
-                    tProjectile.sleep(1000/FPS);
-                } catch (Exception e) {
-                    e.printStackTrace();
+                    Thread.sleep(1000/frameRate);
                 }
-            }
-            while (gameModel.getPaused()){
-                try{
-                    tProjectile.sleep(100);
-                } catch (InterruptedException e) {
-                    e.printStackTrace();
+                else{
+                    Thread.sleep(1000);
+                    System.out.println("le projectile est en pause");
                 }
+            }catch (Exception e) {
+                    e.printStackTrace();
             }
         }
     }
 
+    /**Lance le thread et passe une référence de la cible.
+     * @param target NPC sur lequel le projectile est vérouillé.
+     */
     public void initialize(NPC target){
         this.target = target;
         this.finalPosition = target.getPos();
@@ -69,42 +73,23 @@ public abstract class Projectile implements Runnable, Drawable, Movable {
         tProjectile.start();
     }
 
+    /**Comportement du projectile, redéfinie dans chaque sous-classe*/
     public abstract void doDamage(NPC target);
 
     /*==================================================================================================================
                                                GESTION DE LA REPRESENTATION
     ==================================================================================================================*/
-    /**
-     * Initilisation de la vue
-     * Création d'un objet de la vue qui pourra ensuite être récupéré
-     */
-    public void initDrawing() {
-    }
+    public Printable getDrawing(){return null;}
 
-    /**
-     * Mise à jour de la représentation graphique
-     * Ne peut être appelée que par la vue
-     */
-    public void updateDrawing() {
-    }
+    public void removeDrawing(){}
 
-    /**
-     * Récupérer la représentation graphique de l'ojet
-     * Ne peut être appelée que par la vue
-     *
-     * @return représentation graphique de l'ojet
-     */
-    public Printable getDrawing() {
-        return null;
-    }
+    public void updateDrawing(){}
 
     /*==================================================================================================================
                                                GESTION DU MOUVEMENT
     ==================================================================================================================*/
-    /**
-     * Permet au projectile d'atteindre sa cible via une trajectoire en ligne droite
-     * */
-    public void move(){
+    /** Permet au projectile d'atteindre sa cible via une trajectoire en ligne droite*/
+    public void move(int numberFPS){
         //Distance entre la tour et le point d'impact du projectile:
         double trajectoryNorm = position.getDistance(finalPosition);
 
@@ -119,7 +104,7 @@ public abstract class Projectile implements Runnable, Drawable, Movable {
         double alpha = Math.acos(adj/hyp); //  /!\ alpha est en radians. TODO: cdt sur hyp != 0 ?
 
         //Distance parcouru entre l'affichage de deux images à l'écran:
-        double distanceDone = velocity / FPS; //TODO: cdt sur FPS != 0 ?
+        double distanceDone = velocity/numberFPS; //TODO: cdt sur numberFPS != 0 ?
         double depX = Math.cos(alpha)*distanceDone;
         double depY = Math.sin(alpha)*distanceDone;
 
