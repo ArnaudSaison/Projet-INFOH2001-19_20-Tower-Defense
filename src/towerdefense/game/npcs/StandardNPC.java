@@ -1,5 +1,6 @@
 package towerdefense.game.npcs;
 
+import towerdefense.game.map.GatePathTile;
 import towerdefense.game.map.Map;
 import towerdefense.game.map.Tile;
 import towerdefense.game.model.GameModel;
@@ -11,7 +12,7 @@ import towerdefense.game.waves.WaveFactory;
 public class StandardNPC extends NPC {
     private WaveFactory.NPCTypes type;
 
-    public StandardNPC(Map map, GameModel gameModel, int health, int speed, int goldLoot, int healthLoot, Tile gatePathTile, WaveFactory.NPCTypes type) {
+    public StandardNPC(Map map, GameModel gameModel, int health, int speed, int goldLoot, int healthLoot, GatePathTile gatePathTile, WaveFactory.NPCTypes type) {
         super(map, gameModel, health, speed, goldLoot, healthLoot, gatePathTile);
         this.type=type;
     }

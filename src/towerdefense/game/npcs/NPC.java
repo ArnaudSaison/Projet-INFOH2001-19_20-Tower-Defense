@@ -4,15 +4,15 @@ import towerdefense.game.Drawable;
 import towerdefense.game.Hittable;
 import towerdefense.game.Movable;
 import towerdefense.game.Placeable;
-import towerdefense.game.map.Map;
-import towerdefense.game.map.Position;
-import towerdefense.game.map.Tile;
+import towerdefense.game.map.*;
 import towerdefense.game.model.GameModel;
 import towerdefense.game.projectiles.Arrow;
 import towerdefense.game.projectiles.Glue;
 import towerdefense.game.projectiles.Shell;
 import towerdefense.view.Printable;
 import towerdefense.view.npc.NPCView;
+
+import java.util.ArrayList;
 
 public abstract class NPC implements Drawable, Movable, Placeable, Runnable, Hittable {
     //TODO: arriver au bout du chemin ! + (joueur).
@@ -24,6 +24,7 @@ public abstract class NPC implements Drawable, Movable, Placeable, Runnable, Hit
     protected Map map;
     protected Thread tNPC;
     protected Boolean running;
+    private final ArrayList<Position> positions;
 
     //Permet de savoir si le NPC est sur la carte:
     protected boolean onMap;
@@ -51,8 +52,10 @@ public abstract class NPC implements Drawable, Movable, Placeable, Runnable, Hit
     /*==================================================================================================================
                                                    CONSTRUCTEUR
     ==================================================================================================================*/
-    public NPC (Map map, GameModel gameModel, int health, int speed, int goldLoot, int scoreLoot, Tile gatePathTile){
-        position = gatePathTile.getPosition();
+    public NPC (Map map, GameModel gameModel, int health, int speed, int goldLoot, int scoreLoot, GatePathTile gatePathTile){
+        Path path = gatePathTile.getRandomPath();
+        positions = path.getRandomPositions();
+        position = positions.get(0);
         onMap = false; //TODO: set sur false dans le gameModel
         isArrived = false;
         this.gameModel = gameModel;

@@ -1,5 +1,6 @@
 package towerdefense.game.npcs;
 
+import towerdefense.game.map.GatePathTile;
 import towerdefense.game.map.Map;
 import towerdefense.game.map.Tile;
 import towerdefense.game.model.GameModel;
@@ -9,7 +10,7 @@ import towerdefense.game.projectiles.Shell;
 
 public class ExplosiveResistantNPC extends NPC {
 
-    public ExplosiveResistantNPC(Map map, GameModel gameModel, int health, int speed, int goldLoot, int scoreLoot, Tile gatePathTile) {
+    public ExplosiveResistantNPC(Map map, GameModel gameModel, int health, int speed, int goldLoot, int scoreLoot, GatePathTile gatePathTile) {
         super(map, gameModel, health, speed, goldLoot, scoreLoot, gatePathTile);
     }
 

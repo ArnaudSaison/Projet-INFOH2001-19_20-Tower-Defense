@@ -1,5 +1,6 @@
 package towerdefense.game.npcs;
 
+import towerdefense.game.map.GatePathTile;
 import towerdefense.game.map.Map;
 import towerdefense.game.map.Tile;
 import towerdefense.game.model.GameModel;
@@ -9,7 +10,7 @@ import java.util.ArrayList;
 
 public class NPCFactory {
 
-    public NPC getInstance(WaveFactory.NPCTypes type, Map map, GameModel gameModel, ArrayList<Integer> specifications, Tile gatePathTile) {
+    public NPC getInstance(WaveFactory.NPCTypes type, Map map, GameModel gameModel, ArrayList<Integer> specifications, GatePathTile gatePathTile) {
         NPC res = null;
 
         //Lecture des attributs des NPCs:

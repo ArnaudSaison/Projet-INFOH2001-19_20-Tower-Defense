@@ -1,5 +1,6 @@
 package towerdefense.game.waves;
 
+import towerdefense.game.map.GatePathTile;
 import towerdefense.game.map.Map;
 import towerdefense.game.map.Tile;
 import towerdefense.game.model.GameModel;
@@ -83,7 +84,7 @@ public class WaveFactory {
         NPCFactory npcFactory = new NPCFactory();
 
         //Tile par laquelle les NPCs entre sur la carte:
-        Tile gatePathTile = map.getGates().get(waveSpecifications.get(0).get(1).intValue());
+        GatePathTile gatePathTile = map.getGates().get(waveSpecifications.get(0).get(1).intValue());
 
         //===============================================Gestion des cas================================================
         switch (difficulty.toLowerCase()) {
