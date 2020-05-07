@@ -14,7 +14,7 @@ public class StandardTower extends Tower{
     public StandardTower(Map map, GameModel gameModel, ArrayList<ArrayList<Integer>> towerSpe, String type){
         super(map, gameModel,towerSpe);
         this.type = type;
-        arrow = new Arrow(map,super.position, gameModel, damageDeal);
+        arrow = new Arrow(map, super.position, gameModel, damageDeal);
     }
 
     @Override
@@ -22,10 +22,10 @@ public class StandardTower extends Tower{
         super.attack();
         for (NPC target : super.targets){
             arrow.initialize(target);
+            arrow.run();
         }
     }
 
-    @Override
     public void levelUp() {
         super.levelUp();
     }

@@ -43,7 +43,7 @@ public class Shop {
 
         //================================Lecture des propriétés du magasin============================================
         shopProperties = new Properties();
-        InputStream shopPropertiesFile = new FileInputStream(shopFilePath);
+        InputStream shopPropertiesFile = new FileInputStream(shopFilePath+".properties");
         shopProperties.load(shopPropertiesFile);
 
         //Initialisation des listes de spécification:

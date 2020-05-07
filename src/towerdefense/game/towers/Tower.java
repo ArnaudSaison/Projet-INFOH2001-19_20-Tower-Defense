@@ -35,10 +35,17 @@ public abstract class Tower implements Buyable, Upgradable, Placeable, Drawable,
     protected Thread tTower;
     private Boolean running;
 
+    //Optionel:
+    //private int health; (optionnel)
+
     //TODO: gestion du prix via un fichier properties ?
     /*==================================================================================================================
                                                    CONSTRUCTEUR
     ==================================================================================================================*/
+
+    /**Constructeur
+     * @param towerSpe [[level1Spec], ..., [levelNSpec]]
+     */
     public Tower(Map map, GameModel gameModel, ArrayList<ArrayList<Integer>> towerSpe){
         this.gameModel = gameModel;
 
@@ -48,7 +55,7 @@ public abstract class Tower implements Buyable, Upgradable, Placeable, Drawable,
         maxLevel = 3;
 
         //Initialisation des attributs:
-        ArrayList<Integer> level1Spe = towerSpe.get(1);
+        ArrayList<Integer> level1Spe = towerSpe.get(0);
         setAttributes(level1Spe);
         position = new Position(map);
         targets = new ArrayList<>();
@@ -72,27 +79,29 @@ public abstract class Tower implements Buyable, Upgradable, Placeable, Drawable,
         }
     }
 
-    public void attack() {
+    public void attack(){
         targetAcquisition();
     }
 
     /*==================================================================================================================
                                                     PASSAGE DE NIVEAU
     ==================================================================================================================*/
-    @Override
-    public boolean canBeLeveledUp() {
+    public boolean canBeLeveledUp(){
         return level<maxLevel;
     }
 
-    @Override
-    public void levelUp() {
-        if(canBeLeveledUp()) {
+    /**Si le niveau maximal n'est pas atteint, passe les attributs à leur valeur spécifiée par la liste levelSpe (cf: setAttributes()) */
+    public void levelUp(){
+        if(canBeLeveledUp()){
             level++;
             ArrayList<Integer> levelSpe = towerSpe.get(level-1);
             setAttributes(levelSpe);
         }
     }
 
+    /**Passe tous les attributs à leur valeur spécifiée par la liste prise en argument.
+     * @param levelSpe [int price, int range, int fireRate, int damageDeal, maxEnemyNumber]
+     */
     private void setAttributes(ArrayList<Integer> levelSpe){
         price = levelSpe.get(0);
         range = levelSpe.get(1);
@@ -104,58 +113,37 @@ public abstract class Tower implements Buyable, Upgradable, Placeable, Drawable,
     /*==================================================================================================================
                                                      GESTION DU THREAD
     ==================================================================================================================*/
+    /**Démarre le thread de la tour*/
     public void initialize(){
         running = true;
         tTower.start();
     }
-
-    @Override
+    /**Si le jeu tourne, vérifie sa distance aux NPCs sur la carte, si à porté alors attaque*/
     public void run(){
-        while (running) {
-            while (!gameModel.getPaused()) {
-                try {
+        while (gameModel.getRunning() && running) {
+            try{
+                if (!gameModel.getPaused()) {
                     attack();
-                    tTower.sleep(1000/fireRate);
-                } catch (Exception e) {
-                    e.printStackTrace();
+                    Thread.sleep(1000/fireRate);
+                    System.out.println("==========la tour attaque");
+                }else {
+                    Thread.sleep(1000);
+                    System.out.println("==========la tour est en pause");
                 }
-            }
-        }
-        while (gameModel.getPaused()) {
-            try {
-                Thread.sleep(100);
-            } catch (InterruptedException e) {
+            }catch (InterruptedException e) {
                 e.printStackTrace();
             }
         }
     }
 
     /*==================================================================================================================
-                                                    JavaFX
+                                               GESTION DE LA REPRESENTATION
     ==================================================================================================================*/
-    /**
-     * Initilisation de la vue
-     * Création d'un objet de la vue qui pourra ensuite être récupéré
-     */
-    public void initDrawing() {
-    }
+    public Printable getDrawing(){return null;}
 
-    /**
-     * Mise à jour de la représentation graphique
-     * Ne peut être appelée que par la vue
-     */
-    public void updateDrawing() {
-    }
+    public void removeDrawing(){}
 
-    /**
-     * Récupérer la représentation graphique de l'ojet
-     * Ne peut être appelée que par la vue
-     *
-     * @return représentation graphique de l'ojet
-     */
-    public Printable getDrawing() {
-        return null;
-    }
+    public void updateDrawing(){}
 
     /*==================================================================================================================
                                                     AUTRES
@@ -176,16 +164,8 @@ public abstract class Tower implements Buyable, Upgradable, Placeable, Drawable,
     /*==================================================================================================================
                                                  GETTEURS/SETTEURS
     ==================================================================================================================*/
-    @Override
-    public int getCost(){
-        return price;
-    }
+    public int getCost(){return price;}
 
-    public Position getPos(){
-        return position;
-    }
-
-    @Override
     public void setPosition(Position position){
         this.position = position;
     }

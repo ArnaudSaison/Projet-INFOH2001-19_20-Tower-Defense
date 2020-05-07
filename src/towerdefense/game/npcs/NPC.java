@@ -3,7 +3,6 @@ package towerdefense.game.npcs;
 import towerdefense.game.Drawable;
 import towerdefense.game.Hittable;
 import towerdefense.game.Movable;
-import towerdefense.game.map.Map;
 import towerdefense.game.map.Position;
 import towerdefense.game.map.Tile;
 import towerdefense.game.model.GameModel;
@@ -11,28 +10,17 @@ import towerdefense.game.projectiles.Arrow;
 import towerdefense.game.projectiles.Glue;
 import towerdefense.game.projectiles.Shell;
 import towerdefense.view.Printable;
-import towerdefense.view.npc.NPCView;
 
 public abstract class NPC implements Drawable, Movable, Runnable, Hittable {
     //TODO: arriver au bout du chemin ! + (joueur).
     /*==================================================================================================================
-                                                   ATTRIBUTS
+                                                     ATTRIBUTS
     ==================================================================================================================*/
-    protected Position position;
-    protected GameModel gameModel;
-    protected Map map;
-    protected Thread tNPC;
-    protected Boolean running;
-
     //Permet de savoir si le NPC est sur la carte:
     protected boolean onMap;
 
     //Permet de savoir si le NPC est arrivé au bout du chemin, donc sans se faire tuer:
     protected boolean isArrived;
-    protected HeadedDir isHeaded;
-
-    private double width = 1.0/4.0;
-    private double height = 1.0/4.0;
 
     //Attributs de spécification:
     protected int health;
@@ -40,63 +28,68 @@ public abstract class NPC implements Drawable, Movable, Runnable, Hittable {
     protected int goldLoot;
     protected int healthLoot;
 
-    //Optionnel:
-    //protected ArrayList<Weapon> inventaire ; (optionnel)
-
-    // JavaFX
-    private NPCView npcView;
+    //Autres:
+    protected Position position;
+    protected GameModel gameModel;
+    protected Thread tNPC;
+    protected Boolean running;
 
     /*==================================================================================================================
-                                                   CONSTRUCTEUR
+                                                     CONSTRUCTEUR
     ==================================================================================================================*/
-    public NPC (Map map, GameModel gameModel, int health, int speed, int goldLoot, int scoreLoot, Tile gatePathTile){
+    /**Constructeur de la super classe NPC (Non PLayable Character):
+     * @param goldLoot Or récupéré par le joueur si le NPC est tué.
+     * @param healthLoot Vie du joueur amputée si le NPC arrive au bout du chemin.
+     * @param gatePathTile Case par laquelle le NPC arrive sur la carte
+     */
+    public NPC (GameModel gameModel, int health, int speed, int goldLoot, int healthLoot, Tile gatePathTile){
         position = gatePathTile.getPosition();
         onMap = false;
         isArrived = false;
         this.gameModel = gameModel;
         this.tNPC = new Thread();
-        this.map = map;
 
         this.health = health;
         this.speed = speed;
         this.goldLoot = goldLoot;
-        this.healthLoot = scoreLoot;
-        isHeaded = HeadedDir.DOWN;
+        this.healthLoot= healthLoot;
 
         running= false;
+
     }
 
     /*==================================================================================================================
-                                                        GESTION DES ATTAQUES
+                                                  GESTION DES ATTAQUES
     ==================================================================================================================*/
-    /**
-     * Methode surchargée qui prend en argument un objet type Projectile
-     * */
-    @Override
+    /**Methode surchargée qui prend en argument un objet type Projectile*/
     public void hit(Shell shell){
         injure(shell);
     }
 
-    @Override
     public void hit(Glue glue){
         stick(glue);
     }
 
-    @Override
     public void hit(Arrow arrow){
         pierce(arrow);
     }
 
     /*==================================================================================================================
-                                                        GESTION DES DEGATS
+                                                GESTION DES DEGATS
     ==================================================================================================================*/
+    //En fonction du type de projectile, applique un effet sur le NPC:
+
+    /**Si non résistant, ralenti le NPC*/
     public abstract void stick(Glue glue);
 
+    /**Si non résistant, blesse le NPC*/
     public abstract void injure(Shell shell);
 
+    /**Blesse le NPC*/
     public abstract void pierce(Arrow arrow);
 
-    public void decreaseHealth(int damage) {
+    /**Retire de la vie au NPC*/
+    public void decreaseHealth(int damage){
         if (health <= 0) {
             gameModel.killNPC(this);
         } else {
@@ -105,99 +98,53 @@ public abstract class NPC implements Drawable, Movable, Runnable, Hittable {
     }
 
     /*==================================================================================================================
-                                                        GESTION DU THREAD
+                                                  GESTION DU THREAD
     ==================================================================================================================*/
     public void initialize(){
         if(onMap){
             running = true;
             tNPC.start();
-            System.out.println("NPC : je suis initialisé.");
+            System.out.println("NPC : je suis initialisé."); //TODO: à enlever dans la version finale.
         }
     }
 
-    @Override
     public void run(){
         while(onMap && gameModel.getRunning()){
-        }
+    }
     }
 
     //todo : removeElementsOnMap(Drawable element)
 
     /*==================================================================================================================
-                                               GESTION DE LA REPRESENTATION
+                                             GESTION DE LA REPRESENTATION
     ==================================================================================================================*/
-    /**
-     * Initilisation de la vue
-     * Création d'un objet de la vue qui pourra ensuite être récupéré
-     */
-    public void initDrawing() {
-        npcView = new NPCView(this, map, "generic");
-    }
+    public Printable getDrawing(){return null;}
 
-    /**
-     * Mise à jour de la représentation graphique
-     * Ne peut être appelée que par la vue
-     */
-    public void updateDrawing() {
-        npcView.update();
-    }
+    public void removeDrawing(){}
 
-    /**
-     * Récupérer la représentation graphique de l'ojet
-     * Ne peut être appelée que par la vue
-     *
-     * @return représentation graphique de l'ojet
-     */
-    public Printable getDrawing() {
-        return npcView;
+    public void updateDrawing(){}
+
+    /*==================================================================================================================
+                                                 GESTION DU DEPLACEMENT
+    ==================================================================================================================*/
+    public void move(int frameRate){
+
     }
 
     /*==================================================================================================================
-                                                        GESTION DU DEPLACEMENT
+                                                    GETTEURS/SETTEURS
     ==================================================================================================================*/
-    public void move() {
-    }
+    public Position getPos(){return position;}
 
-    /**
-     * Donne la direction dans laquelle le NPC se dirige
-     * @return direction du NPC
-     */
-    public HeadedDir getHeadedDir() {
-        return isHeaded;
-    }
+    public int getGoldLoot(){return goldLoot;}
 
-    /*==================================================================================================================
-                                                        GETTEURS/SETTEURS
-    ==================================================================================================================*/
-    public Position getPos() {
-        return position;
-    }
+    public int getHealthLoot(){return healthLoot;}
 
-    public int getGoldLoot() {
-        return goldLoot;
-    }
+    public boolean getIsArrived(){return isArrived;}
 
-    public int getHealthLoot() {
-        return healthLoot;
-    }
-
-    public boolean getIsArrived() {
-        return isArrived;
-    }
-
-    public void setIsArrived(boolean isArrived) {
-        this.isArrived = isArrived;
-    }
+    public void setIsArrived(boolean isArrived){ this.isArrived = isArrived;}
 
     public void setOnMap(boolean onMap){this.onMap = onMap;}
-
-    public double getWidth() {
-        return width;
-    }
-
-    public double getHeight() {
-        return height;
-    }
 
     /*==================================================================================================================
                                                         AUTRES

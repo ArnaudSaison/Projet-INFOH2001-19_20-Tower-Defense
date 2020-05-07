@@ -24,12 +24,10 @@ public class CanonTower extends Tower {
         }
     }
 
-    @Override
     public void levelUp() {
         super.levelUp();
     }
 
-    @Override
     public String toString(){
         return (super.toString() + "\n" + getClass().getName() + ".");
     }

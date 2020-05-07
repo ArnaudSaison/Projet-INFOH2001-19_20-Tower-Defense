@@ -18,22 +18,13 @@ public class NPCFactory {
         int goldLoot = specifications.get(2);
         int healthLoot = specifications.get(3);
 
-        //Increments spéciaux propre à chaque type de NPC:
-        int extraHealth = specifications.get(4) ;
-        int extraSpeed = specifications.get(5);
-        int extraGoldLoot = specifications.get(6);
-        int extraHealthLoot = specifications.get(7);
-
-
-
-        //TODO: scoreLoot
         //Gestion des différents cas:
         switch (type){
             case STANDARD_NPC: res = new StandardNPC(map, gameModel, health, speed, goldLoot, healthLoot,gatePathTile, type);
             break;
-            case RAPID_NPC: res = new StandardNPC(map, gameModel, health, speed+extraSpeed, goldLoot+extraGoldLoot, healthLoot+extraHealthLoot,gatePathTile, type);
+            case RAPID_NPC: res = new StandardNPC(map, gameModel, health, speed, goldLoot, healthLoot,gatePathTile, type);
                 break;
-            case SUPER_HEALTH_NPC: res = new StandardNPC(map, gameModel, health+extraHealth, speed, goldLoot+extraGoldLoot, healthLoot+extraHealthLoot, gatePathTile, type);
+            case SUPER_HEALTH_NPC: res = new StandardNPC(map, gameModel, health, speed, goldLoot, healthLoot, gatePathTile, type);
                 break;
             case EXPLOSIVE_RESISTANT_NPC: res = new ExplosiveResistantNPC(map, gameModel, health, speed, goldLoot, healthLoot, gatePathTile);
                 break;
