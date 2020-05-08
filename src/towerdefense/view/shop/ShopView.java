@@ -70,7 +70,7 @@ public class ShopView extends VBox {
         // Ajout de des attributs
         ArrayList<Shop.ItemProp> itemProps = Shop.getPropertiesOfItem(item);
         for (Shop.ItemProp prop : itemProps) {
-            Label description = new Label(Shop.getPropName(item, prop) + " : " + shop.getItemProp(item, prop, 0));
+            Label description = new Label(Shop.getPropName(item, prop) + " : " + shop.getItemProp(item, prop, 1));
             description.getStyleClass().add("item-label-description");
             propBox.getChildren().add(description);
         }

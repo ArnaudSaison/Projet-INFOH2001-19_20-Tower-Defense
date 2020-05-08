@@ -25,8 +25,6 @@ public class GameModel implements Runnable {
     private Thread gameThread;
 
     // Attributs du jeu:
-    private int timeBeforeBeginning;
-
     private Config config;
     private Wave wave;
     private WaveFactory waveFactory;
@@ -89,26 +87,22 @@ public class GameModel implements Runnable {
             try {
                 while (!paused) {
                     int max = wave.getLength() ;
+
                     for (int i = 0; i < max; i++){
                         NPC nextNPC = wave.getNextEnemy();
                         initializeElement(nextNPC);
                         Thread.sleep(2000); // place et démarre un NPC toutes les secondes.
-                        player.increaseScore(); //augmentation du score du joueur.
 
                         // tests
-                        System.out.println("============================Vague actuelle==============================");
-                        wave.toPrint();
-                        System.out.println("============================Le prochain NPC est : \n" + nextNPC.toString());
+//                        System.out.println("============================Vague actuelle==============================");
+//                        wave.toPrint();
+//                        System.out.println("============================Le prochain NPC est : \n" + nextNPC.toString());
 
-                    }if(!NPCsOnMap.isEmpty()) {
+                    } if(!NPCsOnMap.isEmpty()) {
                         Thread.sleep(5000);//Attend qu'il n'y ait plus de NPC sur la carte avant de relancer une nouvelle vague.
                         pauseGame();
                     }
                     wave = waveFactory.getNextWave(wave);
-                }
-                while (paused) {
-                Thread.sleep(1000);
-                System.out.println("Le jeu est en pause");
                 }
 
                 Thread.sleep(1 / config.getModelFrameRate());
@@ -120,7 +114,7 @@ public class GameModel implements Runnable {
 
 
     public void initialize() {
-        gameThread.start();
+//        gameThread.start();
         running = true;
         paused = false;
     }

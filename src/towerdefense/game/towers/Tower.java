@@ -166,7 +166,7 @@ public abstract class Tower implements Buyable, Upgradable, Placeable, Drawable,
      * Création d'un objet de la vue qui pourra ensuite être récupéré
      */
     public void initDrawing() {
-        towerView = new TowerView(this, map, graphicsName, size);
+        towerView = new TowerView(this, map, graphicsName, size, gameModel.getShop());
     }
 
     /**
@@ -231,4 +231,14 @@ public abstract class Tower implements Buyable, Upgradable, Placeable, Drawable,
     public void setPosition(Position position){
         this.position = position.getAdded(new Position(size / 2.0 * map.getTileMetricWidth(), size / 2.0 * map.getTileMetricWidth(), map));
     }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public int getMaxLevel() {
+        return maxLevel;
+    }
+
+    public abstract Shop.ShopCases getID();
 }

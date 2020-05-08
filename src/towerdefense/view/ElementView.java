@@ -8,8 +8,9 @@ import javafx.scene.layout.VBox;
 import towerdefense.game.Placeable;
 import towerdefense.game.map.Map;
 import towerdefense.game.map.Position;
+import towerdefense.game.model.Shop;
 
-public abstract class ElementView extends VBox implements Printable {
+public abstract class ElementView extends StackPane implements Printable {
     // ==================== Attributs ====================
     // Références
     protected Position position;
@@ -50,6 +51,7 @@ public abstract class ElementView extends VBox implements Printable {
         updatePos();
         update();
 
+        imageView.getStyleClass().add("hand-cursor");
 //        setStyle("-fx-border-color: magenta; -fx-border-width: 1;");
     }
 

@@ -1,3 +1,6 @@
+/*======================================================================================================================
+                                                    UI DU JEU
+======================================================================================================================*/
 .gameInfoBarItem {
 	-fx-background-color: rgba(217, 217, 217, 0.7);
 	-fx-background-radius: 10;
@@ -29,10 +32,14 @@
 .shop-items-box {
 }
 
+.hand-cursor {
+    -fx-cursor: hand;
+}
 
 
-
-/*SCROLLPANE DU SHOP*/
+/*======================================================================================================================
+                                                    SCROLLPANE DU SHOP
+======================================================================================================================*/
 .tab-pane .tab-header-area .tab-header-background {
     -fx-background-color: #e6e6e6;
 }
@@ -99,7 +106,9 @@
 
 
 
-/*ELEMTNS DU SHOP*/
+/*======================================================================================================================
+                                                    ELEMENTS DU SHOP
+======================================================================================================================*/
 
 .shop-vbox {
     -fx-spacing: 10;
@@ -147,3 +156,73 @@
     -fx-font-size: 14;
     -fx-font-weight: bold;
 }
+
+
+
+/*======================================================================================================================
+                                    POPUP D'INFO POUR LES NIVEAUX D'AMÉLIORATIONS
+======================================================================================================================*/
+.info-bubble-vbox {
+    -fx-spacing: 5;
+    -fx-alignment: center-left;
+
+    -fx-background-color: white 0.7;
+    -fx-background-radius: 15;
+
+    -fx-padding: 10;
+}
+
+.info-bubble-vbox .level-gridpane {
+    -fx-hgap: 5;
+    -fx-vgap: 5;
+
+    -fx-padding: 5;
+
+    -fx-background-color: #cccccc;
+    -fx-background-radius: 0;
+}
+
+.info-bubble-vbox .level-gridpane .label {
+
+}
+
+.next-level {
+    -fx-background-color: #a6a6a6;
+}
+
+.no-upgrade-label {
+
+}
+
+.close-button {
+    -fx-background-color : #999999;
+    -fx-background-radius: 15;
+
+	-fx-background-insets: 0;
+	-fx-cursor: hand;
+}
+
+.close-button:hover {
+    -fx-background-color : #888888;
+}
+
+.close-button:pressed {
+    -fx-background-color : #999999;
+}
+
+.upgrade-button {
+    -fx-background-color : #ffd100;
+    -fx-background-radius: 15;
+
+	-fx-background-insets: 0;
+	-fx-cursor: hand;
+}
+
+.upgrade-button:hover {
+    -fx-background-color : #ffb800;
+}
+
+.upgrade-button:pressed {
+    -fx-background-color : #ff9900;
+}
+

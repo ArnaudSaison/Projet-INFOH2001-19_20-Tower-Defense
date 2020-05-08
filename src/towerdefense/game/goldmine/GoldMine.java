@@ -181,7 +181,7 @@ public class GoldMine implements ProducesGold, Buyable, Upgradable, Placeable, D
      * Création d'un objet de la vue qui pourra ensuite être récupéré
      */
     public void initDrawing() {
-        goldMineView = new GoldMineView(this, map, graphicsName, size);
+        goldMineView = new GoldMineView(this, map, graphicsName, size, gameModel.getShop());
     }
 
     /**
@@ -232,6 +232,18 @@ public class GoldMine implements ProducesGold, Buyable, Upgradable, Placeable, D
      */
     public void setPosition(Position position){
         this.position = position.getAdded(new Position(size / 2.0 * map.getTileMetricWidth(), size / 2.0 * map.getTileMetricWidth(), map));
+    }
+
+    public int getLevel() {
+        return level;
+    }
+
+    public int getMaxLevel() {
+        return maxLevel;
+    }
+
+    public Shop.ShopCases getID() {
+        return ID;
     }
 
     /*==================================================================================================================

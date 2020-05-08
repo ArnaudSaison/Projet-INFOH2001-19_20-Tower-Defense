@@ -52,16 +52,16 @@ public abstract class Projectile implements Runnable, Drawable, Movable {
             try {
                 if (!gameModel.getPaused()) {
                     move();
-                    System.out.println("La position du projectile est" + getPosition().toString());
+//                    System.out.println("La position du projectile est" + getPosition().toString());
                     if (position == finalPosition) {
                         doDamage(target);
                         isArrived = true;
-                        System.out.println("Le projectile a atteint sa cible");
+//                        System.out.println("Le projectile a atteint sa cible");
                     }
                     Thread.sleep(1000 / frameRate);
                 } else {
                     Thread.sleep(1000);
-                    System.out.println("le projectile est en pause");
+//                    System.out.println("le projectile est en pause");
                 }
             } catch (Exception e) {
                 e.printStackTrace();

@@ -32,7 +32,7 @@ public class NPCFactory {
             case GLUE_RESISTANT_NPC: res = new GlueResistantNPC(map, gameModel, health, speed, goldLoot, healthLoot, gatePathTile);
                 break;
 
-            default : System.out.println("Invalid NPC type");
+//            default : System.out.println("Invalid NPC type");
         }
         return res;
     }

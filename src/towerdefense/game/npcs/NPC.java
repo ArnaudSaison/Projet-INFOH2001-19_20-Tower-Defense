@@ -119,7 +119,7 @@ public abstract class NPC implements Drawable, Movable, Placeable, Runnable, Hit
     public void initialize(){
         if(onMap){
             tNPC.start();
-            System.out.println("NPC : je suis initialisé.");
+//            System.out.println("NPC : je suis initialisé.");
         }
     }
 
@@ -129,10 +129,10 @@ public abstract class NPC implements Drawable, Movable, Placeable, Runnable, Hit
             try{
                 if (!gameModel.getPaused()){
                     move();
-                    System.out.println("La position du NPC est" + getPos().toString());
+//                    System.out.println("La position du NPC est" + getPosition().toString());
                     if (position == nextPosition){
                         setNextPosition();
-                        System.out.println("Le NPC a atteint une position intermédiaire");
+//                        System.out.println("Le NPC a atteint une position intermédiaire");
                         if(isArrived){
                             gameModel.killNPC(this);
                         }
@@ -141,7 +141,7 @@ public abstract class NPC implements Drawable, Movable, Placeable, Runnable, Hit
                 }
                 else{
                     Thread.sleep(1000);
-                    System.out.println("le NPC est en pause");
+//                    System.out.println("le NPC est en pause");
                 }
             }catch (Exception e) {
                 e.printStackTrace();
@@ -193,7 +193,7 @@ public abstract class NPC implements Drawable, Movable, Placeable, Runnable, Hit
             isArrived = true;
         }
         positions.remove(nextPosition);
-        System.out.println("=============================LA PROCHAINE POSITION EST=================================="+ nextPosition);
+//        System.out.println("=============================LA PROCHAINE POSITION EST=================================="+ nextPosition);
     }
 
     /**

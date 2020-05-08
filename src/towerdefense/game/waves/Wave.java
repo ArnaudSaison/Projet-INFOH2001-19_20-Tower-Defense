@@ -49,7 +49,7 @@ public class Wave {
     //==============================================Tests===============================================================
     public void toPrint(){
         for(NPC e :waveNPCs){
-            System.out.println(e.toString());
+//            System.out.println(e.toString());
         }
     }
 }

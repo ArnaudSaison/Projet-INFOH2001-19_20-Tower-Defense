@@ -127,7 +127,7 @@ public class Shop {
 
         if (canBeBought) {
             //===============================================Gestion des cas================================================
-            int price = getItemProp(type, ItemProp.PRICE, 0); // récupération du prix
+            int price = getItemProp(type, ItemProp.PRICE, 1); // récupération du prix
             canBeBought = player.getGold() >= price;
 
             if (canBeBought) { // vérification que le joueur a assez d'argent
@@ -231,6 +231,7 @@ public class Shop {
 
     public int getItemProp(ShopCases item, ItemProp prop, int level) {
         int res = 0;
+        level -= 1;
 
         switch (item) {
             //Tours:

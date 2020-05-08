@@ -36,4 +36,9 @@ public class StandardTower extends Tower{
     public String toString(){
         return (super.toString() + "\n" + getClass() + type + ".");
     }
+
+    @Override
+    public Shop.ShopCases getID() {
+        return ID;
+    }
 }

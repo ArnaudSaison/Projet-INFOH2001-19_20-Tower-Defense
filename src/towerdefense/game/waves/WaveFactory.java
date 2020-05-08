@@ -129,11 +129,11 @@ public class WaveFactory {
         }
 
         //=========================Incrémentation des compteurs de vague et de cycle====================================
-        System.out.println("*************************VAGUE :" +(waveIterator+1) +"***************************************");
+//        System.out.println("*************************VAGUE :" +(waveIterator+1) +"***************************************");
         if (waveIterator == 2){
             waveIterator=0;
             cycleIterator++;
-            System.out.println("=============Dernière vague avant nouveau cycle======================");
+//            System.out.println("=============Dernière vague avant nouveau cycle======================");
         }else{waveIterator++; }
 
         //=================================================Return=======================================================
@@ -253,7 +253,7 @@ public class WaveFactory {
     ==================================================================================================================*/
     public void afficheFichiersSpec(){
         for (File file : allMapSpecificationsFiles){
-            System.out.println(file.getName());
+//            System.out.println(file.getName());
         }
     }
 }

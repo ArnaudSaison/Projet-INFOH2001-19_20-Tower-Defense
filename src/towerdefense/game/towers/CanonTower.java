@@ -31,4 +31,9 @@ public class CanonTower extends Tower {
     public String toString(){
         return (super.toString() + "\n" + getClass().getName() + ".");
     }
+
+    @Override
+    public Shop.ShopCases getID() {
+        return ID;
+    }
 }
