@@ -272,15 +272,6 @@ public class GameController implements Initializable, GUIController {
 
             } else {
                 gameModel.initialize();
-
-                //TODO: supprimer (test)
-                gameModel.initializeElement(new StandardNPC(map, gameModel, 100, 10, 100, 10, map.getGates().get(0), WaveFactory.NPCTypes.STANDARD_NPC));
-                gameModel.getNPCsOnMap().get(0).decreaseHealth(20);
-                player.increaseGold(75);
-                boolean placed1 = shop.buyPlaceable(Shop.ShopCases.STANDARD_TOWER, new Position(2, 3, map), map);
-                boolean placed2 = shop.buyPlaceable(Shop.ShopCases.GOLD_MINE, new Position(3, 5, map), map);
-                boolean placed3 = shop.buyPlaceable(Shop.ShopCases.GLUE_TOWER, new Position(3, 7, map), map);
-                System.out.println(placed1 + " " + placed2 + " " + placed3);
             }
 
         } else {
