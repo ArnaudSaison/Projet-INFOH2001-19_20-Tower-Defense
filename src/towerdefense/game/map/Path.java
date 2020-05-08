@@ -50,7 +50,7 @@ public class Path {
     }
 
     /**
-     * Méthode générant une liste de positions auquelles le NPC soit de rendre pour se déplacer sur le chemin.
+     * Méthode générant une liste de positions auquelles le NPC doit de rendre pour se déplacer sur le chemin.
      * Celles-ci sont randomisées autour du centre des cases composant les changements de direction du chemin.
      *
      * @return listes de Position (en mètres autour du centre d'une case du chemin)

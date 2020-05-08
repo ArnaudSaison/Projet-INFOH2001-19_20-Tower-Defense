@@ -9,9 +9,8 @@ import towerdefense.game.npcs.NPC;
 public class Shell extends Projectile {
     private int radius;
 
-    public Shell(Map map, Position initialPosition, GameModel gameModel, int damage, int radius){
-        super(map, initialPosition, gameModel, damage);
-        super.velocity = 1;
+    public Shell(Map map, GameModel gameModel, int damage, int velocity, Position initialPosition, NPC target, int radius){
+        super(map, gameModel, damage, velocity, initialPosition, target);
         this.radius = radius;
     }
 

@@ -7,9 +7,8 @@ import towerdefense.game.npcs.NPC;
 
 public class Arrow extends Projectile {
 
-    public Arrow(Map map, Position initialPosition, GameModel gameModel, int damage){
-    super(map,initialPosition, gameModel, damage);
-    super.velocity = 10;
+    public Arrow(Map map, GameModel gameModel, int damage, int velocity, Position initialPosition, NPC target){
+    super(map, gameModel, damage, velocity, initialPosition, target);
     }
 
 

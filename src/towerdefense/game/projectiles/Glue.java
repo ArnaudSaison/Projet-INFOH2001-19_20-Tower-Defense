@@ -7,9 +7,8 @@ import towerdefense.game.npcs.NPC;
 
 public class Glue extends Projectile{
 
-    public Glue(Map map, Position initialPosition, GameModel gameModel, int damage){
-        super(map,initialPosition, gameModel, damage);
-        super.velocity = 10;
+    public Glue(Map map, GameModel gameModel, int damage, int velocity, Position initialPosition, NPC target){
+        super(map, gameModel, damage, velocity, initialPosition, target);
     }
 
     @Override

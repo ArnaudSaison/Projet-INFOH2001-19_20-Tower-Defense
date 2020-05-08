@@ -155,9 +155,9 @@ public class GoldMine implements ProducesGold, Buyable, Upgradable, Placeable, D
     public void run() {
         while (running) {
             while (!gameModel.getPaused()) {
-                try {//TODO: définir par seconde, ça bloque tout si on doit attendre 1 minute
+                try {
                     produceGold();
-                    Thread.sleep(60000 / productionRate);
+                    Thread.sleep(1000 / 60*productionRate);
                 } catch (InterruptedException e) {
                     e.printStackTrace();
                 }
