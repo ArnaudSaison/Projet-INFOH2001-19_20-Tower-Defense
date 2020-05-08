@@ -189,7 +189,7 @@ public abstract class NPC implements Drawable, Movable, Placeable, Runnable, Hit
     /*==================================================================================================================
                                                     GETTEURS/SETTEURS
     ==================================================================================================================*/
-    public Position getPos() {
+    public Position getPosition() {
         return position;
     }
 

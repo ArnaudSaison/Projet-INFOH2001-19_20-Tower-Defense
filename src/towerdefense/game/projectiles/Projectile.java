@@ -7,7 +7,6 @@ import towerdefense.game.map.Position;
 import towerdefense.game.model.GameModel;
 import towerdefense.game.npcs.NPC;
 import towerdefense.view.Printable;
-import towerdefense.view.towers.TowerView;
 
 public abstract class Projectile implements Runnable, Drawable, Movable {
     //Spécification:
@@ -69,7 +68,7 @@ public abstract class Projectile implements Runnable, Drawable, Movable {
      */
     public void initialize(NPC target){
         this.target = target;
-        this.finalPosition = target.getPos();
+        this.finalPosition = target.getPosition();
         running = true;
         tProjectile.start();
     }

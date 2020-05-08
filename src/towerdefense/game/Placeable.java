@@ -7,5 +7,6 @@ import towerdefense.game.map.Position;
  */
 public interface Placeable {
     public void setPosition(Position position);
+    public Position getPosition();
     public void initialize();
 }

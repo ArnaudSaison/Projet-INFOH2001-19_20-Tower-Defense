@@ -8,6 +8,7 @@ import towerdefense.game.map.Map;
 import towerdefense.game.map.Position;
 import towerdefense.game.map.Tile;
 import towerdefense.view.Printable;
+import towerdefense.view.shop.TemporaryItem;
 
 import java.util.ArrayList;
 
@@ -24,6 +25,9 @@ public class MapView extends Pane implements Printable {
     private ArrayList<Node> elementsToRemove;
     private ArrayList<Node> elementsToAdd;
 
+    private TemporaryItem tempElement;
+    private boolean tempElementOnMap;
+
     // ==================== Initilisation ====================
 
     /**
@@ -37,6 +41,7 @@ public class MapView extends Pane implements Printable {
         this.map = map;
         elementsToRemove = new ArrayList<>();
         elementsToAdd = new ArrayList<>();
+        tempElementOnMap = false;
 
         // Réglages graphiques
         String graphicsPath = "towerdefense/controller/game/graphics.css";
@@ -48,6 +53,15 @@ public class MapView extends Pane implements Printable {
             t.initDrawing();
             this.getChildren().add((Node) t.getDrawing());
             t.updateDrawing();
+        }
+    }
+
+    /**
+     * Initilisation des listeners
+     */
+    public void initListeners() {
+        for (Tile t : map.getTiles()) {
+            t.getDrawing().initListeners();
         }
     }
 
@@ -129,6 +143,11 @@ public class MapView extends Pane implements Printable {
         for (Drawable drawable : map.getElementsOnMap()) {
             drawable.updateDrawing();
         }
+
+        // Élément temporaire sur la carte (il ne peut y en avoir qu'un seul à fois
+        if (tempElement != null) {
+            tempElement.update();
+        }
     }
 
     // Liaison directe avec le modèle sans interaction avec JavaFX
@@ -146,5 +165,26 @@ public class MapView extends Pane implements Printable {
     public void removePrintable(Printable elem) {
         // Liste buffer afin de laisser le thread JavaFX supprimer sans risque
         elementsToRemove.add((Node) elem);
+    }
+
+    // Gestion d'un élément temporaire
+    public void removeTempElement() {
+        this.tempElementOnMap = false;
+        getChildren().remove((Node) tempElement);
+    }
+
+    public void setTempElement(TemporaryItem elem) {
+        removeTempElement();
+        this.tempElementOnMap = true;
+        tempElement = elem;
+        getChildren().add((Node) elem);
+    }
+
+    public TemporaryItem getTempElement() {
+        return tempElement;
+    }
+
+    public boolean tempElementPresent() {
+        return tempElementOnMap;
     }
 }

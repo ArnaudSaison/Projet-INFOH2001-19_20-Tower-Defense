@@ -5,7 +5,6 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.StackPane;
 import javafx.scene.shape.Rectangle;
-import towerdefense.controller.listeners.TileClickedListener;
 import towerdefense.game.map.Map;
 import towerdefense.game.map.Tile;
 import towerdefense.view.Printable;
@@ -20,8 +19,8 @@ import java.util.Random;
 public abstract class TileView extends StackPane implements Printable {
     // ==================== Attributs ====================
     // Références
-    protected final Map map;
-    protected final Tile tile;
+    protected Map map;
+    protected Tile tile;
 
     // JavFX
     private Rectangle hoverIndicator;
@@ -39,8 +38,14 @@ public abstract class TileView extends StackPane implements Printable {
         // Construction
         this.tile = tile;
         this.map = map;
+    }
 
+    /**
+     * Initilisation des listeners
+     */
+    public void initListeners() {
         setOnMousePressed(new TileClickedListener(tile));
+        setOnMouseEntered(new TileEnteredListener(tile, map));
     }
 
     /**

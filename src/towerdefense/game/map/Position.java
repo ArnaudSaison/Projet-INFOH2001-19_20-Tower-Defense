@@ -203,6 +203,16 @@ public class Position {
     }
 
     /**
+     * Méthode permettant de récupérer le coin inférieur droit de la case dans laquelle on se trouve
+     *
+     * @return
+     */
+    public Position getSouthEastTileCorner() {
+        assertMapAttached();
+        return new Position(getX() + tileMetricWidth, getTileY() + tileMetricWidth, map);
+    }
+
+    /**
      * Méthode permettant de récupérer les coordonnées de la case dans la quelle la position se trouve
      *
      * @return cordonnées de la case dans laquelle la position se trouve

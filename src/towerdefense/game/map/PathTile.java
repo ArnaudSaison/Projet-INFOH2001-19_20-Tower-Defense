@@ -24,6 +24,7 @@ public class PathTile extends Tile {
     public PathTile(int x, int y, Map map) {
         super(x, y, map);
         connections = new ArrayList<>();
+        isBlocked = true;
     }
 
     // ==================== Gestion des connections entre cases ====================

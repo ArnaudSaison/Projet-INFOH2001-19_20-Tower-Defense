@@ -229,6 +229,29 @@ public class Map implements Drawable {
     }
 
     /**
+     * Renvoie si on peut ou non construire sur toutes les cases d'une zone définie par
+     * la position de son coin supérieur gauche et la largeur de la zone carrée considérée
+     *
+     * @param x    abscisse de la position du coin supérieur gauche
+     * @param y    ordonnée  position du coin supérieur gauche
+     * @param size largeur de la zone carrée (en nombre de cases)
+     * @return true si toutes les cases dans la zone sont libres
+     */
+    public boolean canBeBuiltOn(int x, int y, int size) {
+        boolean blocked = false;
+        int i = 0;
+        int j = 0;
+        while (!blocked && i < size) {
+            while (!blocked && j < size) {
+                blocked = getTile(x + i, y + j).getBlockedState();
+                j++;
+            }
+            i++;
+        }
+        return !blocked;
+    }
+
+    /**
      * Récupérer l'échelle en pixels par mètres
      * le mètre est l'unité de mesure universelle utilisée par le jeux pour représenter tout objet sur la carte
      */

@@ -6,6 +6,7 @@ import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
@@ -26,9 +27,9 @@ import towerdefense.game.model.GameModel;
 import towerdefense.game.model.Player;
 import towerdefense.game.model.Shop;
 import towerdefense.game.npcs.StandardNPC;
-import towerdefense.game.towers.StandardTower;
 import towerdefense.game.waves.WaveFactory;
 import towerdefense.view.map.MapView;
+import towerdefense.view.shop.ShopView;
 
 import java.io.IOException;
 import java.net.URL;
@@ -66,7 +67,7 @@ public class GameController implements Initializable, GUIController {
     @FXML
     private Button ResetViewButton;
     @FXML
-    private VBox shopItemsBox;
+    private ScrollPane shopItemsContainer;
     @FXML
     private Button pauseButton;
 
@@ -142,13 +143,14 @@ public class GameController implements Initializable, GUIController {
         // Initilisation du bouton de pause
         initPauseButton();
 
-        // Initilisation du shop
-        initShopView();
-
         // Initialisation de la map
         map.initDrawing(); // initialisation de toutes les raprésentations graphiques
         mapView = (MapView) map.getDrawing(); // Ce casting est parmis par déifnition du MCV parttern
+        mapView.initListeners();
         mapPlaceHolder.getChildren().add(0, mapView); // Ajout de la carte à la vue FXML
+
+        // Initilisation du shop
+        shopItemsContainer.setContent(new ShopView(mapPlaceHolder, map, shop));
 
         // Démarrage de la GUI
         startAllTimers();
@@ -161,11 +163,6 @@ public class GameController implements Initializable, GUIController {
         pauseButtonView.setFitHeight(20);
         pauseButtonView.setFitWidth(20);
         pauseButton.setGraphic(pauseButtonView);
-    }
-
-    private void initShopView() {
-//        shopItemsBox.initDrawing();
-//        shopItemsBox.getChildren().addAll(shop.getDrawing);
     }
 
     // ==================== Fonctionnement du controller ====================
@@ -247,7 +244,6 @@ public class GameController implements Initializable, GUIController {
      */
     @FXML
     public void handleQuitGameButtonClicked(MouseEvent event) throws IOException {
-//        if (!gameModel.getIsRunning) {
         if (gameModel.getRunning()) {
             boolean answer = mainApplication.confirmWindow(
                     "The Game is not finished yet. Do you want to quit anyway ?",
@@ -262,7 +258,6 @@ public class GameController implements Initializable, GUIController {
         }
     }
 
-    //TODO: mauvais bouton
     /**
      * Bouton qui gère le démarrage, la mise en pause et la reprise du jeu
      */
@@ -272,7 +267,21 @@ public class GameController implements Initializable, GUIController {
             pauseButton.setText("Pause Game");
             pauseButtonView.setImage(pauseIcon);
 
-            gameModel.resumeGame();
+            if (gameModel.getRunning()) {
+                gameModel.resumeGame();
+
+            } else {
+                gameModel.initialize();
+
+                //TODO: supprimer (test)
+                gameModel.initializeElement(new StandardNPC(map, gameModel, 100, 10, 100, 10, map.getGates().get(0), WaveFactory.NPCTypes.STANDARD_NPC));
+                gameModel.getNPCsOnMap().get(0).decreaseHealth(20);
+                player.increaseGold(75);
+                boolean placed1 = shop.buyPlaceable(Shop.ShopCases.STANDARD_TOWER, new Position(2, 3, map), map);
+                boolean placed2 = shop.buyPlaceable(Shop.ShopCases.GOLD_MINE, new Position(3, 5, map), map);
+                boolean placed3 = shop.buyPlaceable(Shop.ShopCases.GLUE_TOWER, new Position(3, 7, map), map);
+                System.out.println(placed1 + " " + placed2 + " " + placed3);
+            }
 
         } else {
             pauseButton.setText("Resume Game");
@@ -281,17 +290,6 @@ public class GameController implements Initializable, GUIController {
             gameModel.pauseGame();
         }
 
-        if (!gameModel.getRunning()) {
-            gameModel.initialize();
-
-            //TODO: supprimer (test)
-            gameModel.initializeElement(new StandardNPC(map, gameModel, 100, 10, 100, 10, map.getGates().get(0), WaveFactory.NPCTypes.STANDARD_NPC));
-            gameModel.getNPCsOnMap().get(0).decreaseHealth(20);
-            boolean placed1 = shop.buyPlaceable(Shop.ShopCases.STANDARD_TOWER, new Position(3, 4, map));
-            player.increaseGold(500);
-            boolean placed2 = shop.buyPlaceable(Shop.ShopCases.GOLD_MINE, new Position(3, 6, map));
-            System.out.println(placed1 + " " + placed2);
-        }
     }
 
     // Déplacements et zoom de la carte

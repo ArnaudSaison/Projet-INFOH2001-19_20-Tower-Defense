@@ -18,7 +18,7 @@ public class Shell extends Projectile {
     /**Fait exploser l'obus et touche tous les ennemis à portée*/
     public void doZoneDamage(){
         for(Hittable hittable : super.gameModel.getHittables()){
-            if(position.getDistance(hittable.getPos()) <= radius){
+            if(position.getDistance(hittable.getPosition()) <= radius){
                 hittable.hit(this);
             }
         }

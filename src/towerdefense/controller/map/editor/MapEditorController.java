@@ -140,7 +140,7 @@ public class MapEditorController implements Initializable, GUIController {
         }
 
         // Sélecteur de cases pour éditer la carte
-        sideBarTilesSelector = new SideBarTilesSelector(mapPlaceHolder, vBoxTilesSideBar, map, this);
+        sideBarTilesSelector = new SideBarTilesSelector(mapPlaceHolder, vBoxTilesSideBar, map);
         scrollPaneTilesSideBar.setContent(sideBarTilesSelector);
     }
 

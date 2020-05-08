@@ -9,5 +9,5 @@ public interface Hittable {
     public void hit(Shell shell);
     public void hit(Arrow arrow);
     public void hit(Glue glue);
-    public Position getPos();
+    public Position getPosition();
 }

@@ -16,7 +16,6 @@ import java.io.InputStream;
 
 public class SideBarTilesSelector extends VBox {
     // ==================== Attriuts ====================
-    private MapEditorController controller;
     private Map map;
     private int tilesReprHeight = 50; //px
 
@@ -24,9 +23,8 @@ public class SideBarTilesSelector extends VBox {
     /**
      * Constructeur qui crée la HBox et y insère tous les éléments nécessaires
      */
-    public SideBarTilesSelector(Pane targetPane, VBox parentBox, Map map, MapEditorController controller) {
+    public SideBarTilesSelector(Pane targetPane, VBox parentBox, Map map) {
         super(); // Constructeur JavaFX
-        this.controller = controller;
         this.map = map;
 
         this.getStyleClass().add("tile-selector-vbox");

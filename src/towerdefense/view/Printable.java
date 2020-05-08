@@ -10,4 +10,5 @@ package towerdefense.view;
  * */
 public interface Printable {
     public void update();
+    public void initListeners();
 }

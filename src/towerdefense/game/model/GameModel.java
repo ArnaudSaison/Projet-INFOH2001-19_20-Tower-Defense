@@ -75,9 +75,6 @@ public class GameModel implements Runnable {
         this.gameThread = new Thread();
         running = false;
         paused = true;
-
-        //Initialisation du joueur:
-        player = new Player(100, 100);
     }
 
     /*==================================================================================================================

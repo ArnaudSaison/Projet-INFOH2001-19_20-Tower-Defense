@@ -3,18 +3,20 @@ package towerdefense.game.towers;
 import towerdefense.game.map.Map;
 import towerdefense.game.map.Position;
 import towerdefense.game.model.GameModel;
+import towerdefense.game.model.Shop;
 import towerdefense.game.npcs.NPC;
 import towerdefense.game.projectiles.Arrow;
 
 import java.util.ArrayList;
 
 public class StandardTower extends Tower{
-    private String type;
+    private static final Shop.ShopCases ID = Shop.ShopCases.STANDARD_TOWER;
+    private final String type;
 
     public StandardTower(Map map, Position pos, GameModel gameModel, ArrayList<ArrayList<Integer>> towerSpe, String type){
-        super(map, pos, gameModel, towerSpe);
+        super(map, pos, gameModel, towerSpe, ID);
         this.type = type;
-        this.graphicsName = "archer_tower/";
+        this.graphicsName = Shop.getIconPath(ID);
     }
 
     @Override

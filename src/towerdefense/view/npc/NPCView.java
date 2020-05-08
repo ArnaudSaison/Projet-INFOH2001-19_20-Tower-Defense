@@ -1,8 +1,10 @@
 package towerdefense.view.npc;
 
+import javafx.event.EventHandler;
 import javafx.geometry.Pos;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 import towerdefense.game.map.Map;
@@ -65,6 +67,14 @@ public class NPCView extends VBox implements Printable {
 
         healthBar.updateTo(npc.getMaxHealth() / 2);
         update();
+
+        setOnMousePressed(mouseEvent -> {
+            System.out.println("NPC: " + npc);
+        });
+    }
+
+    public void initListeners() {
+
     }
 
     // ==================== Mises à jour ====================
@@ -78,8 +88,8 @@ public class NPCView extends VBox implements Printable {
 
         scale = map.getPixelsPerMeter() / map.getSettingsPixelsPerMeter();
 
-        this.setLayoutX(npc.getPos().getPixelX() - this.getWidth() / 2);
-        this.setLayoutY(npc.getPos().getPixelY() - this.getHeight() / 2);
+        this.setLayoutX(npc.getPosition().getPixelX() - this.getWidth() / 2);
+        this.setLayoutY(npc.getPosition().getPixelY() - this.getHeight() / 2);
 
         setScaleX(scale);
         setScaleY(scale);

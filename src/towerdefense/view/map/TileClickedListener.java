@@ -1,4 +1,4 @@
-package towerdefense.controller.listeners;
+package towerdefense.view.map;
 
 import javafx.event.EventHandler;
 import javafx.scene.input.MouseEvent;
@@ -21,6 +21,7 @@ public class TileClickedListener implements EventHandler<MouseEvent> {
             if (tile instanceof PathTile) {
                 System.out.println(((PathTile)tile).getConnections());
             }
+            System.out.println("blocked: " + tile.getBlockedState());
         }
     }
 }

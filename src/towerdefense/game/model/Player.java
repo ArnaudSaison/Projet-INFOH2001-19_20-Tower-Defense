@@ -25,9 +25,13 @@ public class Player {
     public void increaseScore(){score++;}
 
     //******Gestion de l'or*******
-    public void increaseGold(int goldIncrement){gold += goldIncrement;}
+    public void increaseGold(int goldIncrement){
+        gold += goldIncrement;
+    }
 
-    public void decreaseGold(int goldDecrement){gold -= goldDecrement;}
+    public void decreaseGold(int goldDecrement){
+        gold -= goldDecrement;
+    }
 
     //******Gestion du score*******
     public void increaseHealth(int scoreIncrement){ health += scoreIncrement;}

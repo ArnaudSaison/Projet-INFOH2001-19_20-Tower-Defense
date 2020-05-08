@@ -4,18 +4,21 @@ import towerdefense.game.*;
 import towerdefense.game.map.Map;
 import towerdefense.game.map.Position;
 import towerdefense.game.model.GameModel;
+import towerdefense.game.model.Shop;
 import towerdefense.view.Printable;
 import towerdefense.view.goldmines.GoldMineView;
 
 import java.util.ArrayList;
 
 public class GoldMine implements ProducesGold, Buyable, Upgradable, Placeable, Drawable, Runnable {
+    private static final Shop.ShopCases ID = Shop.ShopCases.GOLD_MINE;
+
     /*==================================================================================================================
                                                    ATTRIBUTS
     ==================================================================================================================*/
     //Attributs relatifs au passage de niveau:
     private int level;
-    private int maxLevel; //TODO: mettre en static ?
+    private int maxLevel;
 
     //Attributs de specification:
     private ArrayList<ArrayList<Integer>> goldMineSpe;
@@ -30,6 +33,8 @@ public class GoldMine implements ProducesGold, Buyable, Upgradable, Placeable, D
     private GameModel gameModel;
     private Thread tGoldMine;
     private Boolean running; //Permet de vérifier que le thread de la mine d'or est activé.
+    private int size; // en largeur de cases
+    protected String graphicsName;
 
     // javaFX
     private GoldMineView goldMineView;
@@ -60,6 +65,25 @@ public class GoldMine implements ProducesGold, Buyable, Upgradable, Placeable, D
         position = pos;
         tGoldMine = new Thread(this);
         running = false;
+
+        this.graphicsName = Shop.getIconPath(ID);
+        size = Shop.getGraphicsProportion(ID); // récupération de la taille
+        /* la position d'une mine d'or est définie par la position de son centre
+        Cependant, pour la vue, il est plus pratique de définir le coin surpérieur gauche */
+        this.position = pos.getAdded(new Position(size / 2.0 * map.getTileMetricWidth(), size / 2.0 * map.getTileMetricWidth(), map));
+        // Bloquage des cases (une tour fait toujours 2 cases de largeur
+        blockTiles();
+    }
+
+    /**
+     * Sert à bloquer les cases nouvellement occupées
+     */
+    protected void blockTiles() {
+        for (int i = 0; i < size; i++) { // largeur
+            for (int j = 0; j < size; j++) { // hauteur
+                map.getTile(getCornerPosition().getTileX() + i, getCornerPosition().getTileY() + j).setBlockedState(true);
+            }
+        }
     }
 
     /*==================================================================================================================
@@ -157,7 +181,7 @@ public class GoldMine implements ProducesGold, Buyable, Upgradable, Placeable, D
      * Création d'un objet de la vue qui pourra ensuite être récupéré
      */
     public void initDrawing() {
-        goldMineView = new GoldMineView(this, map);
+        goldMineView = new GoldMineView(this, map, graphicsName, size);
     }
 
     /**
@@ -184,18 +208,30 @@ public class GoldMine implements ProducesGold, Buyable, Upgradable, Placeable, D
     /*==================================================================================================================
                                                    GETTEURS/SETTEURS
     ==================================================================================================================*/
-    @Override
     public int getCost() {
         return price;
     }
 
-    public Position getPos() {
+    /**
+     * Renvoie la position du centre de la mine
+     */
+    public Position getPosition(){
         return position;
     }
 
-    @Override
-    public void setPosition(Position position) {
-        this.position = position;
+    /**
+     * Renvoie la position du coin supérieur gauche de la mine
+     */
+    public Position getCornerPosition(){
+        return position.getAdded(new Position(-size / 2.0 * map.getTileMetricWidth(), -size / 2.0 * map.getTileMetricWidth(), map));
+    }
+
+    /**
+     * Changer la position de la mine
+     * @param position
+     */
+    public void setPosition(Position position){
+        this.position = position.getAdded(new Position(size / 2.0 * map.getTileMetricWidth(), size / 2.0 * map.getTileMetricWidth(), map));
     }
 
     /*==================================================================================================================

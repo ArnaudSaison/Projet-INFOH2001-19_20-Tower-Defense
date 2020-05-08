@@ -122,55 +122,56 @@ public class Shop {
      *             Le shop ne s'occupe que de vendre les objet, et ne vérifie donc pas qu'il soit placé au bon endroit
      * @return true si la transaction a pu avoir lieu
      */
-    public boolean buyPlaceable(ShopCases type, Position pos) {
+    public boolean buyPlaceable(ShopCases type, Position pos, Map map) {
+        boolean canBeBought = map.canBeBuiltOn(pos.getTileX(), pos.getTileY(), getGraphicsProportion(type)); // vérification qu'on puisse construire l'élément à cet endroit
 
-        //===============================================Gestion des cas================================================
-        int price = getItemProp(type, ItemProp.PRICE, 0); // récupération du prix
-        boolean canBeBought = player.getGold() >= price;
-        System.out.println(price);
+        if (canBeBought) {
+            //===============================================Gestion des cas================================================
+            int price = getItemProp(type, ItemProp.PRICE, 0); // récupération du prix
+            canBeBought = player.getGold() >= price;
 
-        if (canBeBought) { // vérification que le joueur a assez d'argent
-            player.decreaseGold(price); // on prend l'argent
-            System.out.println(player.getGold());
+            if (canBeBought) { // vérification que le joueur a assez d'argent
+                player.decreaseGold(price);
 
-            Buyable bought = null; // initialisation
-            switch (type) { // Récupération de ce qui a été acheté
-                //Tours:
-                case STANDARD_TOWER:
-                    bought = new StandardTower(map, pos, gameModel, standardTowerSpe, "StandardTower");
-                    break;
-                case RAPID_TOWER:
-                    bought = new StandardTower(map, pos, gameModel, rapidTowerSpe, "RapidTower");
-                    break;
-                case LONG_RANGE_TOWER:
-                    bought = new StandardTower(map, pos, gameModel, longRangeTowerSpe, "LongRangeTower");
-                    break;
-                case CANON_TOWER:
-                    bought = new CanonTower(map, pos, gameModel, canonTowerSpe);
-                    break;
-                case GLUE_TOWER:
-                    bought = new GlueTower(map, pos, gameModel, glueTowerSpe);
-                    break;
+                Buyable bought = null; // initialisation
+                switch (type) { // Récupération de ce qui a été acheté
+                    //Tours:
+                    case STANDARD_TOWER:
+                        bought = new StandardTower(map, pos, gameModel, standardTowerSpe, "StandardTower");
+                        break;
+                    case RAPID_TOWER:
+                        bought = new StandardTower(map, pos, gameModel, rapidTowerSpe, "RapidTower");
+                        break;
+                    case LONG_RANGE_TOWER:
+                        bought = new StandardTower(map, pos, gameModel, longRangeTowerSpe, "LongRangeTower");
+                        break;
+                    case CANON_TOWER:
+                        bought = new CanonTower(map, pos, gameModel, canonTowerSpe);
+                        break;
+                    case GLUE_TOWER:
+                        bought = new GlueTower(map, pos, gameModel, glueTowerSpe);
+                        break;
 
-                //Mine d'or:
-                case GOLD_MINE:
-                    bought = new GoldMine(map, pos, gameModel, goldMineSpe);
-                    break;
+                    //Mine d'or:
+                    case GOLD_MINE:
+                        bought = new GoldMine(map, pos, gameModel, goldMineSpe);
+                        break;
+                }
+
+                // Ajout de l'élément acheté au modèle
+                gameModel.initializePlaceable((Placeable) bought); // Ce cast n'est pas dangereux car cette méthode est exclusivement réservée à l'instanciation de placeable
+            } else {
             }
-
-            // Ajout de l'élément acheté au modèle
-            gameModel.initializePlaceable((Placeable) bought); // Ce cast n'est pas dangereux car cette méthode est exclusivement réservée à l'instanciation de placeable
-
         } else {
-            // si pas assez d'argent
         }
 
         return canBeBought;
     }
 
+    // ==================== Getters ====================
     public enum ItemProp {PRICE, RANGE, RATE, DAMAGE, MAX_TARGETS, PROD_RATE, MAX_STORAGE}
 
-    public int getPropID(ItemProp prop) {
+    public static int getPropID(ItemProp prop) {
         int res = 0;
 
         switch (prop) {
@@ -178,9 +179,11 @@ public class Shop {
                 res = 0;
                 break;
             case RANGE:
+            case PROD_RATE:
                 res = 1;
                 break;
             case DAMAGE:
+            case MAX_STORAGE:
                 res = 2;
                 break;
             case RATE:
@@ -189,17 +192,11 @@ public class Shop {
             case MAX_TARGETS:
                 res = 4;
                 break;
-            case PROD_RATE:
-                res = 1;
-                break;
-            case MAX_STORAGE:
-                res = 2;
-                break;
         }
         return res;
     }
 
-    public String getPropName(ItemProp prop) {
+    public static String getPropName(ShopCases item, ItemProp prop) {
         String res = null;
 
         switch (prop) {
@@ -210,7 +207,11 @@ public class Shop {
                 res = "Range";
                 break;
             case DAMAGE:
-                res = "Damage";
+                if (item == ShopCases.GLUE_TOWER) {
+                    res = "Glued time";
+                } else {
+                    res = "Damage";
+                }
                 break;
             case RATE:
                 res = "Fire rate";
@@ -257,35 +258,114 @@ public class Shop {
         return res;
     }
 
-    public String getIconPath(ShopCases item) {
-        String res = null;
+    public static ArrayList<ItemProp> getPropertiesOfItem(ShopCases item) {
+        ArrayList<ItemProp> res = new ArrayList<>();
 
         switch (item) {
             //Tours:
             case STANDARD_TOWER:
-                res = "";
-                break;
             case RAPID_TOWER:
-                res = "";
-                break;
             case LONG_RANGE_TOWER:
-                res = "";
-                break;
             case CANON_TOWER:
-                res = "";
-                break;
             case GLUE_TOWER:
-                res = "";
+                res.add(ItemProp.PRICE);
+                res.add(ItemProp.RANGE);
+                res.add(ItemProp.RATE);
+                res.add(ItemProp.DAMAGE);
+                res.add(ItemProp.MAX_TARGETS);
                 break;
-
             //Mine d'or:
             case GOLD_MINE:
-                res = "";
+                res.add(ItemProp.PRICE);
+                res.add(ItemProp.PROD_RATE);
+                res.add(ItemProp.MAX_STORAGE);
                 break;
         }
         return res;
     }
 
+    public static String getIconPath(ShopCases item) {
+        String res = null;
+
+        switch (item) {
+            //Tours:
+            case STANDARD_TOWER:
+            case RAPID_TOWER:
+            case LONG_RANGE_TOWER:
+                res = "towers/archer_tower/tower.png";
+                break;
+            case CANON_TOWER:
+                res = "towers/cannon_tower/tower.png";
+                break;
+            case GLUE_TOWER:
+                res = "towers/glue_tower/tower.png";
+                break;
+
+            //Mine d'or:
+            case GOLD_MINE:
+                res = "gold_mine/gold_mine.png";
+                break;
+        }
+        return res;
+    }
+
+    public static int getGraphicsProportion(ShopCases item) {
+        int res = 2;
+
+        switch (item) {
+            case STANDARD_TOWER:
+            case RAPID_TOWER:
+            case LONG_RANGE_TOWER:
+            case CANON_TOWER:
+            case GOLD_MINE:
+                res = 2;
+                break;
+            case GLUE_TOWER:
+                res = 1;
+                break;
+        }
+        return res;
+    }
+
+    public static String getItemName(ShopCases item) {
+        String res = null;
+
+        switch (item) {
+            //Tours:
+            case STANDARD_TOWER:
+                res = "Archer Tower";
+                break;
+            case RAPID_TOWER:
+                res = "Rapid Tower";
+                break;
+            case LONG_RANGE_TOWER:
+                res = "Long Range Tower";
+                break;
+            case CANON_TOWER:
+                res = "Cannon Tower";
+                break;
+            case GLUE_TOWER:
+                res = "Glue Tower";
+                break;
+
+            //Mine d'or:
+            case GOLD_MINE:
+                res = "Gold Mine";
+                break;
+        }
+        return res;
+    }
+
+    public static ArrayList<ShopCases> getBuyableItems() {
+        ArrayList<ShopCases> res = new ArrayList<>();
+        res.add(ShopCases.STANDARD_TOWER);
+        res.add(ShopCases.RAPID_TOWER);
+        res.add(ShopCases.LONG_RANGE_TOWER);
+        res.add(ShopCases.CANON_TOWER);
+        res.add(ShopCases.GLUE_TOWER);
+        res.add(ShopCases.GOLD_MINE);
+        return res;
+    }
 
     /**
      * Permet de convertir une liste de string en une ArrayList d'entier.
