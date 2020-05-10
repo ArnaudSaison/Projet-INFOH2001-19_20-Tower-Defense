@@ -15,21 +15,22 @@ public class ExplosiveResistantNPC extends NPC {
     }
 
     @Override
-    public void stick(Glue glue){
-        speed = speed/glue.getDamage();
+    public void stick(Glue glue) {
+        speed = speed / glue.getDamage();
     }
 
     //Ne fait rien ici car ce NPC est résistant aux explosifs.
     @Override
-    public void injure(Shell shell){}
+    public void injure(Shell shell) {
+    }
 
     @Override
-    public void pierce(Arrow arrow){
+    public void pierce(Arrow arrow) {
         decreaseHealth(arrow.getDamage());
     }
 
     @Override
-    public String toString(){
-        return super.toString() + ("\n"+ getClass().getName() +"\n.");
+    public String toString() {
+        return super.toString() + ("\n" + getClass().getName() + "\n.");
     }
 }

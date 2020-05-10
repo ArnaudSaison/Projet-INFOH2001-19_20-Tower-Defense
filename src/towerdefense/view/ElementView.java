@@ -23,7 +23,7 @@ public abstract class ElementView extends StackPane implements Printable {
 
     // JavaFX
     private Image texture;
-    private ImageView imageView;
+    protected ImageView imageView;
 
     // ==================== Initilisation ====================
 
@@ -36,9 +36,25 @@ public abstract class ElementView extends StackPane implements Printable {
         this.widthProportion = proportion;
         this.graphicsFileName = graphicsFileName;
 
+        buildJFX(500, 500); // construction de JFX avec grande résolution
+    }
+
+    public ElementView(Position position, Map map, String graphicsFileName, double proportion) {
+        super();
+
+        // Références
+        this.position = position;
+        this.map = map;
+        this.widthProportion = proportion;
+        this.graphicsFileName = graphicsFileName;
+
+        buildJFX(50, 50); // construction de JFX avec faible résolution
+    }
+
+    private void buildJFX(double sizeX, double sizeY) {
         // Construction de l'objet JavaFX
         String path = "./resources/graphics/" + graphicsFileName;
-        texture = new Image(path, 500, 500, true, false);
+        texture = new Image(path, sizeX, sizeY, true, false);
 
         imageView = new ImageView(texture);
         imageView.setPreserveRatio(true);
@@ -48,19 +64,17 @@ public abstract class ElementView extends StackPane implements Printable {
         getChildren().add(imageView);
         setAlignment(Pos.CENTER);
 
-        updatePos();
-        update();
-
-        imageView.getStyleClass().add("hand-cursor");
 //        setStyle("-fx-border-color: magenta; -fx-border-width: 1;");
     }
 
+    @Override
     public void initListeners() {
 
     }
 
 
     // ==================== Mises à jour ====================
+    @Override
     public void update() {
         updateScale();
         updatePos();

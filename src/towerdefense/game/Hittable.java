@@ -10,4 +10,5 @@ public interface Hittable {
     public void hit(Arrow arrow);
     public void hit(Glue glue);
     public Position getPosition();
+    public boolean getAlive();
 }

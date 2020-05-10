@@ -11,6 +11,8 @@ import java.util.ArrayList;
  * Classe représentant une carte dans le modèle du jeu
  */
 public class Map implements Drawable {
+    private final Object syncKeyDrawing = new Object();
+
     //==================== Attributs ====================
     // Attributs prorpes au fonctionnement de la carte
     private double pixelsPerMeter;
@@ -60,26 +62,26 @@ public class Map implements Drawable {
             for (char c : line.toCharArray()) {
                 switch (c) {
                     case 'X': // vide
-                        tiles.add((Tile) new EmptyTile(columnCounter, rowCounter, this));
+                        tiles.add(new EmptyTile(columnCounter, rowCounter, this));
                         break;
                     case 'O': // obstacle : type par défaut (arbre)
                     case 'T': // obstacle : arbre
-                        tiles.add((Tile) new ObstacleTile(columnCounter, rowCounter, this, ObstacleTileView.ObstacleType.TREE));
+                        tiles.add(new ObstacleTile(columnCounter, rowCounter, this, ObstacleTileView.ObstacleType.TREE));
                         break;
                     case 'R': // obstacle : rock
-                        tiles.add((Tile) new ObstacleTile(columnCounter, rowCounter, this, ObstacleTileView.ObstacleType.ROCK));
+                        tiles.add(new ObstacleTile(columnCounter, rowCounter, this, ObstacleTileView.ObstacleType.ROCK));
                         break;
                     case 'P': // chemin
-                        tiles.add((Tile) new PathTile(columnCounter, rowCounter, this));
+                        tiles.add(new PathTile(columnCounter, rowCounter, this));
                         break;
                     case 'G': // entrée (gate)
-                        tiles.add((Tile) new GatePathTile(columnCounter, rowCounter, this));
+                        tiles.add(new GatePathTile(columnCounter, rowCounter, this));
                         break;
                     case 'E': // sortie (exit)
-                        tiles.add((Tile) new ExitPathTile(columnCounter, rowCounter, this));
+                        tiles.add(new ExitPathTile(columnCounter, rowCounter, this));
                         break;
                     default:
-                        tiles.add((Tile) new EmptyTile(columnCounter, rowCounter, this));
+                        tiles.add(new EmptyTile(columnCounter, rowCounter, this));
                         break;
                 }
                 columnCounter++;
@@ -135,7 +137,9 @@ public class Map implements Drawable {
      * Requiert d'avoir d'abord initialisé la vue avec initDrawing()
      */
     public void updateDrawing() {
-        mapView.update();
+        synchronized (syncKeyDrawing) {
+            mapView.update();
+        }
     }
 
     /**
@@ -160,17 +164,21 @@ public class Map implements Drawable {
      * Ajout d'un élément à afficher sur la carte
      */
     public void addElementOnMap(Drawable element) {
-        elementsOnMap.add(element);
-        element.initDrawing();
-        mapView.addPrintable(element.getDrawing());
+        synchronized (syncKeyDrawing) {
+            elementsOnMap.add(element);
+            element.initDrawing();
+            mapView.addPrintable(element.getDrawing());
+        }
     }
 
     /**
      * Retrait d'un élément à ne plus afficher sur la carte
      */
     public void removeElementOnMap(Drawable element) {
-        elementsOnMap.remove(element);
-        mapView.removePrintable(element.getDrawing());
+        synchronized (syncKeyDrawing) {
+            elementsOnMap.remove(element);
+            mapView.removePrintable(element.getDrawing());
+        }
     }
 
     // ==================== Getters et Setters ====================
@@ -308,6 +316,8 @@ public class Map implements Drawable {
      * autrmentsn ceux-ci n'appraitront pas dans la représentation graphique
      */
     public ArrayList<Drawable> getElementsOnMap() {
-        return elementsOnMap;
+        synchronized (syncKeyDrawing) {
+            return elementsOnMap;
+        }
     }
 }

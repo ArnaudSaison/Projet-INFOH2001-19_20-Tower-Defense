@@ -8,6 +8,7 @@ import towerdefense.game.map.Position;
 import towerdefense.game.towers.CanonTower;
 import towerdefense.game.towers.GlueTower;
 import towerdefense.game.towers.StandardTower;
+import towerdefense.game.towers.Tower;
 
 import java.io.FileInputStream;
 import java.io.IOException;
@@ -158,8 +159,16 @@ public class Shop {
                         break;
                 }
 
-                // Ajout de l'élément acheté au modèle
-                gameModel.initializePlaceable((Placeable) bought); // Ce cast n'est pas dangereux car cette méthode est exclusivement réservée à l'instanciation de placeable
+                // Etant donné que cette méthode contrôle complètement le type de variable qu'elle produit, on peut se permettre les Casts suivents ;
+                if (bought instanceof Tower) {
+                    gameModel.initializeElement((Tower) bought);
+                } else if (bought instanceof GoldMine) {
+                    gameModel.initializeElement((GoldMine) bought);
+                } else {
+                    gameModel.initializePlaceable((Placeable) bought); // tous les Buyable produits dans cette méthode seont toujours aussi Placeable
+                }
+
+
             } else {
             }
         } else {

@@ -8,6 +8,7 @@ import towerdefense.game.goldmine.GoldMine;
 import towerdefense.game.map.Map;
 import towerdefense.game.map.MapFactory;
 import towerdefense.game.npcs.NPC;
+import towerdefense.game.projectiles.Projectile;
 import towerdefense.game.towers.Tower;
 import towerdefense.game.waves.Wave;
 import towerdefense.game.waves.WaveFactory;
@@ -16,6 +17,15 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public class GameModel implements Runnable {
+    private final Object syncKeyKillNPC = new Object();
+    private final Object syncKeyKillTower = new Object();
+    private final Object syncKeyKillGoldMine = new Object();
+    private final Object syncKeyKillProjectile = new Object();
+    private final Object syncKeyInitNPC = new Object();
+    private final Object syncKeyInitTower = new Object();
+    private final Object syncKeyInitGoldMine = new Object();
+    private final Object syncKeyInitProjectile = new Object();
+
     /*==================================================================================================================
                                                    ATTRIBUTS
     ==================================================================================================================*/
@@ -31,17 +41,20 @@ public class GameModel implements Runnable {
     private Map map;
     private Player player;
     private Shop shop;
+    private int round;
 
     // Eléments de la carte:
     private ArrayList<Hittable> hittables; //listeners des projectiles à effet de zone.
     private ArrayList<NPC> NPCsOnMap;
     private ArrayList<Tower> towers;
     private ArrayList<GoldMine> goldMines;
+    private ArrayList<Placeable> placeables;
 
   
     /*==================================================================================================================
                                                    CONSTRUCTEUR
     ==================================================================================================================*/
+
     /**
      * Constructeur du jeu
      */
@@ -54,9 +67,10 @@ public class GameModel implements Runnable {
         hittables = new ArrayList<>();
         towers = new ArrayList<>();
         goldMines = new ArrayList<>();
+        placeables = new ArrayList<>();
 
         //Initialisation du joueur:
-        player = new Player(config.getInitPlayerGold(), config.getInitPlayerHealth());
+        player = new Player(this, config.getInitPlayerGold(), config.getInitPlayerHealth());
 
         //Initialisation de la carte:
         MapFactory mapFactory = new MapFactory();
@@ -68,6 +82,7 @@ public class GameModel implements Runnable {
         //Initialisation de la première vague:
         waveFactory = new WaveFactory(map, this, mapPath);
         wave = waveFactory.getWave("easy");
+        round = 0;
 
         //Initilisation du thread:
         this.gameThread = new Thread(this);
@@ -82,41 +97,64 @@ public class GameModel implements Runnable {
     /**
      * Routine du thread
      */
+    @Override
     public void run() {
-        while (running) {
-            try {
-                while (!paused) {
-                    int max = wave.getLength() ;
+        int timer = 0; // une itération de timer dure (1 / (FPS * 1000)) milisecondes
+        double sleepTime = 1.0 / config.getModelFrameRate() * 1000; // temps d'une itération (en ms)
+        int timeBetweenNPCs = (int) Math.round(config.getTimeBetweenNPCs() / sleepTime * 1000); // nombre d'itérations de timer
+        int timeBetweenRounds = (int) Math.round(config.getTimeBetweenRounds() / sleepTime * 1000);
+        boolean endOfWave = false;
 
-                    for (int i = 0; i < max; i++){
-                        NPC nextNPC = wave.getNextEnemy();
-                        initializeElement(nextNPC);
-                        Thread.sleep(2000); // place et démarre un NPC toutes les secondes.
+        try {
+            while (running) { // si le jeu est en cours
+                if (!paused) { // si le jeu n'est pas en pause
+                    if (timer == 0) { // si le timer est temriné
+                        if (!endOfWave) { // si la la vague en cours n'est pas terminée
+                            NPC nextNPC = wave.getNextEnemy(); // récupération du prochain NPC
+                            initializeElement(nextNPC); // ajout du NPC sur la carte
 
-                        // tests
-//                        System.out.println("============================Vague actuelle==============================");
-//                        wave.toPrint();
-//                        System.out.println("============================Le prochain NPC est : \n" + nextNPC.toString());
+                            endOfWave = wave.isFinished(); // réévaluation de la fin de la vague
+                            timer = timeBetweenNPCs; // ajout d'un temps avant le prochain NPC
 
-                    } if(!NPCsOnMap.isEmpty()) {
-                        Thread.sleep(5000);//Attend qu'il n'y ait plus de NPC sur la carte avant de relancer une nouvelle vague.
-                        pauseGame();
+                        } else { // si la vague est terminée
+                            if (NPCsOnMap.isEmpty()) { // si la map est vide
+                                wave = waveFactory.getNextWave(wave); // initilisation de la prochaine vague
+                                round++; // variable de l'objet pour que le vue puisse la récupérer
+                                endOfWave = false; // début de la prochaine vague enclenché
+                                timer = timeBetweenRounds; // ajout d'un temps avant la prochaine vague une fois que la carte est vide
+                            }
+                        }
+                    } else {
+                        timer--;
                     }
-                    wave = waveFactory.getNextWave(wave);
                 }
 
-                Thread.sleep(1 / config.getModelFrameRate());
-            } catch (InterruptedException | IOException e) {
-                e.printStackTrace();
+                Thread.sleep((long) sleepTime);
+
+                // tests
+                //                        System.out.println("============================Vague actuelle==============================");
+                //                        wave.toPrint();
+                //                        System.out.println("============================Le prochain NPC est : \n" + nextNPC.toString());
             }
+        } catch (IOException | InterruptedException exception) { // gestion des possibles erreurs lors de l'exécution du thread
+            exception.printStackTrace();
         }
     }
 
 
     public void initialize() {
-//        gameThread.start();
+        gameThread.start(); // démarrage des vagues
+
+        player.initialize(); // Démarrage du joueur
+
+        // Attributs permettant à tous les threads de connaître l'état du jeu
         running = true;
         paused = false;
+
+        // Il faut démarrer tous les threads de toutes les tours et mines d'or déjà posées
+        for (Placeable placeable : placeables) {
+            placeable.initialize();
+        }
     }
 
     /**
@@ -144,37 +182,94 @@ public class GameModel implements Runnable {
         running = false;
     }
 
+    public void setGameOver() {
+        running = false;
+    }
+
     /*==================================================================================================================
                                             GESTION ELEMENTS SUR LA CARTE
     ==================================================================================================================*/
-    public void killNPC(NPC npc) {
-        if (!npc.getIsArrived()) {
-            player.increaseGold(npc.getGoldLoot());
-        } else {
-            player.decreaseHealth(npc.getHealthLoot());
-        }
-        map.removeElementOnMap(npc); //TODO: à mettre/remettre pour test
-        NPCsOnMap.remove(npc);
-    }
-
+    // ========== gestion dans le modèle ==========
+    // NPC
     public void initializeElement(NPC npc) {
-        initializePlaceable(npc);
-        NPCsOnMap.add(npc);
+        synchronized (syncKeyInitNPC) {
+            initializePlaceable(npc);
+            NPCsOnMap.add(npc);
+        }
     }
 
+    public void killElement(NPC npc) {
+        synchronized (syncKeyKillNPC) {
+            if (NPCsOnMap.contains(npc)) { // on vérifie s'il n'a pas déjà été retiré (pour éviter de tuer deux fois un NPC
+                if (!npc.getIsArrived()) {
+                    player.increaseGold(npc.getGoldLoot());
+                } else {
+                    player.decreaseHealth(npc.getHealthLoot());
+                }
+
+                killPlaceable(npc);
+                NPCsOnMap.remove(npc);
+            }
+        }
+    }
+
+    // Tower
     public void initializeElement(Tower tower) {
-        initializePlaceable(tower);
-        towers.add(tower);
+        synchronized (syncKeyInitTower) {
+            initializePlaceable(tower);
+            towers.add(tower);
+        }
     }
 
+    public void killElement(Tower tower) {
+        synchronized (syncKeyKillTower) {
+            if (towers.contains(tower)) {
+                killPlaceable(tower);
+                towers.remove(tower);
+            }
+        }
+    }
+
+    // GoldMine
     public void initializeElement(GoldMine goldMine) {
-        initializePlaceable(goldMine);
-        goldMines.add(goldMine);
+        synchronized (syncKeyInitGoldMine) {
+            initializePlaceable(goldMine);
+            goldMines.add(goldMine);
+        }
     }
 
+    public void killElement(GoldMine goldMine) {
+        synchronized (syncKeyKillGoldMine) {
+            if (goldMines.contains(goldMine)) {
+                killPlaceable(goldMine);
+                goldMines.remove(goldMine);
+            }
+        }
+    }
+
+    // Projectile
+    public void initializeElement(Projectile projectile) {
+        synchronized (syncKeyInitProjectile) {
+            initializePlaceable(projectile);
+        }
+    }
+
+    public void killElement(Projectile projectile) {
+        synchronized (syncKeyKillProjectile) {
+            killPlaceable(projectile);
+        }
+    }
+
+    // ========== Représentation graphique ==========
     public void initializePlaceable(Placeable element) {
         map.addElementOnMap((Drawable) element); // Ajoute l'élément sur la carte TODO: mettre/remettre
         element.initialize(); // Démarre le thread
+        placeables.add(element);
+    }
+
+    public void killPlaceable(Placeable element) {
+        map.removeElementOnMap((Drawable) element); // suppression de l'élément de la carte //TODO: à mettre/remettre pour test
+        placeables.remove(element);
     }
 
 
@@ -189,7 +284,9 @@ public class GameModel implements Runnable {
         return NPCsOnMap;
     }
 
-    public Wave getWave(){ return wave;}
+    public Wave getWave() {
+        return wave;
+    }
 
     public Player getPlayer() {
         return player;
@@ -203,7 +300,7 @@ public class GameModel implements Runnable {
         return running;
     }
 
-    public ArrayList<Hittable> getHittables(){
+    public ArrayList<Hittable> getHittables() {
         return hittables;
     }
 
@@ -215,11 +312,11 @@ public class GameModel implements Runnable {
         return shop;
     }
 
-    public ArrayList<GoldMine> getGoldMines(){
+    public ArrayList<GoldMine> getGoldMines() {
         return goldMines;
     }
 
-    public ArrayList<Tower> getTowers(){
+    public ArrayList<Tower> getTowers() {
         return towers;
     }
 }

@@ -19,7 +19,7 @@ public class TileClickedListener implements EventHandler<MouseEvent> {
             System.out.println(tile);
 
             if (tile instanceof PathTile) {
-                System.out.println(((PathTile)tile).getConnections());
+                System.out.println(((PathTile) tile).getConnections());
             }
             System.out.println("blocked: " + tile.getBlockedState());
         }

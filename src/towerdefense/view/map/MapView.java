@@ -18,6 +18,8 @@ import java.util.ArrayList;
  * Peuvent ensuite venir s'ajouter tous les autres éléments qui doievnt pouvoir être représentés sur la carte
  */
 public class MapView extends Pane implements Printable {
+    private final Object syncKeyElementOnMap = new Object();
+
     // ==================== Attributs ====================
     private Map map; // Référence à la carte du modèle
 
@@ -59,6 +61,7 @@ public class MapView extends Pane implements Printable {
     /**
      * Initilisation des listeners
      */
+    @Override
     public void initListeners() {
         for (Tile t : map.getTiles()) {
             t.getDrawing().initListeners();
@@ -116,6 +119,7 @@ public class MapView extends Pane implements Printable {
     /**
      * Mise à jour de toute la représentation de la carte
      */
+    @Override
     public void update() {
         updateTiles();
         updateDrawables();
@@ -135,56 +139,71 @@ public class MapView extends Pane implements Printable {
      * Mise à jours de tous les éléments présents sur la carte qui ne sont pas des cases
      */
     public void updateDrawables() {
-        getChildren().addAll(elementsToAdd);
-        getChildren().removeAll(elementsToRemove);
-        elementsToRemove.clear();
-        elementsToAdd.clear();
+        synchronized (syncKeyElementOnMap) {
+            getChildren().addAll(elementsToAdd);
+            getChildren().removeAll(elementsToRemove);
+            elementsToRemove.clear();
+            elementsToAdd.clear();
 
-        for (Drawable drawable : map.getElementsOnMap()) {
-            drawable.updateDrawing();
-        }
+            for (Drawable drawable : map.getElementsOnMap()) {
+                drawable.updateDrawing();
+            }
 
-        // Élément temporaire sur la carte (il ne peut y en avoir qu'un seul à fois
-        if (tempElement != null) {
-            tempElement.update();
+            // Élément temporaire sur la carte (il ne peut y en avoir qu'un seul à fois
+            if (tempElement != null) {
+                tempElement.update();
+            }
         }
     }
 
     // Liaison directe avec le modèle sans interaction avec JavaFX
+
     /**
      * Ajouter un élément Printable à cet objet JavaFX
      */
     public void addPrintable(Printable elem) {
-        // Liste buffer afin de laisser le thread JavaFX ajouter sans risque
-        elementsToAdd.add((Node) elem);
+        synchronized (syncKeyElementOnMap) {
+            // Liste buffer afin de laisser le thread JavaFX ajouter sans risque
+            elementsToAdd.add((Node) elem);
+        }
     }
 
     /**
      * Supprimer un élément Printable déjà ajouté à cet objet JavaFX
      */
     public void removePrintable(Printable elem) {
-        // Liste buffer afin de laisser le thread JavaFX supprimer sans risque
-        elementsToRemove.add((Node) elem);
+        synchronized (syncKeyElementOnMap) {
+            // Liste buffer afin de laisser le thread JavaFX supprimer sans risque
+            elementsToRemove.add((Node) elem);
+        }
     }
 
     // Gestion d'un élément temporaire
     public void removeTempElement() {
-        this.tempElementOnMap = false;
-        getChildren().remove((Node) tempElement);
+        synchronized (syncKeyElementOnMap) {
+            this.tempElementOnMap = false;
+            getChildren().remove((Node) tempElement);
+        }
     }
 
     public void setTempElement(TemporaryItem elem) {
-        removeTempElement();
-        this.tempElementOnMap = true;
-        tempElement = elem;
-        getChildren().add((Node) elem);
+        synchronized (syncKeyElementOnMap) {
+            removeTempElement();
+            this.tempElementOnMap = true;
+            tempElement = elem;
+            getChildren().add((Node) elem);
+        }
     }
 
     public TemporaryItem getTempElement() {
-        return tempElement;
+        synchronized (syncKeyElementOnMap) {
+            return tempElement;
+        }
     }
 
     public boolean tempElementPresent() {
-        return tempElementOnMap;
+        synchronized (syncKeyElementOnMap) {
+            return tempElementOnMap;
+        }
     }
 }

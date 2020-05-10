@@ -13,7 +13,7 @@ public class LoadBar extends Pane {
     private double width;
 
 
-    public LoadBar(double width, double height, int max, Color color1, Color color2){
+    public LoadBar(double width, double height, int max, Color color1, Color color2) {
         this.width = width;
         this.height = height;
         this.max = max;
@@ -34,10 +34,11 @@ public class LoadBar extends Pane {
     /**
      * Régler la taille de la barre à un certain pourcentage de la taille de son conteneur
      * en fournissant la nouvelle valeur de la variable affichée
+     *
      * @param value entre 0 et 1
      */
     public void updateTo(int value) {
-        double bw =  width * (max - value) / max;
+        double bw = width * (max - value) / max;
         this.setBorder(new Border(new BorderStroke(color1, BorderStrokeStyle.SOLID, new CornerRadii(0), new BorderWidths(0, bw, 0, 0))));
     }
 }

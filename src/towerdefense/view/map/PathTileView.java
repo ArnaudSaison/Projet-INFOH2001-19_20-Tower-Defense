@@ -26,7 +26,7 @@ public class PathTileView extends TileView {
 
     /**
      * Méthode qui renvoie le chemin vers la bonne représentation selon les connections que possède la case
-     * */
+     */
     private void initPathTileView(ArrayList<PathTile.Connections> co) {
         String res = "grass";
         int rotation = 0;
@@ -121,7 +121,7 @@ public class PathTileView extends TileView {
 //
 //        }
 
-        if (            (co.contains(PathTile.Connections.RIGHT) &&      // ═══
+        if ((co.contains(PathTile.Connections.RIGHT) &&      // ═══
                 co.contains(PathTile.Connections.LEFT) &&
                 !co.contains(PathTile.Connections.TOP) &&
                 !co.contains(PathTile.Connections.BOTTOM)) ||
@@ -136,7 +136,7 @@ public class PathTileView extends TileView {
             res = "grass —";
             rotation = 180;
 
-        } else if (    (!co.contains(PathTile.Connections.RIGHT) &&     // ║
+        } else if ((!co.contains(PathTile.Connections.RIGHT) &&     // ║
                 !co.contains(PathTile.Connections.LEFT) &&
                 co.contains(PathTile.Connections.TOP) &&
                 co.contains(PathTile.Connections.BOTTOM)) ||
@@ -150,14 +150,14 @@ public class PathTileView extends TileView {
                         !co.contains(PathTile.Connections.BOTTOM))) {
             res = "grass I";
 
-        } else if (     co.contains(PathTile.Connections.RIGHT) &&      // ╚═
+        } else if (co.contains(PathTile.Connections.RIGHT) &&      // ╚═
                 !co.contains(PathTile.Connections.LEFT) &&
                 co.contains(PathTile.Connections.TOP) &&
                 !co.contains(PathTile.Connections.BOTTOM)) {
             res = "grass ¬";
             rotation = 180;
 
-        } else if (     !co.contains(PathTile.Connections.RIGHT) &&      // ═╝
+        } else if (!co.contains(PathTile.Connections.RIGHT) &&      // ═╝
                 co.contains(PathTile.Connections.LEFT) &&
                 co.contains(PathTile.Connections.TOP) &&
                 !co.contains(PathTile.Connections.BOTTOM)) {
@@ -165,14 +165,14 @@ public class PathTileView extends TileView {
             scaleX *= -1;
             rotation = 180;
 
-        } else if (     co.contains(PathTile.Connections.RIGHT) &&      // ╔═
+        } else if (co.contains(PathTile.Connections.RIGHT) &&      // ╔═
                 !co.contains(PathTile.Connections.LEFT) &&
                 !co.contains(PathTile.Connections.TOP) &&
                 co.contains(PathTile.Connections.BOTTOM)) {
             res = "grass J";
             rotation = 180;
 
-        } else if (     !co.contains(PathTile.Connections.RIGHT) &&      // ═╗
+        } else if (!co.contains(PathTile.Connections.RIGHT) &&      // ═╗
                 co.contains(PathTile.Connections.LEFT) &&
                 !co.contains(PathTile.Connections.TOP) &&
                 co.contains(PathTile.Connections.BOTTOM)) {
@@ -180,14 +180,14 @@ public class PathTileView extends TileView {
             scaleX *= -1;
             rotation = 180;
 
-        } else if (     co.contains(PathTile.Connections.RIGHT) &&      // ╠═
+        } else if (co.contains(PathTile.Connections.RIGHT) &&      // ╠═
                 !co.contains(PathTile.Connections.LEFT) &&
                 co.contains(PathTile.Connections.TOP) &&
                 co.contains(PathTile.Connections.BOTTOM)) {
             res = "grass ╣";
             rotation = 180;
 
-        } else if (     !co.contains(PathTile.Connections.RIGHT) &&      // ═╣
+        } else if (!co.contains(PathTile.Connections.RIGHT) &&      // ═╣
                 co.contains(PathTile.Connections.LEFT) &&
                 co.contains(PathTile.Connections.TOP) &&
                 co.contains(PathTile.Connections.BOTTOM)) {
@@ -195,21 +195,21 @@ public class PathTileView extends TileView {
             scaleX *= -1;
             rotation = 180;
 
-        } else if (     co.contains(PathTile.Connections.RIGHT) &&      // ═╩═
+        } else if (co.contains(PathTile.Connections.RIGHT) &&      // ═╩═
                 co.contains(PathTile.Connections.LEFT) &&
                 co.contains(PathTile.Connections.TOP) &&
                 !co.contains(PathTile.Connections.BOTTOM)) {
             res = "grass T";
             rotation = 180;
 
-        } else if (     co.contains(PathTile.Connections.RIGHT) &&      // ═╦═
+        } else if (co.contains(PathTile.Connections.RIGHT) &&      // ═╦═
                 co.contains(PathTile.Connections.LEFT) &&
                 !co.contains(PathTile.Connections.TOP) &&
                 co.contains(PathTile.Connections.BOTTOM)) {
             res = "grass ⊥";
             rotation = 180;
 
-        } else if (            co.contains(PathTile.Connections.RIGHT) &&      // ═╬═
+        } else if (co.contains(PathTile.Connections.RIGHT) &&      // ═╬═
                 co.contains(PathTile.Connections.LEFT) &&
                 co.contains(PathTile.Connections.TOP) &&
                 co.contains(PathTile.Connections.BOTTOM)) {

@@ -6,17 +6,19 @@ import java.util.ArrayList;
 
 /**
  * Case de chemin représentant plus spécifiquement une sortie
- * */
+ */
 public class ExitPathTile extends PathTile {
 
     // ==================== Initilisation ====================
-    public ExitPathTile(int x, int y, Map map){
+    public ExitPathTile(int x, int y, Map map) {
         super(x, y, map);
     }
 
     //==================== Interface Drawable ====================
-    /** Initilisation de la vue correpsondant à une case
-     * */
+
+    /**
+     * Initilisation de la vue correpsondant à une case
+     */
     @Override
     public void initDrawing() {
         ArrayList<Connections> connections = getConnections(); // récupération des connections

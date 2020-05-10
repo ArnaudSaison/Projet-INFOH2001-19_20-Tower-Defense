@@ -16,6 +16,7 @@ public class Wave {
     private NPC nextNPC;
 
     private String difficulty;
+
     /*==================================================================================================================
                                                    METHODES
     ==================================================================================================================*/
@@ -28,17 +29,22 @@ public class Wave {
         return difficulty;
     }
 
-    public NPC getNextEnemy(){
+    public NPC getNextEnemy() {
         setNextEnemy();
-        return nextNPC;}
+        return nextNPC;
+    }
 
-    public int getLength(){return waveNPCs.size();}
+    public int getLength() {
+        return waveNPCs.size();
+    }
 
     public boolean isFinished() {
         return waveNPCs.isEmpty();
     }
 
-    /**Choisit de manière aléatoire un NPC parmi tous les NPCs qui composent la vague*/
+    /**
+     * Choisit de manière aléatoire un NPC parmi tous les NPCs qui composent la vague
+     */
     public void setNextEnemy() {
         Random randomGenerator = new Random();
         int randomIndex = randomGenerator.nextInt(waveNPCs.size());
@@ -47,8 +53,8 @@ public class Wave {
     }
 
     //==============================================Tests===============================================================
-    public void toPrint(){
-        for(NPC e :waveNPCs){
+    public void toPrint() {
+        for (NPC e : waveNPCs) {
 //            System.out.println(e.toString());
         }
     }

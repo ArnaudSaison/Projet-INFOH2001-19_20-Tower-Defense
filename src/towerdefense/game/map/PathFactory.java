@@ -16,6 +16,7 @@ public class PathFactory {
     }
 
     // ==================== Fonctionnement ====================
+
     /**
      * Renvoie tous les chemins qu'il est possible d'emprunter à partir d'une entrée
      * sans jamais passer deux fois par la même case dans un même chemin

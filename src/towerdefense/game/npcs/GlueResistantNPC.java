@@ -16,20 +16,21 @@ public class GlueResistantNPC extends NPC {
 
     @Override
     //Ne fait rien ici car ce NPC est resistant à la colle.
-    public void stick(Glue glue){}
+    public void stick(Glue glue) {
+    }
 
     @Override
-    public void injure(Shell shell){
+    public void injure(Shell shell) {
         decreaseHealth(shell.getDamage());
     }
 
     @Override
-    public void pierce(Arrow arrow){
+    public void pierce(Arrow arrow) {
         decreaseHealth(arrow.getDamage());
     }
 
     @Override
-    public String toString(){
-        return super.toString() + ("\n"+ getClass().getName() +"\n.");
+    public String toString() {
+        return super.toString() + ("\n" + getClass().getName() + "\n.");
     }
 }

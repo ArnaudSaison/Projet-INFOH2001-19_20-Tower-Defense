@@ -21,6 +21,8 @@ public class GoldMineView extends ElementView {
         this.goldMine = goldMine;
         this.map = map;
 
+        imageView.getStyleClass().add("hand-cursor");
+
         setOnMousePressed(mouseEvent -> {
             if (mouseEvent.isPrimaryButtonDown()) {
                 this.getChildren().add(new upgradePrompt(goldMine.getID(), goldMine, shop, this));

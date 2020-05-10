@@ -231,9 +231,13 @@ public class GameController implements Initializable, GUIController {
 
     // Arrêter le jeu et revenir au menu
     private void quitGame() throws IOException {
-        gameModel.stopGame();
         stopAllTimers();
+        gameModel.stopGame();
         mainApplication.setCurrentSceneTo(MainApplication.SceneType.MENU);
+    }
+
+    private void gameOver() {
+
     }
 
     // ==================== Gestion des éléments FXML ====================

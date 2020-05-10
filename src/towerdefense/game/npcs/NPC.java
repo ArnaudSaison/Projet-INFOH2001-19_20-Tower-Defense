@@ -15,6 +15,9 @@ import towerdefense.view.npc.NPCView;
 import java.util.ArrayList;
 
 public abstract class NPC implements Drawable, Movable, Placeable, Runnable, Hittable {
+    private final Object syncKeyHealth = new Object();
+    private final Object syncKeyDrawing = new Object();
+
     /*==================================================================================================================
                                                      ATTRIBUTS
     ==================================================================================================================*/
@@ -28,8 +31,9 @@ public abstract class NPC implements Drawable, Movable, Placeable, Runnable, Hit
     private Path path;
     private final ArrayList<Position> positions;
     protected boolean isArrived;
+    protected boolean alive;
     protected HeadedDir isHeaded;
-    protected boolean onMap;
+//    protected boolean onMap;
 
     //Attributs de spécification:
     protected int health;
@@ -39,9 +43,8 @@ public abstract class NPC implements Drawable, Movable, Placeable, Runnable, Hit
     protected int healthLoot;
 
     //Attributs de représentation:
-    private double width = 1.0/4.0;
-    private double height = 1.0/4.0;
-    private int frameRate;
+    private double width = 1.0 / 4.0;
+    private double height = 1.0 / 4.0;
 
     // JavaFX
     private NPCView npcView;
@@ -49,16 +52,16 @@ public abstract class NPC implements Drawable, Movable, Placeable, Runnable, Hit
     /*==================================================================================================================
                                                    CONSTRUCTEUR
     ==================================================================================================================*/
-    public NPC (Map map, GameModel gameModel, int health, double speed, int goldLoot, int scoreLoot, GatePathTile gatePathTile){
+    public NPC(Map map, GameModel gameModel, int health, double speed, int goldLoot, int scoreLoot, GatePathTile gatePathTile) {
         path = gatePathTile.getRandomPath();
         positions = path.getRandomPositions();
         position = nextPosition = positions.get(0);
-        onMap = false; //TODO: set sur false dans le gameModel
+//        onMap = false;
         isArrived = false;
+        alive = true;
         this.gameModel = gameModel;
         this.tNPC = new Thread(this);
         this.map = map;
-        frameRate = gameModel.getConfig().getFrameRate();
 
         this.maxHealth = health;
         this.health = health;
@@ -72,21 +75,22 @@ public abstract class NPC implements Drawable, Movable, Placeable, Runnable, Hit
     /*==================================================================================================================
                                                         GESTION DES ATTAQUES
     ==================================================================================================================*/
+
     /**
      * Methode surchargée qui prend en argument un objet type Projectile
-     * */
+     */
     @Override
-    public void hit(Shell shell){
+    public void hit(Shell shell) {
         injure(shell);
     }
 
     @Override
-    public void hit(Glue glue){
+    public void hit(Glue glue) {
         stick(glue);
     }
 
     @Override
-    public void hit(Arrow arrow){
+    public void hit(Arrow arrow) {
         pierce(arrow);
     }
 
@@ -95,77 +99,101 @@ public abstract class NPC implements Drawable, Movable, Placeable, Runnable, Hit
     ==================================================================================================================*/
     //En fonction du type de projectile, applique un effet sur le NPC:
 
-    /**Si non résistant, ralenti le NPC*/
+    /**
+     * Si non résistant, ralenti le NPC
+     */
     public abstract void stick(Glue glue);
 
-    /**Si non résistant, blesse le NPC*/
+    /**
+     * Si non résistant, blesse le NPC
+     */
     public abstract void injure(Shell shell);
 
-    /**Blesse le NPC*/
+    /**
+     * Blesse le NPC
+     */
     public abstract void pierce(Arrow arrow);
 
-    /**Retire de la vie au NPC*/
-    public void decreaseHealth(int damage){
-        if (health - damage <= 0) {
-            gameModel.killNPC(this);
-        } else {
-            health -= damage;
+    /**
+     * Retire de la vie au NPC
+     */
+    public void decreaseHealth(int damage) {
+        synchronized (syncKeyHealth) {
+            if (alive) { // Si le NPC n'a pas encore été tué
+                if (health - damage <= 0) {
+                    gameModel.killElement(this);
+                    alive = false;
+                } else {
+                    health -= damage;
+                }
+            }
         }
     }
 
     /*==================================================================================================================
                                                         GESTION DU THREAD
     ==================================================================================================================*/
-    public void initialize(){
-        if(onMap){
-            tNPC.start();
+    @Override
+    public void initialize() {
+        tNPC.start();
 //            System.out.println("NPC : je suis initialisé.");
-        }
     }
 
     @Override
-    public void run(){
-        while(gameModel.getRunning() && (!isArrived)){
-            try{
-                if (!gameModel.getPaused()){
-                    move();
-//                    System.out.println("La position du NPC est" + getPosition().toString());
-                    if (position == nextPosition){
-                        setNextPosition();
-//                        System.out.println("Le NPC a atteint une position intermédiaire");
-                        if(isArrived){
-                            gameModel.killNPC(this);
+    public void run() {
+        double sleepTime = 1.0 / gameModel.getConfig().getModelFrameRate() * 1000;
+
+        try {
+            while (gameModel.getRunning() && !isArrived && alive) { // si le jeu est en cours et que le NPC n'est pas encore arrivé au bout du chemin
+                if (!gameModel.getPaused()) { // si le jeu n'est pas en pause
+                    move(); // déplacement
+
+                    if (position == nextPosition) { // Si le NPC est arrivé au prochain objectif de position
+                        setNextPosition(); // on change son objectif pour qu'il en ait un nouveau
+
+                        if (isArrived) { // Si le NPC est arrivé entre temps, il faut le supprimer du modèle
+                            alive = false;
+                            gameModel.killElement(this);
                         }
                     }
-                    Thread.sleep(1000/frameRate);
                 }
-                else{
-                    Thread.sleep(1000);
-//                    System.out.println("le NPC est en pause");
-                }
-            }catch (Exception e) {
-                e.printStackTrace();
+
+                Thread.sleep((long) sleepTime);
             }
+        } catch (InterruptedException exception) { // gestion des possibles erreurs lors de l'exécution du thread
+            exception.printStackTrace();
         }
     }
 
     /*==================================================================================================================
                                                GESTION DE LA REPRESENTATION
     ==================================================================================================================*/
+
     /**
      * Initilisation de la vue
      * Création d'un objet de la vue qui pourra ensuite être récupéré
      */
+    @Override
     public void initDrawing() {
-        npcView = new NPCView(this, map, "generic");
+        synchronized (syncKeyDrawing) {
+            npcView = new NPCView(this, map, "generic");
+        }
     }
 
     /**
      * Mise à jour de la représentation graphique
      * Ne peut être appelée que par la vue
      */
+    @Override
     public void updateDrawing() {
-        npcView.update();
+        synchronized (syncKeyDrawing) {
+            try {
+                npcView.update();
+            } catch (Exception exception) {
+                System.out.println("Error updating drawing of: " + super.toString() + " with view: " + this.getDrawing());
+                exception.printStackTrace();
+            }
+        }
     }
 
     /**
@@ -174,6 +202,7 @@ public abstract class NPC implements Drawable, Movable, Placeable, Runnable, Hit
      *
      * @return représentation graphique de l'ojet
      */
+    @Override
     public Printable getDrawing() {
         return npcView;
     }
@@ -184,21 +213,23 @@ public abstract class NPC implements Drawable, Movable, Placeable, Runnable, Hit
 
     /**
      * Supprime les positions déjà visitée de la liste positions.
+     *
      * @return position à atteindre sur la prochaine case.
      */
-    public void setNextPosition(){
-        if (!positions.isEmpty()){
-            nextPosition = positions.get(0);
-        }else{
-            isArrived = true;
+    public void setNextPosition() {
+        if (!positions.isEmpty()) { // s'il reste des objectifs de positions
+            nextPosition = positions.get(0); // on prend le prochain objetif et on le met de côté
+            positions.remove(nextPosition); // comme le prochain objectif est mis on côté, on peut l'enlever de la liste des objectifs
+        } else {
+            isArrived = true; // s'il n'y a plus d'objectifs, c'est qu'on est arrivé au bout
         }
-        positions.remove(nextPosition);
 //        System.out.println("=============================LA PROCHAINE POSITION EST=================================="+ nextPosition);
     }
 
     /**
      * Permet au NPC de se déplacer en ligne droite, d'une case à l'autre.
      */
+    @Override
     public void move() {
         //Distance entre le NPC et la prochaine position à atteindre:
         double trajectoryNorm = position.getDistance(nextPosition);
@@ -212,25 +243,25 @@ public abstract class NPC implements Drawable, Movable, Placeable, Runnable, Hit
         //Définition du triangle rectangle généré par le vecteur trajectoire et sa projection orthogonale sur l'axe X:
         double hyp = trajectoryNorm;
         double adj = finPosX - iniPosX;
-        double alpha = Math.acos(adj/hyp); // /!\ alpha est en radians.
+        double alpha = Math.acos(adj / hyp); // /!\ alpha est en radians.
 
         //Détermination du signe de l'incrément de déplacement en X et Y (cas par défaut : déplacement en haut à droite):
-        int signDepX=1;
-        int signDepY=1;
+        int signDepX = 1;
+        int signDepY = 1;
 
-        if((finPosX-iniPosX >= 0) && (finPosY-iniPosY < 0)){
+        if ((finPosX - iniPosX >= 0) && (finPosY - iniPosY < 0)) {
             signDepY = -1;
-        }else if((finPosX-iniPosX < 0) && (finPosY-iniPosY >= 0)){
+        } else if ((finPosX - iniPosX < 0) && (finPosY - iniPosY >= 0)) {
             signDepX = -1;
-        }else if((finPosX-iniPosX < 0) && (finPosY-iniPosY < 0)){
+        } else if ((finPosX - iniPosX < 0) && (finPosY - iniPosY < 0)) {
             signDepX = -1;
             signDepY = -1;
         }
 
         //Distance parcourue entre l'affichage de deux images à l'écran:
-        double distanceDone = speed / 100*gameModel.getConfig().getModelFrameRate(); //TODO: régler la vitesse de déplacement
-        double depX = signDepX*(Math.cos(alpha)*distanceDone);
-        double depY = signDepY*(Math.sin(alpha)*distanceDone);
+        double distanceDone = speed / gameModel.getConfig().getModelFrameRate(); //TODO: régler la vitesse de déplacement
+        double depX = signDepX * (Math.cos(alpha) * distanceDone);
+        double depY = signDepY * (Math.sin(alpha) * distanceDone);
 
         //Nouvelle position théorique:
         Position newPosition = new Position(map);
@@ -238,15 +269,16 @@ public abstract class NPC implements Drawable, Movable, Placeable, Runnable, Hit
         newPosition.setY(iniPosY + depY);
 
         //Nouvelle position, on vérifie que la position finale n'est pas dépassée:
-        if (trajectoryNorm-distanceDone <= 0){
+        if (trajectoryNorm - distanceDone <= 0) {
             position = nextPosition;
-        }else{
+        } else {
             position = newPosition;
         }
     }
 
     /**
      * Donne la direction dans laquelle le NPC se dirige
+     *
      * @return direction du NPC
      */
     public HeadedDir getHeadedDir() {
@@ -256,10 +288,12 @@ public abstract class NPC implements Drawable, Movable, Placeable, Runnable, Hit
     /*==================================================================================================================
                                                     GETTEURS/SETTEURS
     ==================================================================================================================*/
+    @Override
     public Position getPosition() {
         return position;
     }
 
+    @Override
     public void setPosition(Position position) {
         this.position = position;
     }
@@ -280,7 +314,9 @@ public abstract class NPC implements Drawable, Movable, Placeable, Runnable, Hit
         this.isArrived = isArrived;
     }
 
-    public void setOnMap(boolean onMap){this.onMap = onMap;}
+//    public void setOnMap(boolean onMap) {
+//        this.onMap = onMap;
+//    }
 
     public double getWidth() {
         return width;
@@ -298,21 +334,28 @@ public abstract class NPC implements Drawable, Movable, Placeable, Runnable, Hit
         return health;
     }
 
-    public Path getPath(){
-     return  path;
+    public Path getPath() {
+        return path;
     }
 
-    public Position getNextPosition(){
-        return  nextPosition;
+    public Position getNextPosition() {
+        return nextPosition;
     }
+
+    @Override
+    public boolean getAlive() {
+        return alive;
+    }
+
     /*==================================================================================================================
                                                         AUTRES
     ==================================================================================================================*/
     @Override
-    public String toString(){
+    public String toString() {
         return "- position: " + position + "\n" +
-                "- health: " + health + "\n"+
-                "- goldLoot: " + goldLoot + "\n"+
-                "- speed: " + speed + ".";
+                "- health: " + health + "\n" +
+                "- goldLoot: " + goldLoot + "\n" +
+                "- speed: " + speed + "\n" +
+                "- nextPositoin" + nextPosition + ".";
     }
 }

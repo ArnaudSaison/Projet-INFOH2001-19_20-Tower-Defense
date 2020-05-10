@@ -1,5 +1,7 @@
 package towerdefense.game.map;
 
+import towerdefense.game.npcs.HeadedDir;
+
 /**
  * Les positions du jeu sont toutes représentées en mètres. Ce système permet de créer un lien flexible avec la carte
  * et la représentation graphique.
@@ -240,7 +242,7 @@ public class Position {
     public static double getNorm(double X, double Y) {
         return Math.sqrt(Math.pow(X, 2) + Math.pow(Y, 2));
     }
-  
+
     /**
      * Récupérer la distance par rapport à un autre point
      *
@@ -255,12 +257,22 @@ public class Position {
     }
 
     /**
-     * Normaliser la distane entre l'origine et le point
+     * (en place) Normaliser la distane entre l'origine et le point
      */
     public void normalize() {
         double norm = getNorm();
         x /= norm;
         y /= norm;
+    }
+
+    /**
+     * Normaliser la distane entre l'origine et le point
+     */
+    public Position getNormalized() {
+        double norm = getNorm();
+        x /= norm;
+        y /= norm;
+        return new Position(x, y, map);
     }
 
     // ==================== Fonctionnement de la classe ====================
@@ -327,6 +339,69 @@ public class Position {
     public Position getSubstracted(Position pos2) {
         assertMapAttached();
         return new Position(x - pos2.getX(), y - pos2.getY(), map);
+    }
+
+    /**
+     * Renvoie l'angle trigonométrique (en degrés) formé par le vecteur position
+     *
+     * @return angle en degrés
+     */
+    public double getAngle() {
+        double alpha = Math.atan(Math.abs(y / x)); // on ajoute ∏/2 car y est orienté vers le bas
+        int quadrant = getQuadrant();
+        alpha += quadrant * 90;
+
+        return alpha;
+    }
+
+    /**
+     * Renvoie la quadrant dans lequel pointe le vecteur
+     *
+     * @return quadrant (0, 1, 2 ou 3)
+     */
+    public int getQuadrant() {
+        int res = 0;
+
+        if (x > 0 && y <= 0) {
+            res = 0;
+
+        } else if (x < 0 && y <= 0) {
+            res = 1;
+
+        } else if (x < 0 && y > 0) {
+            res = 2;
+
+        } else if (x > 0 && y > 0) {
+            res = 3;
+
+        }
+
+        return res;
+    }
+
+    /**
+     * Renvoie le côté vers lequel la direction pointe le plus
+     *
+     * @return direction
+     */
+    public HeadedDir getMainDirection() {
+        double angle = getAngle();
+        HeadedDir res = HeadedDir.RIGHT;
+
+        if (angle <= 45 || angle > 315) {
+            res = HeadedDir.RIGHT;
+
+        } else if (angle > 45 && angle <= 135) {
+            res = HeadedDir.UP;
+
+        } else if (angle > 135 && angle <= 255) {
+            res = HeadedDir.LEFT;
+
+        } else if (angle > 225 && angle <= 315) {
+            res = HeadedDir.DOWN;
+        }
+
+        return res;
     }
 
     // Représentation dans la console

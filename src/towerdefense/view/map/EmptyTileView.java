@@ -16,7 +16,7 @@ public class EmptyTileView extends TileView {
     public EmptyTileView(Map map, Tile tile) {
         super(map, tile); // Appel au constructeur de TileView
 
-        initTexture("grass.png", getRandomRotation(0,3, 90), 1, 1);
+        initTexture("grass.png", getRandomRotation(0, 3, 90), 1, 1);
         initHoverIndicator(true);
     }
 }

@@ -151,7 +151,9 @@ public class MainApplication extends Application {
         return mainWindow;
     }
 
-    public Scene getCurrentScene() {return currentScene;}
+    public Scene getCurrentScene() {
+        return currentScene;
+    }
 
     /**
      * Méthode main qui est exécutée par Java lors du démarrage du programme.
