@@ -316,8 +316,8 @@ public class Map implements Drawable {
      * autrmentsn ceux-ci n'appraitront pas dans la représentation graphique
      */
     public ArrayList<Drawable> getElementsOnMap() {
-        synchronized (syncKeyDrawing) {
-            return elementsOnMap;
-        }
+//        synchronized (syncKeyDrawing) {
+        return elementsOnMap;
+//        }
     }
 }

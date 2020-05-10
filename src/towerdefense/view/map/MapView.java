@@ -18,12 +18,11 @@ import java.util.ArrayList;
  * Peuvent ensuite venir s'ajouter tous les autres éléments qui doievnt pouvoir être représentés sur la carte
  */
 public class MapView extends Pane implements Printable {
-    private final Object syncKeyElementOnMap = new Object();
-
     // ==================== Attributs ====================
     private Map map; // Référence à la carte du modèle
 
     // Éléments à ajouter et retirer
+    private ArrayList<Drawable> elementsOnMapView;
     private ArrayList<Node> elementsToRemove;
     private ArrayList<Node> elementsToAdd;
 
@@ -41,6 +40,7 @@ public class MapView extends Pane implements Printable {
     public MapView(Map map) {
         // Initialisation des attributs
         this.map = map;
+        elementsOnMapView = new ArrayList<>();
         elementsToRemove = new ArrayList<>();
         elementsToAdd = new ArrayList<>();
         tempElementOnMap = false;
@@ -108,6 +108,7 @@ public class MapView extends Pane implements Printable {
 
         // Mise à jour des tiles
         update();
+        updateTiles();
 
         // Translation de Map
         this.setLayoutX(this.getLayoutX() + deltaPos.getX());
@@ -121,7 +122,6 @@ public class MapView extends Pane implements Printable {
      */
     @Override
     public void update() {
-        updateTiles();
         updateDrawables();
     }
 
@@ -139,20 +139,19 @@ public class MapView extends Pane implements Printable {
      * Mise à jours de tous les éléments présents sur la carte qui ne sont pas des cases
      */
     public void updateDrawables() {
-        synchronized (syncKeyElementOnMap) {
-            getChildren().addAll(elementsToAdd);
-            getChildren().removeAll(elementsToRemove);
-            elementsToRemove.clear();
-            elementsToAdd.clear();
+        getChildren().addAll(elementsToAdd);
+        getChildren().removeAll(elementsToRemove);
 
-            for (Drawable drawable : map.getElementsOnMap()) {
-                drawable.updateDrawing();
-            }
+        elementsToRemove.clear();
+        elementsToAdd.clear();
 
-            // Élément temporaire sur la carte (il ne peut y en avoir qu'un seul à fois
-            if (tempElement != null) {
-                tempElement.update();
-            }
+        for (Drawable drawable : map.getElementsOnMap()) {
+            drawable.updateDrawing();
+        }
+
+        // Élément temporaire sur la carte (il ne peut y en avoir qu'un seul à fois
+        if (tempElement != null) {
+            tempElement.update();
         }
     }
 
@@ -162,48 +161,37 @@ public class MapView extends Pane implements Printable {
      * Ajouter un élément Printable à cet objet JavaFX
      */
     public void addPrintable(Printable elem) {
-        synchronized (syncKeyElementOnMap) {
-            // Liste buffer afin de laisser le thread JavaFX ajouter sans risque
-            elementsToAdd.add((Node) elem);
-        }
+        // Liste buffer afin de laisser le thread JavaFX ajouter sans risque
+        elementsToAdd.add((Node) elem);
     }
 
     /**
      * Supprimer un élément Printable déjà ajouté à cet objet JavaFX
      */
     public void removePrintable(Printable elem) {
-        synchronized (syncKeyElementOnMap) {
-            // Liste buffer afin de laisser le thread JavaFX supprimer sans risque
-            elementsToRemove.add((Node) elem);
-        }
+        // Liste buffer afin de laisser le thread JavaFX supprimer sans risque
+        elementsToRemove.add((Node) elem);
     }
 
     // Gestion d'un élément temporaire
     public void removeTempElement() {
-        synchronized (syncKeyElementOnMap) {
-            this.tempElementOnMap = false;
-            getChildren().remove((Node) tempElement);
-        }
+        this.tempElementOnMap = false;
+        getChildren().remove((Node) tempElement);
     }
 
     public void setTempElement(TemporaryItem elem) {
-        synchronized (syncKeyElementOnMap) {
-            removeTempElement();
-            this.tempElementOnMap = true;
-            tempElement = elem;
-            getChildren().add((Node) elem);
-        }
+        removeTempElement();
+        this.tempElementOnMap = true;
+        tempElement = elem;
+        getChildren().add((Node) elem);
     }
 
     public TemporaryItem getTempElement() {
-        synchronized (syncKeyElementOnMap) {
-            return tempElement;
-        }
+        return tempElement;
+
     }
 
     public boolean tempElementPresent() {
-        synchronized (syncKeyElementOnMap) {
-            return tempElementOnMap;
-        }
+        return tempElementOnMap;
     }
 }

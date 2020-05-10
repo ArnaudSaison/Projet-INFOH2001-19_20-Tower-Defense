@@ -172,7 +172,7 @@ public class GameController implements Initializable, GUIController {
      * Méthode qui définit l'ensemble des actions à effectuer pour mettre à jour la GUI
      */
     private void updateUI() {
-//        gameRoundInfoBarText.setText("Round" + gameModel.getCurrentRound());
+//        gameRoundInfoBarText.setText("Round" + gameModel.getCurrentRound()); //TODO
         gameHealthInfoBarText.setText(player.getHealth() + "/" + player.getMaxHealth());
         gameGoldInfoBarText.setText(String.valueOf(player.getGold()));
         gameScoreInfoBarText.setText("Score: " + player.getScore());
@@ -183,7 +183,7 @@ public class GameController implements Initializable, GUIController {
      * Méthode qui déifnit l'ensemble des actions à effectuer pour mettre à jour l'UI de la carte seulement
      */
     private void updateView() {
-        mapView.updateDrawables();
+        map.updateDrawing();
 //        i ++;
     }
 
@@ -329,5 +329,6 @@ public class GameController implements Initializable, GUIController {
         mapView.setLayoutY(0);
         map.resetPixelsPerMeter();
         map.updateDrawing();
+        mapView.updateTiles();
     }
 }

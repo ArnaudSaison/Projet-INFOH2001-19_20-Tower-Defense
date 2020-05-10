@@ -14,26 +14,28 @@ public class StandardNPC extends NPC {
 
     public StandardNPC(Map map, GameModel gameModel, int health, int speed, int goldLoot, int healthLoot, GatePathTile gatePathTile, WaveFactory.NPCTypes type) {
         super(map, gameModel, health, speed, goldLoot, healthLoot, gatePathTile);
-        this.type=type;
+        this.type = type;
     }
 
     @Override
-    public void stick(Glue glue){
-        speed = speed/glue.getDamage();
+    public void stick(Glue glue) {
+        speed = speed / glue.getDamage();
     }
 
     @Override
-    public void injure(Shell shell){
+    public void injure(Shell shell) {
         decreaseHealth(shell.getDamage());
     }
 
     @Override
-    public void pierce(Arrow arrow){
+    public void pierce(Arrow arrow) {
+        System.out.println("test");
+
         decreaseHealth(arrow.getDamage());
     }
 
     @Override
-    public String toString(){
-        return super.toString() + ("\n"+ getClass() + type +".");
+    public String toString() {
+        return super.toString() + ("\n" + getClass() + type + ".");
     }
 }
