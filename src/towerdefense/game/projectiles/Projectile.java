@@ -11,6 +11,7 @@ import towerdefense.view.Printable;
 
 public abstract class Projectile implements Runnable, Drawable, Movable, Placeable {
     protected final Object syncKeyDrawing = new Object();
+    private final Object syncKeyMove = new Object();
 
     protected Printable view;
 
@@ -23,6 +24,7 @@ public abstract class Projectile implements Runnable, Drawable, Movable, Placeab
     protected Position position;
     private Boolean isArrived;
     protected Position direction;
+    private double angle;
 
     //Autres:
     protected Map map;
@@ -178,17 +180,19 @@ public abstract class Projectile implements Runnable, Drawable, Movable, Placeab
 //            position = newPosition;
 //        }
 
-
         double maxDistance = velocity / gameModel.getConfig().getModelFrameRate();
 
         finalPosition = target.getPosition();
-        direction = position.getSubstracted(finalPosition);
+        direction = finalPosition.getSubstracted(position);
         double distance = direction.getNorm();
+        angle = direction.getAngle();
 
-        if (distance > maxDistance) {
-            position.add(direction.getNormalized().getMultiplied(maxDistance));
-        } else {
-            position = finalPosition;
+        synchronized (syncKeyMove) {
+            if (distance > maxDistance) {
+                position.add(direction.getNormalized().getMultiplied(maxDistance));
+            } else {
+                position = finalPosition;
+            }
         }
 
     }
@@ -210,6 +214,10 @@ public abstract class Projectile implements Runnable, Drawable, Movable, Placeab
 
     public void setPosition(Position position) {
         this.position = position;
+    }
+
+    public double getAngle() {
+        return angle;
     }
 
     /*==================================================================================================================

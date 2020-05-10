@@ -8,6 +8,7 @@ import towerdefense.game.projectiles.Arrow;
 import towerdefense.game.projectiles.Glue;
 import towerdefense.game.projectiles.Shell;
 import towerdefense.game.waves.WaveFactory;
+import towerdefense.view.npc.NPCView;
 
 public class StandardNPC extends NPC {
     private WaveFactory.NPCTypes type;
@@ -29,9 +30,18 @@ public class StandardNPC extends NPC {
 
     @Override
     public void pierce(Arrow arrow) {
-        System.out.println("test");
-
         decreaseHealth(arrow.getDamage());
+    }
+
+    /**
+     * Initilisation de la vue
+     * Création d'un objet de la vue qui pourra ensuite être récupéré
+     */
+    @Override
+    public void initDrawing() {
+        synchronized (syncKeyDrawing) {
+            npcView = new NPCView(this, map, "generic");
+        }
     }
 
     @Override

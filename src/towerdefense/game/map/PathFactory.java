@@ -32,8 +32,8 @@ public class PathFactory {
         ArrayList<IntCoordinates> positions = new ArrayList<>();
         ArrayList<IntCoordinates> visited = new ArrayList<>();
 
-        positions.add(gate.getPosition().getTileCoords());
-        visited.add(gate.getPosition().getTileCoords());
+//        positions.add(gate.getPosition().getTileCoords());
+//        visited.add(gate.getPosition().getTileCoords());
 
         PathTile.Connections fromSide;
         fromSide = getMapSide(gate.getPosition().getTileCoords());
@@ -41,7 +41,7 @@ public class PathFactory {
         ((PathTile) gate).addConnection(fromSide);
 
         // Initilisation de la recherche de chemin
-        searchForPaths(positions, visited, positions.get(0), fromSide);
+        searchForPaths(positions, visited, gate.getPosition().getTileCoords(), fromSide);
 
         return paths;
     }
@@ -75,7 +75,8 @@ public class PathFactory {
                     ArrayList<IntCoordinates> resVisited = new ArrayList<>(visited);
 
                     resVisited.add(probedTileCoords); // on marque la case comme visitée
-                    if (toSide != fromSide) { // Si changement de direction
+                    if (toSide != getOppositeDir(fromSide)) { // Si changement de direction
+//                        System.out.println("direction change detected for tile " + currentCoords + " from side " + fromSide + " to side " + toSide);
                         resPositions.add(currentCoords); // Ajouter la case actuelle à la liste des positions
                     }
 

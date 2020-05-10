@@ -171,6 +171,7 @@ public abstract class Tower implements Buyable, Upgradable, Placeable, Drawable,
                 if (!gameModel.getPaused()) { // si le jeu n'est pas en pause
                     if (timer == 0) { // si le timer est temriné
                         attack(); // lancer une attaque
+                        targets.clear();
                         timer = reloadTime; // réglage du temps de recharge
                     } else {
                         timer--;

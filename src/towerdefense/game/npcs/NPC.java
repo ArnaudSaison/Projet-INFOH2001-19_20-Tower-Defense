@@ -16,7 +16,8 @@ import java.util.ArrayList;
 
 public abstract class NPC implements Drawable, Movable, Placeable, Runnable, Hittable {
     private final Object syncKeyHealth = new Object();
-    private final Object syncKeyDrawing = new Object();
+    protected final Object syncKeyDrawing = new Object();
+    private final Object syncKeyMove = new Object();
 
     /*==================================================================================================================
                                                      ATTRIBUTS
@@ -33,6 +34,7 @@ public abstract class NPC implements Drawable, Movable, Placeable, Runnable, Hit
     protected boolean isArrived;
     protected boolean alive;
     protected HeadedDir isHeaded;
+    private Position direction;
 //    protected boolean onMap;
 
     //Attributs de spécification:
@@ -47,16 +49,22 @@ public abstract class NPC implements Drawable, Movable, Placeable, Runnable, Hit
     private double height = 1.0 / 4.0;
 
     // JavaFX
-    private NPCView npcView;
+    protected NPCView npcView;
 
     /*==================================================================================================================
                                                    CONSTRUCTEUR
     ==================================================================================================================*/
     public NPC(Map map, GameModel gameModel, int health, double speed, int goldLoot, int scoreLoot, GatePathTile gatePathTile) {
         path = gatePathTile.getRandomPath();
+//        System.out.println("path : " + path);
         positions = path.getRandomPositions();
-        position = nextPosition = positions.get(0);
-//        onMap = false;
+        position = positions.get(0);
+//        positions.remove(0);
+//        System.out.println(positions);
+        nextPosition = positions.get(0);
+//        setNextPosition();
+//        System.out.println(nextPosition);
+
         isArrived = false;
         alive = true;
         this.gameModel = gameModel;
@@ -220,6 +228,8 @@ public abstract class NPC implements Drawable, Movable, Placeable, Runnable, Hit
         if (!positions.isEmpty()) { // s'il reste des objectifs de positions
             nextPosition = positions.get(0); // on prend le prochain objetif et on le met de côté
             positions.remove(nextPosition); // comme le prochain objectif est mis on côté, on peut l'enlever de la liste des objectifs
+//            System.out.println("next position is " + nextPosition);
+
         } else {
             isArrived = true; // s'il n'y a plus d'objectifs, c'est qu'on est arrivé au bout
         }
@@ -231,48 +241,66 @@ public abstract class NPC implements Drawable, Movable, Placeable, Runnable, Hit
      */
     @Override
     public void move() {
-        //Distance entre le NPC et la prochaine position à atteindre:
-        double trajectoryNorm = position.getDistance(nextPosition);
+//        //Distance entre le NPC et la prochaine position à atteindre:
+//        double trajectoryNorm = position.getDistance(nextPosition);
+//
+//        //Coordonnées initiales et finales nécessaires au calcul:
+//        double iniPosX = position.getX();
+//        double iniPosY = position.getY();
+//        double finPosX = nextPosition.getX();
+//        double finPosY = nextPosition.getY();
+//
+//        //Définition du triangle rectangle généré par le vecteur trajectoire et sa projection orthogonale sur l'axe X:
+//        double hyp = trajectoryNorm;
+//        double adj = finPosX - iniPosX;
+//        double alpha = Math.acos(adj / hyp); // /!\ alpha est en radians.
+//
+//        //Détermination du signe de l'incrément de déplacement en X et Y (cas par défaut : déplacement en haut à droite):
+//        int signDepX = 1;
+//        int signDepY = 1;
+//
+//        if ((finPosX - iniPosX >= 0) && (finPosY - iniPosY < 0)) {
+//            signDepY = -1;
+//        } else if ((finPosX - iniPosX < 0) && (finPosY - iniPosY >= 0)) {
+//            signDepX = -1;
+//        } else if ((finPosX - iniPosX < 0) && (finPosY - iniPosY < 0)) {
+//            signDepX = -1;
+//            signDepY = -1;
+//        }
+//
+//        //Distance parcourue entre l'affichage de deux images à l'écran:
+//        double distanceDone = speed / gameModel.getConfig().getModelFrameRate(); //TODO: régler la vitesse de déplacement
+//        double depX = signDepX * (Math.cos(alpha) * distanceDone);
+//        double depY = signDepY * (Math.sin(alpha) * distanceDone);
+//
+//        //Nouvelle position théorique:
+//        Position newPosition = new Position(map);
+//        newPosition.setX(iniPosX + depX);
+//        newPosition.setY(iniPosY + depY);
+//
+//        //Nouvelle position, on vérifie que la position finale n'est pas dépassée:
+//        if (trajectoryNorm - distanceDone <= 0) {
+//            position = nextPosition;
+//        } else {
+//            position = newPosition;
+//        }
 
-        //Coordonnées initiales et finales nécessaires au calcul:
-        double iniPosX = position.getX();
-        double iniPosY = position.getY();
-        double finPosX = nextPosition.getX();
-        double finPosY = nextPosition.getY();
 
-        //Définition du triangle rectangle généré par le vecteur trajectoire et sa projection orthogonale sur l'axe X:
-        double hyp = trajectoryNorm;
-        double adj = finPosX - iniPosX;
-        double alpha = Math.acos(adj / hyp); // /!\ alpha est en radians.
 
-        //Détermination du signe de l'incrément de déplacement en X et Y (cas par défaut : déplacement en haut à droite):
-        int signDepX = 1;
-        int signDepY = 1;
+        double maxDistance = speed / gameModel.getConfig().getModelFrameRate();
 
-        if ((finPosX - iniPosX >= 0) && (finPosY - iniPosY < 0)) {
-            signDepY = -1;
-        } else if ((finPosX - iniPosX < 0) && (finPosY - iniPosY >= 0)) {
-            signDepX = -1;
-        } else if ((finPosX - iniPosX < 0) && (finPosY - iniPosY < 0)) {
-            signDepX = -1;
-            signDepY = -1;
-        }
+        direction = nextPosition.getSubstracted(position);
+        double distance = direction.getNorm();
+        isHeaded = direction.getMainDirection();
 
-        //Distance parcourue entre l'affichage de deux images à l'écran:
-        double distanceDone = speed / gameModel.getConfig().getModelFrameRate(); //TODO: régler la vitesse de déplacement
-        double depX = signDepX * (Math.cos(alpha) * distanceDone);
-        double depY = signDepY * (Math.sin(alpha) * distanceDone);
+//        System.out.println("move NPC: " + direction.getNormalized() + " with norm " + direction.getNorm());
 
-        //Nouvelle position théorique:
-        Position newPosition = new Position(map);
-        newPosition.setX(iniPosX + depX);
-        newPosition.setY(iniPosY + depY);
-
-        //Nouvelle position, on vérifie que la position finale n'est pas dépassée:
-        if (trajectoryNorm - distanceDone <= 0) {
-            position = nextPosition;
-        } else {
-            position = newPosition;
+        synchronized (syncKeyMove) {
+            if (distance > maxDistance) {
+                position.add(direction.getNormalized().getMultiplied(maxDistance));
+            } else {
+                position = nextPosition;
+            }
         }
     }
 
@@ -290,12 +318,16 @@ public abstract class NPC implements Drawable, Movable, Placeable, Runnable, Hit
     ==================================================================================================================*/
     @Override
     public Position getPosition() {
-        return position;
+        synchronized (syncKeyMove) {
+            return position;
+        }
     }
 
     @Override
     public void setPosition(Position position) {
-        this.position = position;
+        synchronized (syncKeyMove) {
+            this.position = position;
+        }
     }
 
     public int getGoldLoot() {

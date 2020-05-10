@@ -142,6 +142,16 @@ public class Position {
         this.y = y;
     }
 
+    /**
+     * Changer abscisse et ordonnée en même temps
+     * @param x
+     * @param y
+     */
+    public void setXY(double x, double y) {
+        this.x = x;
+        this.y = y;
+    }
+
     //***** Getters *******
 
     /**
@@ -229,7 +239,7 @@ public class Position {
      * @return norme
      */
     public double getNorm() {
-        return Math.sqrt(Math.pow(x, 2) + Math.pow(y, 2));
+        return Math.sqrt(Math.pow(Math.abs(x), 2) + Math.pow(Math.abs(y), 2));
     }
 
     /**
@@ -261,8 +271,10 @@ public class Position {
      */
     public void normalize() {
         double norm = getNorm();
-        x /= norm;
-        y /= norm;
+        if (norm != 0) {
+            x /= norm;
+            y /= norm;
+        }
     }
 
     /**
@@ -347,7 +359,7 @@ public class Position {
      * @return angle en degrés
      */
     public double getAngle() {
-        double alpha = Math.atan(Math.abs(y / x)); // on ajoute ∏/2 car y est orienté vers le bas
+        double alpha = Math.atan(Math.abs(y / x)) * 180; // on ajoute ∏/2 car y est orienté vers le bas
         int quadrant = getQuadrant();
         alpha += quadrant * 90;
 

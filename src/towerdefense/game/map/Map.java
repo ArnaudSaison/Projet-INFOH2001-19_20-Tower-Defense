@@ -112,14 +112,19 @@ public class Map implements Drawable {
             }
         }
 
+        availablePaths.clear();
+
         // Calcul des chemins valides grâce au PathFactory
         PathFactory pathFactory = new PathFactory(this);
         for (GatePathTile gate : gates) {
             ArrayList<Path> computedPaths = pathFactory.getAllPaths(gate);
-            availablePaths.clear();
             availablePaths.addAll(computedPaths);
             gate.clearPaths();
             gate.attachPaths(computedPaths);
+        }
+
+        for (Path path : availablePaths) {
+            System.out.println(path);
         }
     }
 
