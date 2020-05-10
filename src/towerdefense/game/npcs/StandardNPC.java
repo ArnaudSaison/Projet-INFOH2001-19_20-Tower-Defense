@@ -20,7 +20,9 @@ public class StandardNPC extends NPC {
 
     @Override
     public void stick(Glue glue) {
-        speed = speed / glue.getDamage();
+        if (speed == initialSpeed) {
+            speed = speed / glue.getDamage();
+        }
     }
 
     @Override

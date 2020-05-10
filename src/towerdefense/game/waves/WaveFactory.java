@@ -142,6 +142,7 @@ public class WaveFactory {
         }
 
         //=================================================Return=======================================================
+//        System.out.println(npcList);
         return new Wave(npcList, difficulty);
     }
 

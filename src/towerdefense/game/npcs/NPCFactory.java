@@ -20,16 +20,21 @@ public class NPCFactory {
         int healthLoot = specifications.get(3);
 
         //Gestion des différents cas:
-        switch (type){
-            case STANDARD_NPC: res = new StandardNPC(map, gameModel, health, speed, goldLoot, healthLoot,gatePathTile, type);
-            break;
-            case RAPID_NPC: res = new StandardNPC(map, gameModel, health, speed, goldLoot, healthLoot,gatePathTile, type);
+        switch (type) {
+            case STANDARD_NPC:
+                res = new StandardNPC(map, gameModel, health, speed, goldLoot, healthLoot, gatePathTile, type);
                 break;
-            case SUPER_HEALTH_NPC: res = new StandardNPC(map, gameModel, health, speed, goldLoot, healthLoot, gatePathTile, type);
+            case RAPID_NPC:
+                res = new StandardNPC(map, gameModel, health, speed, goldLoot, healthLoot, gatePathTile, type);
                 break;
-            case EXPLOSIVE_RESISTANT_NPC: res = new ExplosiveResistantNPC(map, gameModel, health, speed, goldLoot, healthLoot, gatePathTile);
+            case SUPER_HEALTH_NPC:
+                res = new StandardNPC(map, gameModel, health, speed, goldLoot, healthLoot, gatePathTile, type);
                 break;
-            case GLUE_RESISTANT_NPC: res = new GlueResistantNPC(map, gameModel, health, speed, goldLoot, healthLoot, gatePathTile);
+            case EXPLOSIVE_RESISTANT_NPC:
+                res = new ExplosiveResistantNPC(map, gameModel, health, speed, goldLoot, healthLoot, gatePathTile);
+                break;
+            case GLUE_RESISTANT_NPC:
+                res = new GlueResistantNPC(map, gameModel, health, speed, goldLoot, healthLoot, gatePathTile);
                 break;
 
 //            default : System.out.println("Invalid NPC type");

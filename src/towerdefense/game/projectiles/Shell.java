@@ -12,7 +12,7 @@ public class Shell extends Projectile {
     private static final double proportion = 1.0 / 5.0;
     private int radius;
 
-    public Shell(Map map, GameModel gameModel, int damage, int velocity, Position initialPosition, NPC target, int radius) {
+    public Shell(Map map, GameModel gameModel, int damage, double velocity, Position initialPosition, NPC target, int radius) {
         super(map, gameModel, damage, velocity, initialPosition, target);
         this.radius = radius;
     }

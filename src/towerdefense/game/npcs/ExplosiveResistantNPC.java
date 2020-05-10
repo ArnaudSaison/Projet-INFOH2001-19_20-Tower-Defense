@@ -17,7 +17,9 @@ public class ExplosiveResistantNPC extends NPC {
 
     @Override
     public void stick(Glue glue) {
-        speed = speed / glue.getDamage();
+        if (speed == initialSpeed) {
+            speed = speed / glue.getDamage();
+        }
     }
 
     //Ne fait rien ici car ce NPC est résistant aux explosifs.

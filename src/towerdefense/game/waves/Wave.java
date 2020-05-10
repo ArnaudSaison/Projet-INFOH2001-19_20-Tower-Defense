@@ -46,10 +46,15 @@ public class Wave {
      * Choisit de manière aléatoire un NPC parmi tous les NPCs qui composent la vague
      */
     public void setNextEnemy() {
-        Random randomGenerator = new Random();
-        int randomIndex = randomGenerator.nextInt(waveNPCs.size());
-        nextNPC = waveNPCs.get(randomIndex);
-        waveNPCs.remove(randomIndex);
+        try {
+            Random randomGenerator = new Random();
+            int randomIndex = randomGenerator.nextInt(waveNPCs.size());
+            nextNPC = waveNPCs.get(randomIndex);
+            waveNPCs.remove(randomIndex);
+        } catch (Exception e) {
+            System.out.println("La liste des NPCs semble vide. Vérifiez que la somme du nombre de NPCs de chaque vague pour chaque difficulté vaut 1.");
+            e.printStackTrace();
+        }
     }
 
     //==============================================Tests===============================================================

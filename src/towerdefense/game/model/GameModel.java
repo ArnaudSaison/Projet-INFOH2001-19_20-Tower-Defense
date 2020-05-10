@@ -25,6 +25,7 @@ public class GameModel implements Runnable {
     private final Object syncKeyInitTower = new Object();
     private final Object syncKeyInitGoldMine = new Object();
     private final Object syncKeyInitProjectile = new Object();
+    private final Object syncKeyAccessNPCsOnMap = new Object();
 
     /*==================================================================================================================
                                                    ATTRIBUTS
@@ -81,7 +82,7 @@ public class GameModel implements Runnable {
 
         //Initialisation de la première vague:
         waveFactory = new WaveFactory(map, this, mapPath);
-        wave = waveFactory.getWave("easy");
+        wave = waveFactory.getWave(config.getDifficulty());
         round = 0;
 
         //Initilisation du thread:
@@ -251,6 +252,7 @@ public class GameModel implements Runnable {
     public void initializeElement(Projectile projectile) {
         synchronized (syncKeyInitProjectile) {
             initializePlaceable(projectile);
+            System.out.println("projectile initialized on map");
         }
     }
 
@@ -281,7 +283,13 @@ public class GameModel implements Runnable {
     }
 
     public ArrayList<NPC> getNPCsOnMap() {
-        return NPCsOnMap;
+        synchronized (syncKeyAccessNPCsOnMap) {
+            return NPCsOnMap;
+        }
+    }
+
+    public ArrayList<NPC> getNPCsOnMapClone() {
+        return new ArrayList<>(NPCsOnMap);
     }
 
     public Wave getWave() {

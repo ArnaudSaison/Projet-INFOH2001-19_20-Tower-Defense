@@ -17,7 +17,7 @@ public class TemporaryItemView extends ElementView implements TemporaryItem {
 
     // ==================== Initilisation ====================
 
-    public TemporaryItemView(Shop.ShopCases itemType, Map map, Shop shop) {
+    public TemporaryItemView(Shop.ShopCases itemType, Map map, Shop shop, ShopView shopView) {
         super(new Position(0, 0, map), map, Shop.getIconPath(itemType), Shop.getGraphicsProportion(itemType));
         this.itemType = itemType;
         this.shop = shop;
@@ -35,6 +35,7 @@ public class TemporaryItemView extends ElementView implements TemporaryItem {
                 boolean built = shop.buyPlaceable(itemType, tilePosition, map); // On essaye d'acheter l'item
                 if (built) { // S'il a pu être placé, il faut supprimer la représentation temporaire
                     ((MapView) map.getDrawing()).removeTempElement(); // Cast permis puisque le Drawing d'une map sera toujours une MapView
+                    shopView.deselectItems();
                 }
             }
         });

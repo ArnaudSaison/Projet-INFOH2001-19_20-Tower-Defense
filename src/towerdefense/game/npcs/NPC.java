@@ -41,6 +41,7 @@ public abstract class NPC implements Drawable, Movable, Placeable, Runnable, Hit
     protected int health;
     private int maxHealth;
     protected double speed;
+    protected double initialSpeed;
     protected int goldLoot;
     protected int healthLoot;
 
@@ -75,6 +76,7 @@ public abstract class NPC implements Drawable, Movable, Placeable, Runnable, Hit
         this.health = health;
 
         this.speed = speed;
+        this.initialSpeed = speed;
         this.goldLoot = goldLoot;
         this.healthLoot = scoreLoot;
         isHeaded = HeadedDir.DOWN;

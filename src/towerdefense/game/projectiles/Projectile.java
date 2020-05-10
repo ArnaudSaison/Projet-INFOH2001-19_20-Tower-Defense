@@ -38,7 +38,7 @@ public abstract class Projectile implements Runnable, Drawable, Movable, Placeab
      *
      * @param initialPosition Position de la tour depuis laquelle le projectile est tirer.
      */
-    public Projectile(Map map, GameModel gameModel, int damage, int velocity, Position initialPosition, Hittable target) {
+    public Projectile(Map map, GameModel gameModel, int damage, double velocity, Position initialPosition, Hittable target) {
         this.map = map;
         this.gameModel = gameModel;
         this.damage = damage;

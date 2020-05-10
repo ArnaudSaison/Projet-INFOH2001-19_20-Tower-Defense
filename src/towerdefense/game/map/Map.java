@@ -123,9 +123,9 @@ public class Map implements Drawable {
             gate.attachPaths(computedPaths);
         }
 
-        for (Path path : availablePaths) {
-            System.out.println(path);
-        }
+//        for (Path path : availablePaths) {
+//            System.out.println(path);
+//        }
     }
 
     //==================== Interface Drawable ====================

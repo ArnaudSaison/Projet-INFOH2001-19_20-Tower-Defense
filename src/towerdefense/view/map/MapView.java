@@ -107,7 +107,7 @@ public class MapView extends Pane implements Printable {
         Position deltaPos = pos1.getMultiplied((-1) * deltaPPM / oldPPM);
 
         // Mise à jour des tiles
-        update();
+        map.updateDrawing();
         updateTiles();
 
         // Translation de Map

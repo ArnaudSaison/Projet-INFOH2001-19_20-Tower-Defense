@@ -16,6 +16,8 @@ import java.io.IOException;
 import java.util.ArrayList;
 
 public abstract class Tower implements Buyable, Upgradable, Placeable, Drawable, Runnable {
+    private static Object syncKeytargetAquisition = new Object();
+
     /*==================================================================================================================
                                                    ATTRIBUTS
     ==================================================================================================================*/
@@ -97,11 +99,13 @@ public abstract class Tower implements Buyable, Upgradable, Placeable, Drawable,
      * Test si les ennemis sur la carte sont à portée de tir.
      */
     public void targetAcquisition() {
-        ArrayList<NPC> npcsOnMap = gameModel.getNPCsOnMap();
-        if (targets.size() < maxTargetNumber) {
-            for (NPC npc : npcsOnMap) {
-                if ((npc.getPosition()).getDistance(position) <= range)
-                    targets.add(npc);
+        synchronized (syncKeytargetAquisition) {
+            ArrayList<NPC> npcsOnMap = gameModel.getNPCsOnMapClone();
+            if (targets.size() < maxTargetNumber) {
+                for (NPC npc : npcsOnMap) {
+                    if ((npc.getPosition()).getDistance(position) <= range)
+                        targets.add(npc);
+                }
             }
         }
     }

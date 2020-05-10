@@ -21,6 +21,7 @@ public class Config {
     private int initPlayerHealth;
     private int timeBetweenRounds;
     private int timeBetweenNPCs;
+    private String difficulty;
 
     // Constructeur et initialisation
     public Config(String path) throws IOException {
@@ -45,6 +46,7 @@ public class Config {
         initPlayerHealth = Integer.parseInt(settings.getProperty("initPlayerHealth"));
         timeBetweenRounds = Integer.parseInt(settings.getProperty("timeBetweenRounds"));
         timeBetweenNPCs = Integer.parseInt(settings.getProperty("timeBetweenNPCs"));
+        difficulty = settings.getProperty("difficulty");
     }
 
     // getters
@@ -94,5 +96,9 @@ public class Config {
 
     public int getTimeBetweenNPCs() {
         return timeBetweenNPCs;
+    }
+
+    public String getDifficulty() {
+        return difficulty;
     }
 }
