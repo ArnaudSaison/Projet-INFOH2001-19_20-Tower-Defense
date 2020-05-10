@@ -11,6 +11,9 @@ public class ArrowView extends ElementView {
         super(position, map, graphicsFileName, proportion);
 
         this.direction = direction;
+
+        setStyle("-fx-border-color: magenta; -fx-border-width: 1;");
+
     }
 
     @Override

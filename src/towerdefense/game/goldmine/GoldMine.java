@@ -167,7 +167,7 @@ public class GoldMine implements ProducesGold, Buyable, Upgradable, Placeable, D
     public void run() {
         long timer = 0;
         double sleepTime = 1.0 / gameModel.getConfig().getModelFrameRate() * 1000;
-        int productionTime = (int) Math.round(1.0 / sleepTime); // la mine produira toujours toutes les secondes pour éviter d'avoir un temps = 0
+        int productionTime = (int) Math.round(1.0 / sleepTime * 1000); // la mine produira toujours toutes les secondes pour éviter d'avoir un temps = 0
 
         try {
             while (gameModel.getRunning()) { // si le jeu est en cours
@@ -266,6 +266,16 @@ public class GoldMine implements ProducesGold, Buyable, Upgradable, Placeable, D
     @Override
     public Shop.ShopCases getID() {
         return ID;
+    }
+
+    public int getGoldStorage() {
+        synchronized (syncKeyA) {
+            return goldStorage;
+        }
+    }
+
+    public int getMaxGoldStorage() {
+        return maxGoldStorage;
     }
 
     /*==================================================================================================================

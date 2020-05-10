@@ -172,7 +172,7 @@ public class GameController implements Initializable, GUIController {
      * Méthode qui définit l'ensemble des actions à effectuer pour mettre à jour la GUI
      */
     private void updateUI() {
-//        gameRoundInfoBarText.setText("Round" + gameModel.getCurrentRound()); //TODO
+        gameRoundInfoBarText.setText("Round " + (gameModel.getRound() + 1));
         gameHealthInfoBarText.setText(player.getHealth() + "/" + player.getMaxHealth());
         gameGoldInfoBarText.setText(String.valueOf(player.getGold()));
         gameScoreInfoBarText.setText("Score: " + player.getScore());
@@ -249,6 +249,7 @@ public class GameController implements Initializable, GUIController {
     @FXML
     public void handleQuitGameButtonClicked(MouseEvent event) throws IOException {
         if (gameModel.getRunning()) {
+            gameModel.pauseGame();
             boolean answer = mainApplication.confirmWindow(
                     "The Game is not finished yet. Do you want to quit anyway ?",
                     "Quit Game",
@@ -256,6 +257,8 @@ public class GameController implements Initializable, GUIController {
                     "Confirm");
             if (answer) {
                 quitGame();
+            } else if (gameModel.getRunning()) {
+                gameModel.resumeGame();
             }
         } else {
             quitGame();

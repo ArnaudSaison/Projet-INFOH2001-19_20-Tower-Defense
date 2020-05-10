@@ -55,7 +55,7 @@ public class upgradePrompt extends VBox {
 
             if (level < item.getMaxLevel()) { // si on n'est pas au niveau maximum
                 Label next = new Label(String.valueOf(shop.getItemProp(itemID, propID, level + 1)));
-
+                next.getStyleClass().add("next-level-label");
                 GridPane.setConstraints(next, i, 2);
                 gridPane.getChildren().add(next);
             }

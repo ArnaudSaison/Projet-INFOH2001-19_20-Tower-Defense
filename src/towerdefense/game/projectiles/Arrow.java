@@ -12,8 +12,8 @@ public class Arrow extends Projectile {
     private static final String graphicsPath = "towers/archer_tower/projectile.png";
     private static final double proportion = 1.0 / 5.0;
 
-    public Arrow(Map map, GameModel gameModel, int damage, double velocity, Position initialPosition, NPC target) {
-        super(map, gameModel, damage, velocity, initialPosition, target);
+    public Arrow(Map map, GameModel gameModel, int damage, double velocity, double range, Position initialPosition, NPC target) {
+        super(map, gameModel, damage, velocity, range, initialPosition, target);
     }
 
     @Override

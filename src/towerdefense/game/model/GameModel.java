@@ -252,7 +252,6 @@ public class GameModel implements Runnable {
     public void initializeElement(Projectile projectile) {
         synchronized (syncKeyInitProjectile) {
             initializePlaceable(projectile);
-            System.out.println("projectile initialized on map");
         }
     }
 
@@ -326,5 +325,9 @@ public class GameModel implements Runnable {
 
     public ArrayList<Tower> getTowers() {
         return towers;
+    }
+
+    public int getRound() {
+        return round;
     }
 }

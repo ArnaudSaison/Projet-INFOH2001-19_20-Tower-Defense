@@ -18,8 +18,10 @@ public abstract class Projectile implements Runnable, Drawable, Movable, Placeab
     //Spécification:
     protected int damage;
     protected double velocity;
+    private double range;
 
     //Positon:
+    private Position initialPosition;
     protected Position finalPosition;
     protected Position position;
     private Boolean isArrived;
@@ -38,11 +40,13 @@ public abstract class Projectile implements Runnable, Drawable, Movable, Placeab
      *
      * @param initialPosition Position de la tour depuis laquelle le projectile est tirer.
      */
-    public Projectile(Map map, GameModel gameModel, int damage, double velocity, Position initialPosition, Hittable target) {
+    public Projectile(Map map, GameModel gameModel, int damage, double velocity, double range, Position initialPosition, Hittable target) {
         this.map = map;
         this.gameModel = gameModel;
         this.damage = damage;
+        this.range = range;
         this.velocity = velocity;
+        this.initialPosition = initialPosition;
         this.position = new Position(initialPosition.getX(), initialPosition.getY(), map);
         this.target = target;
         frameRate = gameModel.getConfig().getModelFrameRate();
@@ -72,8 +76,11 @@ public abstract class Projectile implements Runnable, Drawable, Movable, Placeab
 //                    System.out.println("La position du projectile est" + getPosition().toString());
                     if (position == finalPosition) {
                         doDamage(target); // blasser la cible
-                        isArrived = true; //
+                        isArrived = true;
 //                        System.out.println("Le projectile a atteint sa cible");
+
+                    } else if (position.getDistance(initialPosition) > range) {
+                        isArrived = true;
                     }
                 }
                 Thread.sleep((long) sleepTime);

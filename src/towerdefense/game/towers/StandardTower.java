@@ -23,7 +23,7 @@ public class StandardTower extends Tower {
     public void attack() {
         super.attack();
         for (NPC target : super.targets) {
-            Arrow arrow = new Arrow(map, gameModel, damageDeal, 2, super.position, target);
+            Arrow arrow = new Arrow(map, gameModel, damageDeal, 2, range, super.position, target);
             gameModel.initializeElement(arrow);
         }
     }

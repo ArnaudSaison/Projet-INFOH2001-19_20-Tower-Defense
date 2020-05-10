@@ -186,6 +186,10 @@
 
 }
 
+.next-level-label {
+    -fx-text-fill: #ffb800;
+}
+
 .next-level {
     -fx-background-color: #a6a6a6;
 }
@@ -226,3 +230,15 @@
     -fx-background-color : #ff9900;
 }
 
+
+/*======================================================================================================================
+                                            SPÉCIFIQUE AUX MINES D'OR
+======================================================================================================================*/
+.retrieve-gold {
+    -fx-background-color: white;
+    -fx-cursor: hand;
+}
+
+.retrieve-gold:hover {
+    -fx-background-color: #a6a6a6;
+}

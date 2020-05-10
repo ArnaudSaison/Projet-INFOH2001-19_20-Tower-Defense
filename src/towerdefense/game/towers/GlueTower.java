@@ -22,7 +22,7 @@ public class GlueTower extends Tower {
     public void attack() {
         super.attack();
         for (NPC target : super.targets) {
-            Glue glue = new Glue(map, gameModel, damageDeal, 2, super.position, target);
+            Glue glue = new Glue(map, gameModel, damageDeal, 2, range, super.position, target);
             gameModel.initializeElement(glue);
         }
     }

@@ -14,9 +14,10 @@ import towerdefense.view.towers.TowerView;
 
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Collections;
 
 public abstract class Tower implements Buyable, Upgradable, Placeable, Drawable, Runnable {
-    private static Object syncKeytargetAquisition = new Object();
+    private static final Object syncKeytargetAquisition = new Object();
 
     /*==================================================================================================================
                                                    ATTRIBUTS
@@ -101,11 +102,13 @@ public abstract class Tower implements Buyable, Upgradable, Placeable, Drawable,
     public void targetAcquisition() {
         synchronized (syncKeytargetAquisition) {
             ArrayList<NPC> npcsOnMap = gameModel.getNPCsOnMapClone();
-            if (targets.size() < maxTargetNumber) {
-                for (NPC npc : npcsOnMap) {
-                    if ((npc.getPosition()).getDistance(position) <= range)
-                        targets.add(npc);
-                }
+            Collections.shuffle(npcsOnMap);
+            int i = 0;
+            while (!npcsOnMap.isEmpty() && targets.size() < maxTargetNumber && i < npcsOnMap.size()) {
+                NPC npc = npcsOnMap.get(i);
+                if ((npc.getPosition()).getDistance(position) <= range)
+                    targets.add(npc);
+                i++;
             }
         }
     }
