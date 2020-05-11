@@ -188,7 +188,6 @@ public class MapView extends Pane implements Printable {
 
     public TemporaryItem getTempElement() {
         return tempElement;
-
     }
 
     public boolean tempElementPresent() {

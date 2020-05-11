@@ -1,29 +1,33 @@
 package towerdefense.controller.map.editor;
 
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.*;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextField;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.input.ScrollEvent;
-import javafx.scene.layout.*;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
+import javafx.scene.layout.VBox;
 import javafx.stage.DirectoryChooser;
-import javafx.stage.FileChooser;
+import javafx.util.Duration;
 import towerdefense.MainApplication;
 import towerdefense.controller.generic.GUIController;
-import towerdefense.game.Buyable;
 import towerdefense.game.map.Map;
 import towerdefense.game.map.MapFactory;
+import towerdefense.view.editor.SideBarTilesSelector;
 import towerdefense.view.map.MapView;
 
-import java.awt.Desktop;
+import javax.management.monitor.CounterMonitor;
+import java.awt.*;
 import java.io.File;
 import java.io.IOException;
 import java.net.URL;
-import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -92,6 +96,10 @@ public class MapEditorController implements Initializable, GUIController {
     private int maxPixelsPerMeter = 200;
     private SideBarTilesSelector sideBarTilesSelector;
 
+    // Timer
+    private Timeline ViewTimer;
+    private boolean running;
+
     // ==================== Initilisations ====================
 
     /**
@@ -115,6 +123,8 @@ public class MapEditorController implements Initializable, GUIController {
 
         // MapFactory
         mapFactory = new MapFactory();
+
+        running = false;
     }
 
     /**
@@ -137,10 +147,6 @@ public class MapEditorController implements Initializable, GUIController {
         if (mapPath != null) {
             initMap();
         }
-
-        // Sélecteur de cases pour éditer la carte
-        sideBarTilesSelector = new SideBarTilesSelector(mapPlaceHolder, vBoxTilesSideBar, map);
-        scrollPaneTilesSideBar.setContent(sideBarTilesSelector);
     }
 
     /**
@@ -156,6 +162,7 @@ public class MapEditorController implements Initializable, GUIController {
 
             map.initDrawing(); // initialisation de toutes les raprésentations graphiques
             mapView = (MapView) map.getDrawing(); // Ce casting est parmis par déifnition du MCV parttern
+            mapView.initListeners();
             mapPlaceHolder.getChildren().add(0, mapView); // Ajout de la carte à la vue FXML
 
         } catch (IOException exception) {
@@ -163,6 +170,11 @@ public class MapEditorController implements Initializable, GUIController {
         }
 
         // GUI de l'éditeur
+        // Sélecteur de cases pour éditer la carte
+        sideBarTilesSelector = new SideBarTilesSelector(mapPlaceHolder, vBoxTilesSideBar, map, this);
+        scrollPaneTilesSideBar.setContent(sideBarTilesSelector);
+
+        startAllTimers();
         saveButton.setVisible(true);
         resetViewButton.setVisible(true);
     }
@@ -172,9 +184,15 @@ public class MapEditorController implements Initializable, GUIController {
         // Initilisation de la map
         map.initDrawing(); // initialisation de toutes les raprésentations graphiques
         mapView = (MapView) map.getDrawing(); // Ce casting est parmis par déifnition du MCV parttern
+        mapView.initListeners();
         mapPlaceHolder.getChildren().add(0, mapView); // Ajout de la carte à la vue FXML
 
         // GUI de l'éditeur
+        // Sélecteur de cases pour éditer la carte
+        sideBarTilesSelector = new SideBarTilesSelector(mapPlaceHolder, vBoxTilesSideBar, map, this);
+        scrollPaneTilesSideBar.setContent(sideBarTilesSelector);
+
+        startAllTimers();
         resetViewButton.setVisible(true);
     }
 
@@ -184,8 +202,57 @@ public class MapEditorController implements Initializable, GUIController {
 
     // ==================== Fonctionnement du controller ====================
 
+    /**
+     * Méthode qui déifnit l'ensemble des actions à effectuer pour mettre à jour l'UI de la carte seulement
+     */
+    private void updateView() {
+        map.updateDrawing();
+//        i ++;
+    }
+
+    // Initilisation du timer
+
+    /**
+     * Initialisation d'un obet Timeline qui met à jour tous les éléments sur la carte (mais pas les tiles)
+     * <p>
+     * 20 FPS par défaut (hardcoded)
+     */
+    private void runView() {
+        ViewTimer = new Timeline(new KeyFrame(Duration.millis((int) (1.0 / 20 * 1000)), actionEvent -> updateView()));
+        ViewTimer.setCycleCount(Animation.INDEFINITE);
+        ViewTimer.play();
+    }
+
+    // Gestion des timers
+
+    /**
+     * Méthode qui arrête tous les timers
+     */
+    private void stopAllTimers() {
+        if (running) {
+            running = false;
+            ViewTimer.stop();
+        }
+//        double k = i / j;
+//        System.out.println("modèle : " + i + ", UI :" + j + ", proportion modèle / UI (attendu : 1.5) : " + k);
+    }
+//    double i = 0.0;
+//    double j = 0.0;
+
+    /**
+     * Méthode qui démarre tous les timers
+     */
+    private void startAllTimers() {
+        if (!running) {
+            running = true;
+            runView();
+        }
+    }
+
+
     // ==================== Gestion des éléments FXML ====================
     // ******************** Retour au menu ********************
+
     /**
      * Gestion du bouton pour retourner au menu principal
      */
@@ -201,20 +268,28 @@ public class MapEditorController implements Initializable, GUIController {
         }
 
         if (answer) {
+            stopAllTimers();
             mainApplication.setCurrentSceneTo(MainApplication.SceneType.MENU);
         }
     }
 
     // ******************** Sauvegarder une carte déjà existante ********************
+
     /**
      * Gestion du bouton pour sauvegarder
      */
     @FXML
     public void handleSaveButtonClicked(MouseEvent event) throws IOException {
         isSaved = true;
+        save();
+    }
+
+    private void save() {
+        mapFactory.saveMap(map, mapPath);
     }
 
     // ******************** Sauvegarder un nouveau fichier ********************
+
     /**
      * Gestion du bouton pour sauvegarder un nouvrau fichier
      */
@@ -224,6 +299,7 @@ public class MapEditorController implements Initializable, GUIController {
         isSaved = true;
         saveNewHBox.setVisible(false);
         saveButton.setVisible(true);
+        save();
     }
 
     /**
@@ -233,8 +309,11 @@ public class MapEditorController implements Initializable, GUIController {
     public void handleSaveNewTextFieldTyped(KeyEvent keyEvent) {
         currentFileName = saveNewTextField.getText();
         if (!validateFileName(currentFileName)) {
-            saveNewTextField.setStyle("-fx-text-fill: red;");//TODO: corriger bug saver snas bon nom de fichier
+            saveNewTextField.setStyle("-fx-text-fill: red;");
+            saveNewButton.setDisable(true);
         } else {
+            mapPath = directoryPath + "/" + currentFileName;
+            saveNewButton.setDisable(false);
             saveNewTextField.setStyle("-fx-text-fill: black;");
         }
     }
@@ -248,6 +327,7 @@ public class MapEditorController implements Initializable, GUIController {
     }
 
     // ******************** Créer un nouveau fichier ********************
+
     /**
      * Gestion du bouton pour créer un nouveau fichier
      */
@@ -263,6 +343,7 @@ public class MapEditorController implements Initializable, GUIController {
         }
 
         if (answer) {
+            stopAllTimers();
             sizeSelectorHBox.setVisible(true);
         }
     }
@@ -283,6 +364,7 @@ public class MapEditorController implements Initializable, GUIController {
      */
     @FXML
     public void handleCancelNewMapButtonClicked(MouseEvent event) {
+        startAllTimers();
         disableNewMapPrompt();
     }
 
@@ -364,10 +446,12 @@ public class MapEditorController implements Initializable, GUIController {
         isSaved = false;
 
         saveNewHBox.setVisible(true);
+        saveNewButton.setDisable(true);
         saveButton.setVisible(false);
     }
 
     // ******************** Charger un fichier ********************
+
     /**
      * Gestion du bouton pour charger un fichier
      */
@@ -383,6 +467,8 @@ public class MapEditorController implements Initializable, GUIController {
         }
 
         if (answer) {
+            stopAllTimers();
+
             saveNewHBox.setVisible(false);
             saveButton.setVisible(true);
 
@@ -392,6 +478,7 @@ public class MapEditorController implements Initializable, GUIController {
     }
 
     // ******************** Ouvrir le dossier contenant les maps ********************
+
     /**
      * Ouvrir le dossier contenant toutes les maps
      */
@@ -424,7 +511,7 @@ public class MapEditorController implements Initializable, GUIController {
     private boolean validatePixelsPerMeter(String pxPerMeter) {
         boolean res = false;
         try {
-            int value =  Integer.parseInt(pxPerMeter);
+            int value = Integer.parseInt(pxPerMeter);
             if (value > 0 && value <= maxPixelsPerMeter) {
                 res = true;
             }
@@ -435,6 +522,7 @@ public class MapEditorController implements Initializable, GUIController {
 
 
 // ==================== Gestion de la carte ====================
+
     /**
      * Gestion du zoom sur la carte
      */
@@ -485,10 +573,19 @@ public class MapEditorController implements Initializable, GUIController {
     }
 
     // ==================== Getters et setters ====================
+
     /**
      * Changer l'état de sauvegarde
      */
     public void setSavedState(boolean state) {
         isSaved = state;
+    }
+
+    public boolean getRunning() {
+        return running;
+    }
+
+    public void notifyModification() {
+        isSaved = false;
     }
 }

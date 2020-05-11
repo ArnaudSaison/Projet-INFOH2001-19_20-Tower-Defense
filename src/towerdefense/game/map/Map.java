@@ -66,10 +66,10 @@ public class Map implements Drawable {
                         break;
                     case 'O': // obstacle : type par défaut (arbre)
                     case 'T': // obstacle : arbre
-                        tiles.add(new ObstacleTile(columnCounter, rowCounter, this, ObstacleTileView.ObstacleType.TREE));
+                        tiles.add(new ObstacleTile(columnCounter, rowCounter, this, TileType.TREE));
                         break;
                     case 'R': // obstacle : rock
-                        tiles.add(new ObstacleTile(columnCounter, rowCounter, this, ObstacleTileView.ObstacleType.ROCK));
+                        tiles.add(new ObstacleTile(columnCounter, rowCounter, this, TileType.ROCK));
                         break;
                     case 'P': // chemin
                         tiles.add(new PathTile(columnCounter, rowCounter, this));
@@ -99,6 +99,8 @@ public class Map implements Drawable {
 
         // Liste des autres éléments qui se trouvent sur la carte (NPC, tour, mine d'or, ...)
         elementsOnMap = new ArrayList<>();
+
+//        System.out.println(mapTileSizeX + " " + mapTileSizeY);
     }
 
     public void computePaths() {
@@ -223,14 +225,21 @@ public class Map implements Drawable {
 
     /**
      * Remplacer une case par une autre sur la carte.
-     * Attention : opération déifnitive et gourmande en ressource (recalcul de tous les chemins)
+     * Attention : opération définitive et gourmande en ressource (recalcul de tous les chemins)
      *
      * @param tile case que l'on veut insérer
-     * @param x    abscisse de la position à laquelle on veut la mettre
-     * @param y    ordonnée de la position à laquelle on veut la mettre
      */
-    public void setTile(Tile tile, int x, int y) {
-        tiles.set((y) * mapTileSizeX + (x), tile); // remplacement dans la liste des tiles
+    public void setTile(Tile tile) {
+        int X = tile.getPosition().getTileX();
+        int Y = tile.getPosition().getTileY();
+
+        if (X >= 0 && X < mapTileSizeX && Y >= 0 && Y < mapTileSizeY) {
+            tiles.set(Y * mapTileSizeX + X, tile); // remplacement dans la liste des tiles
+
+            if (tile instanceof PathTile) {
+                computePaths();
+            }
+        }
     }
 
     /**

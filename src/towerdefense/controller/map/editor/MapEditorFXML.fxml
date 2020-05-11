@@ -174,6 +174,30 @@
    <right>
       <TabPane prefWidth="300.0" tabClosingPolicy="UNAVAILABLE" BorderPane.alignment="CENTER">
         <tabs>
+            <Tab text="Tiles">
+               <content>
+                  <VBox fx:id="vBoxTilesSideBar">
+                     <styleClass>
+                        <String fx:value="sidebar-tiles" />
+                        <String fx:value="sidebar" />
+                     </styleClass>
+                     <children>
+                        <Label text="Tile editing tools">
+                           <font>
+                              <Font size="16.0" />
+                           </font>
+                           <VBox.margin>
+                              <Insets />
+                           </VBox.margin>
+                           <padding>
+                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                           </padding>
+                        </Label>
+                        <ScrollPane fx:id="scrollPaneTilesSideBar" hbarPolicy="NEVER" prefHeight="440.0" prefWidth="300.0" vbarPolicy="ALWAYS" VBox.vgrow="ALWAYS" />
+                     </children>
+                  </VBox>
+               </content>
+            </Tab>
           <Tab closable="false" text="Map">
                <content>
                   <VBox>
@@ -185,6 +209,11 @@
                            <font>
                               <Font size="16.0" />
                            </font>
+                        </Label>
+                        <Label prefWidth="295.0" text="Please check the map.properties file in the correponding map directory since this editor does not implement all the necessary attributes." wrapText="true">
+                           <padding>
+                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                           </padding>
                         </Label>
                         <GridPane>
                           <columnConstraints>
@@ -214,30 +243,6 @@
                   </VBox>
                </content>
             </Tab>
-            <Tab text="Tiles">
-               <content>
-                  <VBox fx:id="vBoxTilesSideBar">
-                     <styleClass>
-                        <String fx:value="sidebar-tiles" />
-                        <String fx:value="sidebar" />
-                     </styleClass>
-                     <children>
-                        <Label text="Tile editing tools">
-                           <font>
-                              <Font size="16.0" />
-                           </font>
-                           <VBox.margin>
-                              <Insets />
-                           </VBox.margin>
-                           <padding>
-                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
-                           </padding>
-                        </Label>
-                        <ScrollPane fx:id="scrollPaneTilesSideBar" hbarPolicy="NEVER" prefHeight="440.0" prefWidth="300.0" vbarPolicy="ALWAYS" VBox.vgrow="ALWAYS" />
-                     </children>
-                  </VBox>
-               </content>
-            </Tab>
           <Tab closable="false" text="Waves">
                <content>
                   <VBox prefHeight="200.0" prefWidth="100.0">
@@ -245,6 +250,13 @@
                         <String fx:value="sidebar" />
                         <String fx:value="sidebar-waves" />
                      </styleClass>
+                     <children>
+                        <Label prefWidth="295.0" text="You need to create a &quot;wave&quot; directory in you &quot;map&quot; directory. Please refer to other maps in order to create the necessary files since this editor does not implement the handling of waves." wrapText="true">
+                           <padding>
+                              <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+                           </padding>
+                        </Label>
+                     </children>
                   </VBox>
                </content></Tab>
         </tabs>

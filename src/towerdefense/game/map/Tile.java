@@ -9,6 +9,7 @@ import towerdefense.view.map.TileView;
  */
 public abstract class Tile implements Drawable {
     //==================== Attributs ====================
+    protected TileType ID;
     private Position tilePosition; // stocke la position du coin supérieur gauche de la case
     protected Map map;
     protected TileView tileView;
@@ -98,6 +99,9 @@ public abstract class Tile implements Drawable {
     }
 
     //==================== Autres ====================
+    public TileType getTileType() {
+        return ID;
+    }
 
     /**
      * Représentation de la case sous forme de texte selon le format :
@@ -105,6 +109,6 @@ public abstract class Tile implements Drawable {
      */
     @Override
     public String toString() {
-        return "Tile" + tilePosition.getTileCoords();
+        return super.toString() + " = Tile" + tilePosition.getTileCoords();
     }
 }

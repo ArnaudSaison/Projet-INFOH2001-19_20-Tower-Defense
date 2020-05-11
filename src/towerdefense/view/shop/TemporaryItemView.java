@@ -20,6 +20,7 @@ public class TemporaryItemView extends ElementView implements TemporaryItem {
 
     public TemporaryItemView(Shop.ShopCases itemType, Map map, Shop shop, ShopView shopView) {
         super(new Position(0, 0, map), map, Shop.getIconPath(itemType), Shop.getGraphicsProportion(itemType));
+
         this.itemType = itemType;
         this.shop = shop;
         this.map = map;

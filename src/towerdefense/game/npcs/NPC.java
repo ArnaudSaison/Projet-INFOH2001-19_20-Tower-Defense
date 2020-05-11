@@ -271,7 +271,7 @@ public abstract class NPC implements Drawable, Movable, Placeable, Runnable, Hit
 //        }
 //
 //        //Distance parcourue entre l'affichage de deux images à l'écran:
-//        double distanceDone = speed / gameModel.getConfig().getModelFrameRate(); //TODO: régler la vitesse de déplacement
+//        double distanceDone = speed / gameModel.getConfig().getModelFrameRate();
 //        double depX = signDepX * (Math.cos(alpha) * distanceDone);
 //        double depY = signDepY * (Math.sin(alpha) * distanceDone);
 //

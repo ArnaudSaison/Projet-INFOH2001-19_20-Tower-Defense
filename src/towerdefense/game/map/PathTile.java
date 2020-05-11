@@ -23,6 +23,8 @@ public class PathTile extends Tile {
      */
     public PathTile(int x, int y, Map map) {
         super(x, y, map);
+        ID = TileType.PATH;
+
         connections = new ArrayList<>();
         isBlocked = true;
     }

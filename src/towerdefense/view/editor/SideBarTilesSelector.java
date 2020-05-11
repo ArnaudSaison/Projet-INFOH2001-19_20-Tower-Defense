@@ -11,6 +11,7 @@ import javafx.scene.layout.VBox;
 import towerdefense.controller.map.editor.MapEditorController;
 import towerdefense.game.map.Map;
 import towerdefense.game.map.MapFactory;
+import towerdefense.game.map.TileType;
 
 import java.io.InputStream;
 
@@ -18,26 +19,28 @@ public class SideBarTilesSelector extends VBox {
     // ==================== Attriuts ====================
     private Map map;
     private int tilesReprHeight = 50; //px
+    private MapEditorController controller;
 
     // ==================== Attriuts ====================
 
     /**
      * Constructeur qui crée la HBox et y insère tous les éléments nécessaires
      */
-    public SideBarTilesSelector(Pane targetPane, VBox parentBox, Map map) {
+    public SideBarTilesSelector(Pane targetPane, VBox parentBox, Map map, MapEditorController controller) {
         super(); // Constructeur JavaFX
         this.map = map;
+        this.controller = controller;
 
         this.getStyleClass().add("tile-selector-vbox");
 
-        for (MapFactory.TileType type : MapFactory.getTileTypesList()) {
+        for (TileType type : MapFactory.getTileTypesList()) {
             this.getChildren().add(getTileSidebarRepr(type));
         }
 
         this.setPrefWidth(260);
     }
 
-    private VBox getTileSidebarRepr(MapFactory.TileType type) {
+    private VBox getTileSidebarRepr(TileType type) {
         String imagePath = "../../../resources/graphics/" + MapFactory.getTileGraphics(type);
 
         // Chargement de l'image
@@ -75,24 +78,26 @@ public class SideBarTilesSelector extends VBox {
         vBox.getChildren().add(hBox);
 
         // Attacher le listener
-        vBox.setOnMouseClicked(new PlaceTileListener(map, type));
+        vBox.setOnMouseClicked(new PlaceTileListener(map, type, vBox, this, controller));
 
         return vBox;
     }
 
-    // Sélection d'un item (doit se trouver dans cette classe afin de pouvoir modifier tous les boutons)
+    // Sélection d'une tile (doit se trouver dans cette classe afin de pouvoir modifier tous les boutons)
     public void setSelectedItem(Node item) {
         deselectItems();
-        item.getStyleClass().add("tile-sidebar-selected");
+        item.getStyleClass().add("tile-selector-container-vbox-selected");
     }
 
     public void deselectItems() {
         for (Node elem : this.getChildren()) {
-            elem.getStyleClass().remove("tile-sidebar-selected");
+            elem.getStyleClass().remove("tile-selector-container-vbox-selected");
         }
     }
 
     public boolean getSelectedState(Node item) {
-        return item.getStyleClass().contains("tile-sidebar-selected");
+        return item.getStyleClass().contains("tile-selector-container-vbox-selected");
     }
+
+
 }

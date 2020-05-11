@@ -10,6 +10,8 @@ public class EmptyTile extends Tile {
     // ==================== Initilisation ====================
     public EmptyTile(int x, int y, Map map) {
         super(x, y, map);
+        ID = TileType.EMPTY;
+
         isBlocked = false;
     }
 

@@ -61,7 +61,6 @@ public class TestModel {
         Position p1 = new Position(4.0,4.0,gameModel.getMap());
         Shop shop = gameModel.getShop();
         shop.buyPlaceable(Shop.ShopCases.STANDARD_TOWER,p1);
-        //TODO: imprimer la tour achtée.
 
         //On vérifie que l'argent est bien retirer au joueur:
         System.out.println(gameModel.getPlayer().toString());
