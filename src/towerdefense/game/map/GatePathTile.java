@@ -16,6 +16,8 @@ public class GatePathTile extends PathTile {
     // ==================== Initilisation ====================
     public GatePathTile(int x, int y, Map map) {
         super(x, y, map);
+        ID = TileType.GATE_PATH;
+
         this.paths = new ArrayList<>();
         random = new Random();
     }
@@ -61,6 +63,15 @@ public class GatePathTile extends PathTile {
     public void initDrawing() {
         // Récupérer la connection permet d'afficher dans la bonne direction la flèche indiquant qu'il s'agit d'une entrée
         // récupération de la première connection ajoutée car ce sera toujours la direction de l'entrée (voir PathFactory)
-        tileView = new GatePathTileView(map, this, getConnections().get(0));
+        ArrayList<Connections> connections = getConnections();
+        Connections arrowConnection;
+
+        if (!connections.isEmpty()) {
+            arrowConnection = connections.get(0);
+        } else {
+            arrowConnection = Connections.RIGHT;
+        }
+
+        tileView = new GatePathTileView(map, this, arrowConnection);
     }
 }

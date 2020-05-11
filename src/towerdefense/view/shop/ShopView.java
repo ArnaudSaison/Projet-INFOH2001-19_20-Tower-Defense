@@ -31,13 +31,13 @@ public class ShopView extends VBox {
         this.getStyleClass().add("shop-vbox");
 
         for (Shop.ShopCases item : Shop.getBuyableItems()) {
-            this.getChildren().add(getTileSidebarRepr(item));
+            this.getChildren().add(getSidebarRepr(item));
         }
 
         this.setPrefWidth(260);
     }
 
-    private VBox getTileSidebarRepr(Shop.ShopCases item) {
+    private VBox getSidebarRepr(Shop.ShopCases item) {
         String imagePath = "../../../resources/graphics/" + Shop.getIconPath(item);
 
         // Chargement de l'image

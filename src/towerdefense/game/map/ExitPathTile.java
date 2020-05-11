@@ -12,6 +12,7 @@ public class ExitPathTile extends PathTile {
     // ==================== Initilisation ====================
     public ExitPathTile(int x, int y, Map map) {
         super(x, y, map);
+        ID = TileType.EXIT_PATH;
     }
 
     //==================== Interface Drawable ====================
@@ -23,6 +24,13 @@ public class ExitPathTile extends PathTile {
     public void initDrawing() {
         ArrayList<Connections> connections = getConnections(); // récupération des connections
         // récupération de la dernière connection ajoutée car ce sera toujours la direction de la sortie (voir PathFactory)
-        tileView = new ExitPathTileView(map, this, connections.get(connections.size() - 1));
+        Connections arrowConnection;
+
+        if (!connections.isEmpty()) {
+            arrowConnection = connections.get(connections.size() - 1);
+        } else {
+            arrowConnection = Connections.RIGHT;
+        }
+        tileView = new ExitPathTileView(map, this, arrowConnection);
     }
 }

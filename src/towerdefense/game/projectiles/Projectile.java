@@ -140,7 +140,6 @@ public abstract class Projectile implements Runnable, Drawable, Movable, Placeab
     @Override
     public void move() {
 //        //Update de la position de la cible pour permettre le suivit de la cible par le projectile:
-//        //TODO: problème si NPC trop rapide (flèche devient un missile à tête chercheuse)
 //        finalPosition = target.getPosition();
 //
 //        //Distance entre la tour et le point d'impact du projectile:

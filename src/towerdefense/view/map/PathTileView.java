@@ -28,7 +28,7 @@ public class PathTileView extends TileView {
      * Méthode qui renvoie le chemin vers la bonne représentation selon les connections que possède la case
      */
     private void initPathTileView(ArrayList<PathTile.Connections> co) {
-        String res = "grass";
+        String res = "grass —";
         int rotation = 0;
         double scaleX = 1;
         double scaleY = 1;
@@ -216,6 +216,9 @@ public class PathTileView extends TileView {
             res = "grass +";
             rotation = 180;
 
+        } else {
+            res = "grass —";
+            rotation = 180;
         }
 
         initTexture(res + ".png", rotation, scaleX, scaleY);

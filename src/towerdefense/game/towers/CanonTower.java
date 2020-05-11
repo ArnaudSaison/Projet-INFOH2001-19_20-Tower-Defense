@@ -5,7 +5,6 @@ import towerdefense.game.map.Position;
 import towerdefense.game.model.GameModel;
 import towerdefense.game.model.Shop;
 import towerdefense.game.npcs.NPC;
-import towerdefense.game.projectiles.Arrow;
 import towerdefense.game.projectiles.Shell;
 
 import java.util.ArrayList;
@@ -22,7 +21,7 @@ public class CanonTower extends Tower {
     public void attack() {
         super.attack();
         for (NPC target : super.targets) {
-            Shell shell = new Shell(map, gameModel, damageDeal, 2, range, super.position, target, 5);
+            Shell shell = new Shell(map, gameModel, damageDeal, 8, range, super.position, target, 5);
             gameModel.initializeElement(shell);
         }
     }

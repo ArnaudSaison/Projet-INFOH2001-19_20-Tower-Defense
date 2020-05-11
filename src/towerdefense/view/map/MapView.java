@@ -8,7 +8,7 @@ import towerdefense.game.map.Map;
 import towerdefense.game.map.Position;
 import towerdefense.game.map.Tile;
 import towerdefense.view.Printable;
-import towerdefense.view.shop.TemporaryItem;
+import towerdefense.view.TemporaryItem;
 
 import java.util.ArrayList;
 
@@ -188,7 +188,6 @@ public class MapView extends Pane implements Printable {
 
     public TemporaryItem getTempElement() {
         return tempElement;
-
     }
 
     public boolean tempElementPresent() {

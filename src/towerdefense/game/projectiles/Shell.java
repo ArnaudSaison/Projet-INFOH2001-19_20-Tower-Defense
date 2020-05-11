@@ -24,6 +24,7 @@ public class Shell extends Projectile {
         for (Hittable hittable : super.gameModel.getHittables()) {
             if (position.getDistance(hittable.getPosition()) <= radius) {
                 hittable.hit(this);
+                System.out.println("zone damage");
             }
         }
     }

@@ -5,6 +5,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import towerdefense.game.map.Map;
 import towerdefense.game.map.Tile;
+import towerdefense.game.map.TileType;
 
 import java.io.InputStream;
 
@@ -16,14 +17,12 @@ public class ObstacleTileView extends TileView {
     private double osbtacleZoomFact = 1; // zoom de l'élément rajouté sur la case
     private ImageView imageView; // conteneur élément rajouté
 
-    public enum ObstacleType {TREE, ROCK}
-
     // ==================== Initialisation ====================
 
     /**
      * Constructeur de la classe permettant de rajouter des éléments à la représentation
      */
-    public ObstacleTileView(Map map, Tile tile, ObstacleType type) {
+    public ObstacleTileView(Map map, Tile tile, TileType type) {
         super(map, tile); // Appel au constructeur de TileView
 
         initTexture("grass.png", getRandomRotation(0, 3, 90), 1, 1);
@@ -36,7 +35,7 @@ public class ObstacleTileView extends TileView {
      * L'utilisation d'un enum permet de très simplement rajouter des types d'obstacles
      * et de naturellement empêcher toute erreur qu'un argument de type String pourrait causer
      */
-    public void initObstacle(ObstacleType type) {
+    public void initObstacle(TileType type) {
         String fileName;
         switch (type) {
             case ROCK:

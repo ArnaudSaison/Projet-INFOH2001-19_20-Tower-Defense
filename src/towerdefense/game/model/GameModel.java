@@ -265,13 +265,13 @@ public class GameModel implements Runnable {
 
     // ========== Représentation graphique ==========
     public void initializePlaceable(Placeable element) {
-        map.addElementOnMap((Drawable) element); // Ajoute l'élément sur la carte TODO: mettre/remettre
+        map.addElementOnMap((Drawable) element); // Ajoute l'élément sur la carte TODO: mettre/remettre pour le test unitaire
         element.initialize(); // Démarre le thread
         placeables.add(element);
     }
 
     public void killPlaceable(Placeable element) {
-        map.removeElementOnMap((Drawable) element); // suppression de l'élément de la carte //TODO: à mettre/remettre pour test
+        map.removeElementOnMap((Drawable) element); // suppression de l'élément de la carte //TODO: à mettre/remettre pour test pour le test unitaire
         placeables.remove(element);
     }
 

@@ -45,7 +45,6 @@ public abstract class Tower implements Buyable, Upgradable, Placeable, Drawable,
     private TowerView towerView;
     protected String graphicsName;
 
-    //TODO: gestion du prix via un fichier properties ?
     /*==================================================================================================================
                                                    CONSTRUCTEUR
     ==================================================================================================================*/

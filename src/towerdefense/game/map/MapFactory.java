@@ -8,8 +8,6 @@ import java.util.Arrays;
 import java.util.Properties;
 
 public class MapFactory {
-    public enum TileType {TREE, ROCK, PATH, EXIT_PATH, GATE_PATH, EMPTY}
-
     private int defaultPixelsPerMeter = 20;
     private int defaultTileMetricWidth = 2;
 
@@ -35,11 +33,6 @@ public class MapFactory {
         return new Map(lines, pixelsPerMeter, tileMetricWidth);
     }
 
-    public void saveMap(Map map, ArrayList<String> waves, String path) {
-        // Générer la chaîne de caractères pour chaque ligne et l'ajouter à un output
-
-    }
-
     /**
      * Crée une carte vide (que des EmptyTile)
      */
@@ -54,6 +47,66 @@ public class MapFactory {
         }
 
         return new Map(resLines, defaultPixelsPerMeter, defaultTileMetricWidth);
+    }
+
+    /**
+     * Enregistrer une carte, qu'elle existe ou non
+     *
+     * @param map  carte que l'on veut enregsitrer
+     * @param name nom qu'on veut lui donner
+     */
+    public void saveMap(Map map, String name) {
+        // Création des lignes de texte
+        int sizeX = map.getMapTileSizeX();
+        int sizeY = map.getMapTileSizeY();
+
+        int line = 0;
+        int column = 0;
+
+        ArrayList<String> lines = new ArrayList<>();
+
+        while (line < sizeY) {
+            StringBuilder textLine = new StringBuilder();
+            while (column < sizeX) {
+                textLine.append(getFileRepOfTile(map.getTile(column, line).getTileType()));
+                column++;
+            }
+            lines.add(textLine.toString());
+            column = 0;
+            line++;
+        }
+
+        System.out.println("save successfull");
+        System.out.println(lines);
+
+        // Enregistrement du fichier
+        System.out.println(name);
+
+        try {
+            // On s'assure que le dossier existe et le cas échéant, on le crée
+            File directory = new File(name);
+            boolean directoryCreated = directory.mkdir(); // création du dossier si besoin
+            if (directoryCreated) {
+                System.out.println("A new directory was created.");
+            }
+
+            // On crée le fichier dans lequel on va écrire
+            File file = new File(name + "/map.txt");
+            System.out.println("File already exists: " + file.exists());
+
+            BufferedWriter writer = new BufferedWriter(new FileWriter(file));
+
+            for (String string : lines) {
+                writer.write(string);
+                writer.newLine();
+            }
+
+            writer.close();
+
+        } catch (IOException exception) {
+            exception.printStackTrace();
+            System.out.println("Une erreur s'est produite durant l'enregistrement de la carte.");
+        }
     }
 
     // ==================== Méthodes pour récupérer des informations sur les cases ====================
@@ -136,10 +189,10 @@ public class MapFactory {
         Tile res;
         switch (type) {
             case ROCK:
-                res = new ObstacleTile(x, y, map, ObstacleTileView.ObstacleType.ROCK);
+                res = new ObstacleTile(x, y, map, TileType.ROCK);
                 break;
             case TREE:
-                res = new ObstacleTile(x, y, map, ObstacleTileView.ObstacleType.TREE);
+                res = new ObstacleTile(x, y, map, TileType.TREE);
                 break;
             case EXIT_PATH:
                 res = new ExitPathTile(x, y, map);
@@ -155,6 +208,33 @@ public class MapFactory {
                 res = new EmptyTile(x, y, map);
                 break;
         }
+        return res;
+    }
+
+    public static String getFileRepOfTile(TileType tileType) {
+        String res = "";
+
+        switch (tileType) {
+            case ROCK:
+                res = "R";
+                break;
+            case TREE:
+                res = "T";
+                break;
+            case EXIT_PATH:
+                res = "E";
+                break;
+            case GATE_PATH:
+                res = "G";
+                break;
+            case PATH:
+                res = "P";
+                break;
+            case EMPTY:
+                res = "X";
+                break;
+        }
+
         return res;
     }
 }
