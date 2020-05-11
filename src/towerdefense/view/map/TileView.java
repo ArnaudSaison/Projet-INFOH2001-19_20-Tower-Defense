@@ -43,6 +43,7 @@ public abstract class TileView extends StackPane implements Printable {
     /**
      * Initilisation des listeners
      */
+    @Override
     public void initListeners() {
         setOnMousePressed(new TileClickedListener(tile));
         setOnMouseEntered(new TileEnteredListener(tile, map));
@@ -74,13 +75,13 @@ public abstract class TileView extends StackPane implements Printable {
 
     /**
      * Initilisation du sélecteur de case
-     * */
+     */
     public void initHoverIndicator(boolean canBeBuiltOn) {
         String style;
         if (canBeBuiltOn) {
-            style =  "can-be-built-on";
+            style = "can-be-built-on";
         } else {
-            style =  "cannot-be-built-on";
+            style = "cannot-be-built-on";
         }
         // hoverIndicator
         hoverIndicator = new Rectangle();
@@ -102,6 +103,7 @@ public abstract class TileView extends StackPane implements Printable {
     /**
      * Méthode permettant de déplacer la réprésentation à l'endroit où l'objet se trouve dans le modèle
      */
+    @Override
     public void update() {
         double correctionAdd = 0.7; // permet de compenser l'erreur d'arrondi créant les fins liserets blancs
 
@@ -120,7 +122,7 @@ public abstract class TileView extends StackPane implements Printable {
 
     /**
      * Récupération de l'objet JavaFX qui permet d'afficher le contour de la case quand celle-ci est survolée
-     * */
+     */
     protected Node getHoverIndicator() {
         return hoverIndicator;
     }

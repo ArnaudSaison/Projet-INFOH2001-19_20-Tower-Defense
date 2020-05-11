@@ -41,7 +41,7 @@ public class ObstacleTileView extends TileView {
         switch (type) {
             case ROCK:
                 fileName = "rock";
-                osbtacleZoomFact = 3.0/4.0;
+                osbtacleZoomFact = 3.0 / 4.0;
                 break;
             default:
             case TREE:

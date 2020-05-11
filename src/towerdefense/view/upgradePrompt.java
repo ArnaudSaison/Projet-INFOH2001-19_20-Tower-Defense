@@ -8,6 +8,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseEvent;
 import javafx.scene.layout.GridPane;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import towerdefense.game.Upgradable;
@@ -33,6 +34,16 @@ public class upgradePrompt extends VBox {
             ((Pane) parent).getChildren().remove(this); // cast autorisé car tout élément sur la carte est contenu dans un pane ou une sous classe de pane
         });
 
+        Label nameLabel = new Label(Shop.getItemName(itemID));
+        nameLabel.getStyleClass().add("prompt-item-name");
+
+        HBox hBox = new HBox();
+        hBox.setSpacing(10);
+        hBox.setAlignment(Pos.CENTER_LEFT);
+
+        hBox.getChildren().add(closeButton);
+        hBox.getChildren().add(nameLabel);
+
         // création du gridpane qui contient les informations sur les attributs actuels et ceux de l'upgrade suivant
         GridPane gridPane = new GridPane();
 
@@ -55,7 +66,7 @@ public class upgradePrompt extends VBox {
 
             if (level < item.getMaxLevel()) { // si on n'est pas au niveau maximum
                 Label next = new Label(String.valueOf(shop.getItemProp(itemID, propID, level + 1)));
-
+                next.getStyleClass().add("next-level-label");
                 GridPane.setConstraints(next, i, 2);
                 gridPane.getChildren().add(next);
             }
@@ -94,7 +105,7 @@ public class upgradePrompt extends VBox {
         gridPane.getStyleClass().add("level-gridpane");
 
         // Ajout du gridpane
-        this.getChildren().add(closeButton);
+        this.getChildren().add(hBox);
         this.getChildren().add(gridPane);
 
         // Placement au bon endroit

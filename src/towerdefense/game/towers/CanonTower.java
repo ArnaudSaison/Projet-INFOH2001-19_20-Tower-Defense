@@ -5,6 +5,7 @@ import towerdefense.game.map.Position;
 import towerdefense.game.model.GameModel;
 import towerdefense.game.model.Shop;
 import towerdefense.game.npcs.NPC;
+import towerdefense.game.projectiles.Arrow;
 import towerdefense.game.projectiles.Shell;
 
 import java.util.ArrayList;
@@ -12,15 +13,17 @@ import java.util.ArrayList;
 public class CanonTower extends Tower {
     private static final Shop.ShopCases ID = Shop.ShopCases.CANON_TOWER;
 
-    public CanonTower(Map map, Position pos, GameModel gameModel, ArrayList<ArrayList<Integer>> towerSpe){
+    public CanonTower(Map map, Position pos, GameModel gameModel, ArrayList<ArrayList<Integer>> towerSpe) {
         super(map, pos, gameModel, towerSpe, ID);
         this.graphicsName = Shop.getIconPath(ID);
     }
 
     @Override
-    public void attack(){
+    public void attack() {
         super.attack();
-        for (NPC target : super.targets){
+        for (NPC target : super.targets) {
+            Shell shell = new Shell(map, gameModel, damageDeal, 2, range, super.position, target, 5);
+            gameModel.initializeElement(shell);
         }
     }
 
@@ -28,7 +31,7 @@ public class CanonTower extends Tower {
         super.levelUp();
     }
 
-    public String toString(){
+    public String toString() {
         return (super.toString() + "\n" + getClass().getName() + ".");
     }
 

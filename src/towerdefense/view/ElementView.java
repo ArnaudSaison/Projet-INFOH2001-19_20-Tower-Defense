@@ -10,6 +10,10 @@ import towerdefense.game.map.Map;
 import towerdefense.game.map.Position;
 import towerdefense.game.model.Shop;
 
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.InputStream;
+
 public abstract class ElementView extends StackPane implements Printable {
     // ==================== Attributs ====================
     // Références
@@ -22,8 +26,9 @@ public abstract class ElementView extends StackPane implements Printable {
     private double scale;
 
     // JavaFX
+    private String path;
     private Image texture;
-    private ImageView imageView;
+    protected ImageView imageView;
 
     // ==================== Initilisation ====================
 
@@ -36,9 +41,30 @@ public abstract class ElementView extends StackPane implements Printable {
         this.widthProportion = proportion;
         this.graphicsFileName = graphicsFileName;
 
+        buildJFX(500, 500); // construction de JFX avec grande résolution
+    }
+
+    public ElementView(Position position, Map map, String graphicsFileName, double proportion) {
+        super();
+
+        // Références
+        this.position = position;
+        this.map = map;
+        this.widthProportion = proportion;
+        this.graphicsFileName = graphicsFileName;
+
+
+        buildJFX(50, 50); // construction de JFX avec grande résolution
+
+//        setStyle("-fx-border-color: magenta; -fx-border-width: 1;");
+    }
+
+    private void buildJFX(double sizeX, double sizeY) {
+        path = "../../../resources/graphics/" + graphicsFileName;
+
         // Construction de l'objet JavaFX
-        String path = "./resources/graphics/" + graphicsFileName;
-        texture = new Image(path, 500, 500, true, false);
+        InputStream input = getClass().getResourceAsStream(path);
+        texture = new Image(input, sizeX, sizeY, true, false);
 
         imageView = new ImageView(texture);
         imageView.setPreserveRatio(true);
@@ -48,19 +74,19 @@ public abstract class ElementView extends StackPane implements Printable {
         getChildren().add(imageView);
         setAlignment(Pos.CENTER);
 
+        updateScale();
         updatePos();
-        update();
-
-        imageView.getStyleClass().add("hand-cursor");
 //        setStyle("-fx-border-color: magenta; -fx-border-width: 1;");
     }
 
+    @Override
     public void initListeners() {
 
     }
 
 
     // ==================== Mises à jour ====================
+    @Override
     public void update() {
         updateScale();
         updatePos();

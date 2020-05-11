@@ -7,6 +7,7 @@ import towerdefense.game.model.GameModel;
 import towerdefense.game.projectiles.Arrow;
 import towerdefense.game.projectiles.Glue;
 import towerdefense.game.projectiles.Shell;
+import towerdefense.view.npc.NPCView;
 
 public class GlueResistantNPC extends NPC {
 
@@ -16,20 +17,32 @@ public class GlueResistantNPC extends NPC {
 
     @Override
     //Ne fait rien ici car ce NPC est resistant à la colle.
-    public void stick(Glue glue){}
+    public void stick(Glue glue) {
+    }
 
     @Override
-    public void injure(Shell shell){
+    public void injure(Shell shell) {
         decreaseHealth(shell.getDamage());
     }
 
     @Override
-    public void pierce(Arrow arrow){
+    public void pierce(Arrow arrow) {
         decreaseHealth(arrow.getDamage());
     }
 
+    /**
+     * Initilisation de la vue
+     * Création d'un objet de la vue qui pourra ensuite être récupéré
+     */
     @Override
-    public String toString(){
-        return super.toString() + ("\n"+ getClass().getName() +"\n.");
+    public void initDrawing() {
+        synchronized (syncKeyDrawing) {
+            npcView = new NPCView(this, map, "glue");
+        }
+    }
+
+    @Override
+    public String toString() {
+        return super.toString() + ("\n" + getClass().getName() + "\n.");
     }
 }

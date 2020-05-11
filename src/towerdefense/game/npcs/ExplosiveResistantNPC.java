@@ -7,6 +7,7 @@ import towerdefense.game.model.GameModel;
 import towerdefense.game.projectiles.Arrow;
 import towerdefense.game.projectiles.Glue;
 import towerdefense.game.projectiles.Shell;
+import towerdefense.view.npc.NPCView;
 
 public class ExplosiveResistantNPC extends NPC {
 
@@ -15,21 +16,35 @@ public class ExplosiveResistantNPC extends NPC {
     }
 
     @Override
-    public void stick(Glue glue){
-        speed = speed/glue.getDamage();
+    public void stick(Glue glue) {
+        if (speed == initialSpeed) {
+            speed = speed / glue.getDamage();
+        }
     }
 
     //Ne fait rien ici car ce NPC est résistant aux explosifs.
     @Override
-    public void injure(Shell shell){}
-
-    @Override
-    public void pierce(Arrow arrow){
-        decreaseHealth(arrow.getDamage());
+    public void injure(Shell shell) {
     }
 
     @Override
-    public String toString(){
-        return super.toString() + ("\n"+ getClass().getName() +"\n.");
+    public void pierce(Arrow arrow) {
+        decreaseHealth(arrow.getDamage());
+    }
+
+    /**
+     * Initilisation de la vue
+     * Création d'un objet de la vue qui pourra ensuite être récupéré
+     */
+    @Override
+    public void initDrawing() {
+        synchronized (syncKeyDrawing) {
+            npcView = new NPCView(this, map, "armor");
+        }
+    }
+
+    @Override
+    public String toString() {
+        return super.toString() + ("\n" + getClass().getName() + "\n.");
     }
 }

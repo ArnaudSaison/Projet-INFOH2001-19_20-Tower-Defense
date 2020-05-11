@@ -26,6 +26,7 @@ public class WaveFactory {
     private int cycleIterator;
 
     public enum NPCTypes {STANDARD_NPC, RAPID_NPC, SUPER_HEALTH_NPC, EXPLOSIVE_RESISTANT_NPC, GLUE_RESISTANT_NPC}
+
     private ArrayList<File> allMapSpecificationsFiles;
 
     /*==================================================================================================================
@@ -49,13 +50,15 @@ public class WaveFactory {
                                                    METHODES
     ==================================================================================================================*/
 
-    /**Retourne un objet Wave contenant une liste de NPC dont la proportion et les caractéristiques de chaque type est
-     * défini ici sur base de la lecture des fichiers properties correspondant*/
+    /**
+     * Retourne un objet Wave contenant une liste de NPC dont la proportion et les caractéristiques de chaque type est
+     * défini ici sur base de la lecture des fichiers properties correspondant
+     */
     public Wave getWave(String difficulty) throws IOException {
         //====================================Variables locales=========================================================
         //Récupérations des fichiers properties:
         File npcProperties = allMapSpecificationsFiles.get(2);
-        File waveProperties = allMapSpecificationsFiles.get(3+waveIterator);
+        File waveProperties = allMapSpecificationsFiles.get(3 + waveIterator);
 
         //Récupération des spécifications des NPCs:
         ArrayList<ArrayList<Integer>> npcSpecifications = getNpcSpecifications(npcProperties);
@@ -91,7 +94,7 @@ public class WaveFactory {
             case "easy":
                 increment = npcSpecifications.get(5).get(0);
                 proportions = waveSpecifications.get(1);
-                    break;
+                break;
             case "normal":
                 increment = npcSpecifications.get(5).get(1);
                 proportions = waveSpecifications.get(2);
@@ -104,49 +107,56 @@ public class WaveFactory {
 
         //Remplissage de la liste de NPC:
         int initialEnemyNumber = waveSpecifications.get(0).get(0).intValue();
-        enemyNumber = initialEnemyNumber + cycleIterator*increment;
+        enemyNumber = initialEnemyNumber + cycleIterator * increment;
 
         assert proportions != null;
-        while(standard < enemyNumber*proportions.get(0)) {
+        while (standard < enemyNumber * proportions.get(0)) {
             npcList.add(npcFactory.getInstance(NPCTypes.STANDARD_NPC, map, gameModel, npcSpecifications.get(0), gatePathTile));
             standard++;
         }
-        while(rapid < enemyNumber*proportions.get(1)) {
+        while (rapid < enemyNumber * proportions.get(1)) {
             npcList.add(npcFactory.getInstance(NPCTypes.RAPID_NPC, map, gameModel, npcSpecifications.get(1), gatePathTile));
             rapid++;
         }
-        while(superHealth < enemyNumber*proportions.get(2)) {
+        while (superHealth < enemyNumber * proportions.get(2)) {
             npcList.add(npcFactory.getInstance(NPCTypes.SUPER_HEALTH_NPC, map, gameModel, npcSpecifications.get(2), gatePathTile));
             superHealth++;
         }
-        while(explosiveResistant < enemyNumber*proportions.get(3)) {
+        while (explosiveResistant < enemyNumber * proportions.get(3)) {
             npcList.add(npcFactory.getInstance(NPCTypes.EXPLOSIVE_RESISTANT_NPC, map, gameModel, npcSpecifications.get(3), gatePathTile));
             explosiveResistant++;
         }
-        while(glueResistant < enemyNumber*proportions.get(4)) {
+        while (glueResistant < enemyNumber * proportions.get(4)) {
             npcList.add(npcFactory.getInstance(NPCTypes.GLUE_RESISTANT_NPC, map, gameModel, npcSpecifications.get(4), gatePathTile));
             glueResistant++;
         }
 
         //=========================Incrémentation des compteurs de vague et de cycle====================================
 //        System.out.println("*************************VAGUE :" +(waveIterator+1) +"***************************************");
-        if (waveIterator == 2){
-            waveIterator=0;
+        if (waveIterator == 2) {
+            waveIterator = 0;
             cycleIterator++;
 //            System.out.println("=============Dernière vague avant nouveau cycle======================");
-        }else{waveIterator++; }
+        } else {
+            waveIterator++;
+        }
 
         //=================================================Return=======================================================
+//        System.out.println(npcList);
         return new Wave(npcList, difficulty);
     }
 
-    /** Génère la prochaine vague via un appel à la méthode getWave*/
+    /**
+     * Génère la prochaine vague via un appel à la méthode getWave
+     */
     public Wave getNextWave(Wave lastWave) throws IOException {
         return getWave(lastWave.getDifficulty());
     }
 
-    /**Après lecture d'un fichier wave(n).properties, renvoie une liste de liste tel que :
-     *  [constants, easySpecifications , normalSpecifications, hardSpecifications]*/
+    /**
+     * Après lecture d'un fichier wave(n).properties, renvoie une liste de liste tel que :
+     * [constants, easySpecifications , normalSpecifications, hardSpecifications]
+     */
     public ArrayList<ArrayList<Double>> getWaveSpecifications(File waveSpeFile) throws IOException {
         final Properties waveProperties = new Properties();
         InputStream wavePropertiesFile = new FileInputStream(waveSpeFile.getPath());
@@ -176,8 +186,10 @@ public class WaveFactory {
         return res;
     }
 
-    /**Après lecture du fichier npc.properties, renvoie une liste de liste tel que :
-     *  [standardSpecifications , specialSpecifications, difficultyIncrements]*/
+    /**
+     * Après lecture du fichier npc.properties, renvoie une liste de liste tel que :
+     * [standardSpecifications , specialSpecifications, difficultyIncrements]
+     */
     public ArrayList<ArrayList<Integer>> getNpcSpecifications(File npcPropFile) throws IOException {
         final Properties npcProperties = new Properties();
         InputStream wavePropertiesFile = new FileInputStream(npcPropFile.getPath());
@@ -200,7 +212,7 @@ public class WaveFactory {
         ArrayList<Integer> rapidSpe = convertToIntegerList(rapid);
         ArrayList<Integer> superHealthSpe = convertToIntegerList(superHealth);
         ArrayList<Integer> explosiveResistantSpe = convertToIntegerList(explosiveResistant);
-        ArrayList<Integer> glueResistantSpe= convertToIntegerList(glueResistant);
+        ArrayList<Integer> glueResistantSpe = convertToIntegerList(glueResistant);
         ArrayList<Integer> difficultyIncrements = convertToIntegerList(difficultiesIncrement);
 
         //Ajout à la liste renvoyée:
@@ -214,9 +226,11 @@ public class WaveFactory {
         return res;
     }
 
-    /**Renvoie une liste, triée dans l'ordre alphabétique, contenant tous les fichiers spécifiant les propriètés
-     *  d'une carte.*/
-    public void getAllMapSpecificationsFiles(File mapFolder){
+    /**
+     * Renvoie une liste, triée dans l'ordre alphabétique, contenant tous les fichiers spécifiant les propriètés
+     * d'une carte.
+     */
+    public void getAllMapSpecificationsFiles(File mapFolder) {
         for (File fileEntry : Objects.requireNonNull(mapFolder.listFiles())) {
             if (fileEntry.isDirectory()) {
                 getAllMapSpecificationsFiles(fileEntry);
@@ -226,23 +240,27 @@ public class WaveFactory {
         }
     }
 
-    /**Permet de convertir une liste de string en une ArrayList d'entier.
+    /**
+     * Permet de convertir une liste de string en une ArrayList d'entier.
+     *
      * @param list de string à convertir en liste d'entier.
      */
-    private ArrayList<Integer> convertToIntegerList(String [] list){
+    private ArrayList<Integer> convertToIntegerList(String[] list) {
         ArrayList<Integer> res = new ArrayList<>();
-        for (String elem : list){
+        for (String elem : list) {
             res.add(Integer.parseInt(elem));
         }
         return res;
     }
 
-    /**Permet de convertir une liste de string en une ArrayList de double.
+    /**
+     * Permet de convertir une liste de string en une ArrayList de double.
+     *
      * @param list de string à convertir en liste de double.
      */
-    private ArrayList<Double> convertToDoubleList(String [] list){
+    private ArrayList<Double> convertToDoubleList(String[] list) {
         ArrayList<Double> res = new ArrayList<>();
-        for (String elem : list){
+        for (String elem : list) {
             res.add(Double.parseDouble(elem));
         }
         return res;
@@ -251,8 +269,8 @@ public class WaveFactory {
     /*==================================================================================================================
                                                    TESTS
     ==================================================================================================================*/
-    public void afficheFichiersSpec(){
-        for (File file : allMapSpecificationsFiles){
+    public void afficheFichiersSpec() {
+        for (File file : allMapSpecificationsFiles) {
 //            System.out.println(file.getName());
         }
     }

@@ -13,8 +13,11 @@ import towerdefense.view.Printable;
 import towerdefense.view.towers.TowerView;
 
 import java.util.ArrayList;
+import java.util.Collections;
 
 public abstract class Tower implements Buyable, Upgradable, Placeable, Drawable, Runnable {
+    private static final Object syncKeytargetAquisition = new Object();
+
     /*==================================================================================================================
                                                    ATTRIBUTS
     ==================================================================================================================*/
@@ -46,7 +49,10 @@ public abstract class Tower implements Buyable, Upgradable, Placeable, Drawable,
     /*==================================================================================================================
                                                    CONSTRUCTEUR
     ==================================================================================================================*/
-    /**Constructeur
+
+    /**
+     * Constructeur
+     *
      * @param towerSpe [[level1Spec], ..., [levelNSpec]]
      */
     public Tower(Map map, Position pos, GameModel gameModel, ArrayList<ArrayList<Integer>> towerSpe, Shop.ShopCases ID) {
@@ -93,11 +99,15 @@ public abstract class Tower implements Buyable, Upgradable, Placeable, Drawable,
      * Test si les ennemis sur la carte sont à portée de tir.
      */
     public void targetAcquisition() {
-        ArrayList<NPC> npcsOnMap = gameModel.getNPCsOnMap();
-        if (targets.size() < maxTargetNumber) {
-            for (NPC npc : npcsOnMap) {
+        synchronized (syncKeytargetAquisition) {
+            ArrayList<NPC> npcsOnMap = gameModel.getNPCsOnMapClone();
+            Collections.shuffle(npcsOnMap);
+            int i = 0;
+            while (!npcsOnMap.isEmpty() && targets.size() < maxTargetNumber && i < npcsOnMap.size()) {
+                NPC npc = npcsOnMap.get(i);
                 if ((npc.getPosition()).getDistance(position) <= range)
                     targets.add(npc);
+                i++;
             }
         }
     }
@@ -109,24 +119,29 @@ public abstract class Tower implements Buyable, Upgradable, Placeable, Drawable,
     /*==================================================================================================================
                                                     PASSAGE DE NIVEAU
     ==================================================================================================================*/
-    public boolean canBeLeveledUp(){
+    @Override
+    public boolean canBeLeveledUp() {
         return level < maxLevel;
     }
 
     /**
-     * Si le niveau maximal n'est pas atteint, passe les attributs à leur valeur spécifiée par la liste levelSpe (cf: setAttributes()) */
-    public void levelUp(){
-        if(canBeLeveledUp()){
+     * Si le niveau maximal n'est pas atteint, passe les attributs à leur valeur spécifiée par la liste levelSpe (cf: setAttributes())
+     */
+    @Override
+    public void levelUp() {
+        if (canBeLeveledUp()) {
             level++;
             ArrayList<Integer> levelSpe = towerSpe.get(level - 1);
             setAttributes(levelSpe);
         }
     }
 
-    /**Passe tous les attributs à leur valeur spécifiée par la liste prise en argument.
+    /**
+     * Passe tous les attributs à leur valeur spécifiée par la liste prise en argument.
+     *
      * @param levelSpe [int price, int range, int fireRate, int damageDeal, maxEnemyNumber]
      */
-    private void setAttributes(ArrayList<Integer> levelSpe){
+    private void setAttributes(ArrayList<Integer> levelSpe) {
         price = levelSpe.get(0);
         range = levelSpe.get(1);
         fireRate = levelSpe.get(2);
@@ -137,23 +152,42 @@ public abstract class Tower implements Buyable, Upgradable, Placeable, Drawable,
     /*==================================================================================================================
                                                      GESTION DU THREAD
     ==================================================================================================================*/
-    /**Démarre le thread de la tour*/
-    public void initialize(){
-        tTower.start();
+
+    /**
+     * Démarre le thread de la tour
+     */
+    @Override
+    public void initialize() {
+        if (gameModel.isRunning()) {
+            tTower.start();
+        }
     }
-    /**Si le jeu tourne, vérifie sa distance aux NPCs sur la carte, si à porté alors attaque*/
-    public void run(){
-        while (gameModel.getRunning()) {
-            try{
-                if (!gameModel.getPaused()) {
-                    attack();
-                    Thread.sleep(1000/fireRate);
-                }else {
-                    Thread.sleep(1 / gameModel.getConfig().getModelFrameRate());
+
+    /**
+     * Si le jeu tourne, vérifie sa distance aux NPCs sur la carte, si à porté alors attaque
+     */
+    @Override
+    public void run() {
+        long timer = 0;
+        double sleepTime = 1.0 / gameModel.getConfig().getModelFrameRate() * 1000; // temps d'une itération (en ms)
+        int reloadTime = (int) Math.round(1.0 / fireRate / sleepTime * 1000);
+
+        try {
+            while (gameModel.isRunning()) { // si le jeu est en cours
+                if (!gameModel.getPaused()) { // si le jeu n'est pas en pause
+                    if (timer == 0) { // si le timer est temriné
+                        attack(); // lancer une attaque
+                        targets.clear();
+                        timer = reloadTime; // réglage du temps de recharge
+                    } else {
+                        timer--;
+                    }
                 }
-            }catch (InterruptedException e) {
-                e.printStackTrace();
+
+                Thread.sleep((long) sleepTime);
             }
+        } catch (InterruptedException exception) { // gestion des possibles erreurs lors de l'exécution du thread
+            exception.printStackTrace();
         }
     }
 
@@ -165,6 +199,7 @@ public abstract class Tower implements Buyable, Upgradable, Placeable, Drawable,
      * Initilisation de la vue
      * Création d'un objet de la vue qui pourra ensuite être récupéré
      */
+    @Override
     public void initDrawing() {
         towerView = new TowerView(this, map, graphicsName, size, gameModel.getShop());
     }
@@ -173,6 +208,7 @@ public abstract class Tower implements Buyable, Upgradable, Placeable, Drawable,
      * Mise à jour de la représentation graphique
      * Ne peut être appelée que par la vue
      */
+    @Override
     public void updateDrawing() {
         towerView.update();
     }
@@ -183,6 +219,7 @@ public abstract class Tower implements Buyable, Upgradable, Placeable, Drawable,
      *
      * @return représentation graphique de l'ojet
      */
+    @Override
     public Printable getDrawing() {
         return towerView;
     }
@@ -191,54 +228,61 @@ public abstract class Tower implements Buyable, Upgradable, Placeable, Drawable,
                                                     AUTRES
     ==================================================================================================================*/
     @Override
-    public String toString(){
+    public String toString() {
         return "Tour :\n - position: " + position + "\n" +
-                "- level: " + level + "\n"+
-                "- maxLevel: " + maxLevel + "\n"+
-                "- range: " + range + "\n"+
-                "- fireRate: " + fireRate + "\n"+
-                "- damageDeal: " + damageDeal + "\n"+
-                "- maxTargetNumber: " + maxTargetNumber + "\n"+
-                "- Nombre de cibles attaquées: " + targets.size() + "\n"+
+                "- level: " + level + "\n" +
+                "- maxLevel: " + maxLevel + "\n" +
+                "- range: " + range + "\n" +
+                "- fireRate: " + fireRate + "\n" +
+                "- damageDeal: " + damageDeal + "\n" +
+                "- maxTargetNumber: " + maxTargetNumber + "\n" +
+                "- Nombre de cibles attaquées: " + targets.size() + "\n" +
                 "- price: " + price;
     }
 
     /*==================================================================================================================
                                                  GETTEURS/SETTEURS
     ==================================================================================================================*/
-    public int getCost(){
+    @Override
+    public int getCost() {
         return price;
     }
 
     /**
      * Renvoie la position du centre de la tour
      */
-    public Position getPosition(){
+    @Override
+    public Position getPosition() {
         return position;
     }
 
     /**
      * Renvoie la position du coin supérieur gauche de la tour
      */
-    public Position getCornerPosition(){
+    public Position getCornerPosition() {
         return position.getAdded(new Position(-size / 2.0 * map.getTileMetricWidth(), -size / 2.0 * map.getTileMetricWidth(), map));
     }
 
     /**
      * Changer la position de la tour
+     *
      * @param position
      */
-    public void setPosition(Position position){
+    @Override
+    public void setPosition(Position position) {
         this.position = position.getAdded(new Position(size / 2.0 * map.getTileMetricWidth(), size / 2.0 * map.getTileMetricWidth(), map));
     }
 
+    @Override
     public int getLevel() {
         return level;
     }
 
+    @Override
     public int getMaxLevel() {
         return maxLevel;
     }
 
+    @Override
     public abstract Shop.ShopCases getID();
 }

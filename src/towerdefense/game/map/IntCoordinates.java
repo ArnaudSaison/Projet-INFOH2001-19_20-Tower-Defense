@@ -26,6 +26,7 @@ public class IntCoordinates {
 
     /**
      * Récupérer la colonne
+     *
      * @return colonne (abscisse entière)
      */
     public int getX() {
@@ -34,6 +35,7 @@ public class IntCoordinates {
 
     /**
      * Définir la colonne
+     *
      * @param x colonne (abscisse entière)
      */
     public void setX(int x) {
@@ -42,6 +44,7 @@ public class IntCoordinates {
 
     /**
      * Récupérer la ligne
+     *
      * @return ligne (ordonnée entière)
      */
     public int getY() {
@@ -50,6 +53,7 @@ public class IntCoordinates {
 
     /**
      * Définir la ligne
+     *
      * @param y ligne (ordonnée entière)
      */
     public void setY(int y) {

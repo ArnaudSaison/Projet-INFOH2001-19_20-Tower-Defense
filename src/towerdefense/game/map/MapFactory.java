@@ -9,6 +9,7 @@ import java.util.Properties;
 
 public class MapFactory {
     public enum TileType {TREE, ROCK, PATH, EXIT_PATH, GATE_PATH, EMPTY}
+
     private int defaultPixelsPerMeter = 20;
     private int defaultTileMetricWidth = 2;
 

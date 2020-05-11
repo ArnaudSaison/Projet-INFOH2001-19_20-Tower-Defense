@@ -23,6 +23,8 @@ public class TowerView extends ElementView {
         this.tower = tower;
         this.map = map;
 
+        imageView.getStyleClass().add("hand-cursor");
+
         setOnMousePressed(mouseEvent -> {
             if (mouseEvent.isPrimaryButtonDown()) {
                 this.getChildren().add(new upgradePrompt(tower.getID(), tower, shop, this));

@@ -16,6 +16,7 @@ public class Wave {
     private NPC nextNPC;
 
     private String difficulty;
+
     /*==================================================================================================================
                                                    METHODES
     ==================================================================================================================*/
@@ -28,27 +29,37 @@ public class Wave {
         return difficulty;
     }
 
-    public NPC getNextEnemy(){
+    public NPC getNextEnemy() {
         setNextEnemy();
-        return nextNPC;}
+        return nextNPC;
+    }
 
-    public int getLength(){return waveNPCs.size();}
+    public int getLength() {
+        return waveNPCs.size();
+    }
 
     public boolean isFinished() {
         return waveNPCs.isEmpty();
     }
 
-    /**Choisit de manière aléatoire un NPC parmi tous les NPCs qui composent la vague*/
+    /**
+     * Choisit de manière aléatoire un NPC parmi tous les NPCs qui composent la vague
+     */
     public void setNextEnemy() {
-        Random randomGenerator = new Random();
-        int randomIndex = randomGenerator.nextInt(waveNPCs.size());
-        nextNPC = waveNPCs.get(randomIndex);
-        waveNPCs.remove(randomIndex);
+        try {
+            Random randomGenerator = new Random();
+            int randomIndex = randomGenerator.nextInt(waveNPCs.size());
+            nextNPC = waveNPCs.get(randomIndex);
+            waveNPCs.remove(randomIndex);
+        } catch (Exception e) {
+            System.out.println("La liste des NPCs semble vide. Vérifiez que la somme du nombre de NPCs de chaque vague pour chaque difficulté vaut 1.");
+            e.printStackTrace();
+        }
     }
 
     //==============================================Tests===============================================================
-    public void toPrint(){
-        for(NPC e :waveNPCs){
+    public void toPrint() {
+        for (NPC e : waveNPCs) {
 //            System.out.println(e.toString());
         }
     }

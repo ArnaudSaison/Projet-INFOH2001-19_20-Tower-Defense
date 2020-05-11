@@ -76,12 +76,14 @@ public abstract class Tile implements Drawable {
     /**
      * Initilisation de la vue correpsondant à une case
      */
+    @Override
     public abstract void initDrawing();
 
     /**
      * Mise à jour de la vue correpsondant à une case
      * Requiert d'avoir d'abord initialisé la vue avec initDrawing()
      */
+    @Override
     public void updateDrawing() {
         tileView.update();
     }
@@ -90,17 +92,9 @@ public abstract class Tile implements Drawable {
      * Récupération de la vue correpsondant à une case
      * Requiert d'avoir d'abord initialisé la vue avec initDrawing()
      */
+    @Override
     public Printable getDrawing() {
         return tileView;
-    }
-
-    /**
-     * Retirer la représentation graphique de l'élément de la vue
-     * Cette méthode ne sert pas à faire disparaître la représentation en question,
-     * mais bien à supprimer toute référence de cette raprésentation et ainsi pouvoir supprimer this
-     * */
-    public void removeDrawing() {
-        // TODO: ajouter possibilité de supprimer les tiles, les remplacer, ...
     }
 
     //==================== Autres ====================

@@ -11,6 +11,8 @@ import java.util.ArrayList;
  * Classe représentant une carte dans le modèle du jeu
  */
 public class Map implements Drawable {
+    private final Object syncKeyDrawing = new Object();
+
     //==================== Attributs ====================
     // Attributs prorpes au fonctionnement de la carte
     private double pixelsPerMeter;
@@ -60,26 +62,26 @@ public class Map implements Drawable {
             for (char c : line.toCharArray()) {
                 switch (c) {
                     case 'X': // vide
-                        tiles.add((Tile) new EmptyTile(columnCounter, rowCounter, this));
+                        tiles.add(new EmptyTile(columnCounter, rowCounter, this));
                         break;
                     case 'O': // obstacle : type par défaut (arbre)
                     case 'T': // obstacle : arbre
-                        tiles.add((Tile) new ObstacleTile(columnCounter, rowCounter, this, ObstacleTileView.ObstacleType.TREE));
+                        tiles.add(new ObstacleTile(columnCounter, rowCounter, this, ObstacleTileView.ObstacleType.TREE));
                         break;
                     case 'R': // obstacle : rock
-                        tiles.add((Tile) new ObstacleTile(columnCounter, rowCounter, this, ObstacleTileView.ObstacleType.ROCK));
+                        tiles.add(new ObstacleTile(columnCounter, rowCounter, this, ObstacleTileView.ObstacleType.ROCK));
                         break;
                     case 'P': // chemin
-                        tiles.add((Tile) new PathTile(columnCounter, rowCounter, this));
+                        tiles.add(new PathTile(columnCounter, rowCounter, this));
                         break;
                     case 'G': // entrée (gate)
-                        tiles.add((Tile) new GatePathTile(columnCounter, rowCounter, this));
+                        tiles.add(new GatePathTile(columnCounter, rowCounter, this));
                         break;
                     case 'E': // sortie (exit)
-                        tiles.add((Tile) new ExitPathTile(columnCounter, rowCounter, this));
+                        tiles.add(new ExitPathTile(columnCounter, rowCounter, this));
                         break;
                     default:
-                        tiles.add((Tile) new EmptyTile(columnCounter, rowCounter, this));
+                        tiles.add(new EmptyTile(columnCounter, rowCounter, this));
                         break;
                 }
                 columnCounter++;
@@ -110,15 +112,20 @@ public class Map implements Drawable {
             }
         }
 
+        availablePaths.clear();
+
         // Calcul des chemins valides grâce au PathFactory
         PathFactory pathFactory = new PathFactory(this);
         for (GatePathTile gate : gates) {
             ArrayList<Path> computedPaths = pathFactory.getAllPaths(gate);
-            availablePaths.clear();
             availablePaths.addAll(computedPaths);
             gate.clearPaths();
             gate.attachPaths(computedPaths);
         }
+
+//        for (Path path : availablePaths) {
+//            System.out.println(path);
+//        }
     }
 
     //==================== Interface Drawable ====================
@@ -135,7 +142,9 @@ public class Map implements Drawable {
      * Requiert d'avoir d'abord initialisé la vue avec initDrawing()
      */
     public void updateDrawing() {
-        mapView.update();
+        synchronized (syncKeyDrawing) {
+            mapView.update();
+        }
     }
 
     /**
@@ -146,31 +155,27 @@ public class Map implements Drawable {
         return mapView;
     }
 
-    /**
-     * Retirer la représentation graphique de l'élément de la vue
-     * Cette méthode ne sert pas à faire disparaître la représentation en question,
-     * mais bien à supprimer toute référence de cette raprésentation et ainsi pouvoir supprimer this
-     */
-    public void removeDrawing() {
-    }
-
     // ======== Gestion des éléments présents sur la carte n'étant pas des cases ========
 
     /**
      * Ajout d'un élément à afficher sur la carte
      */
     public void addElementOnMap(Drawable element) {
-        elementsOnMap.add(element);
-        element.initDrawing();
-        mapView.addPrintable(element.getDrawing());
+        synchronized (syncKeyDrawing) {
+            elementsOnMap.add(element);
+            element.initDrawing();
+            mapView.addPrintable(element.getDrawing());
+        }
     }
 
     /**
      * Retrait d'un élément à ne plus afficher sur la carte
      */
     public void removeElementOnMap(Drawable element) {
-        elementsOnMap.remove(element);
-        mapView.removePrintable(element.getDrawing());
+        synchronized (syncKeyDrawing) {
+            elementsOnMap.remove(element);
+            mapView.removePrintable(element.getDrawing());
+        }
     }
 
     // ==================== Getters et Setters ====================
@@ -238,17 +243,19 @@ public class Map implements Drawable {
      * @return true si toutes les cases dans la zone sont libres
      */
     public boolean canBeBuiltOn(int x, int y, int size) {
-        boolean blocked = false;
+        boolean free = true;
         int i = 0;
         int j = 0;
-        while (!blocked && i < size) {
-            while (!blocked && j < size) {
-                blocked = getTile(x + i, y + j).getBlockedState();
+        while (free && i < size) {
+            while (free && j < size) {
+                free = !(getTile(x + i, y + j).getBlockedState());
+//                System.out.println("CanBeBuiltOn: " + free + " for tile [" + (x + i) + ", " + (y + j) + "]");
                 j++;
             }
+            j = 0;
             i++;
         }
-        return !blocked;
+        return free;
     }
 
     /**
@@ -308,6 +315,8 @@ public class Map implements Drawable {
      * autrmentsn ceux-ci n'appraitront pas dans la représentation graphique
      */
     public ArrayList<Drawable> getElementsOnMap() {
+//        synchronized (syncKeyDrawing) {
         return elementsOnMap;
+//        }
     }
 }

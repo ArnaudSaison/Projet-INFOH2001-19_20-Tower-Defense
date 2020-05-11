@@ -19,8 +19,9 @@ public class Config {
     // Jeu
     private int initPlayerGold;
     private int initPlayerHealth;
-
-    //
+    private int timeBetweenRounds;
+    private int timeBetweenNPCs;
+    private String difficulty;
 
     // Constructeur et initialisation
     public Config(String path) throws IOException {
@@ -37,12 +38,15 @@ public class Config {
         screenHeight = Integer.parseInt(settings.getProperty("screenHeight"));
         frameRate = Integer.parseInt(settings.getProperty("frameRate"));
         UIFrameRate = Integer.parseInt(settings.getProperty("UIFrameRate"));
-        ModelFrameRate =  Integer.parseInt(settings.getProperty("ModelFrameRate"));
+        ModelFrameRate = Integer.parseInt(settings.getProperty("ModelFrameRate"));
         zoomFact = Double.parseDouble(settings.getProperty("zoomFact"));
 
         // Jeu
         initPlayerGold = Integer.parseInt(settings.getProperty("initPlayerGold"));
         initPlayerHealth = Integer.parseInt(settings.getProperty("initPlayerHealth"));
+        timeBetweenRounds = Integer.parseInt(settings.getProperty("timeBetweenRounds"));
+        timeBetweenNPCs = Integer.parseInt(settings.getProperty("timeBetweenNPCs"));
+        difficulty = settings.getProperty("difficulty");
     }
 
     // getters
@@ -84,5 +88,17 @@ public class Config {
 
     public void setInitPlayerHealth(int initPlayerHealth) {
         this.initPlayerHealth = initPlayerHealth;
+    }
+
+    public int getTimeBetweenRounds() {
+        return timeBetweenRounds;
+    }
+
+    public int getTimeBetweenNPCs() {
+        return timeBetweenNPCs;
+    }
+
+    public String getDifficulty() {
+        return difficulty;
     }
 }

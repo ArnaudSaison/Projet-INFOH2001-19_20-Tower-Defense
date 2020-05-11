@@ -20,6 +20,7 @@ public class SideBarTilesSelector extends VBox {
     private int tilesReprHeight = 50; //px
 
     // ==================== Attriuts ====================
+
     /**
      * Constructeur qui crée la HBox et y insère tous les éléments nécessaires
      */

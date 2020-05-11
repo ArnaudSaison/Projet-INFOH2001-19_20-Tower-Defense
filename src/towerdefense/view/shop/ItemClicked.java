@@ -26,11 +26,11 @@ public class ItemClicked implements EventHandler<MouseEvent> {
     @Override
     public void handle(MouseEvent mouseEvent) {
         if (shopView.getSelectedState(buyableItem)) {
-            shopView.deselectItem(buyableItem);
+            shopView.deselectItems();
             ((MapView) map.getDrawing()).removeTempElement();
         } else {
             shopView.setSelectedItem(buyableItem); //graphiquement montrer que l'élément est sélectionné
-            ((MapView) map.getDrawing()).setTempElement(new TemporaryItemView(item, map, shop));
+            ((MapView) map.getDrawing()).setTempElement(new TemporaryItemView(item, map, shop, shopView));
         }
     }
 }

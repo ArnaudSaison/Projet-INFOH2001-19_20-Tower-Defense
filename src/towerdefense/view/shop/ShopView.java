@@ -88,14 +88,14 @@ public class ShopView extends VBox {
 
     // Sélection d'un item (doit se trouver dans cette classe afin de pouvoir modifier tous les boutons)
     public void setSelectedItem(Node item) {
-        for (Node elem : this.getChildren()) {
-            elem.getStyleClass().remove("shop-container-vbox-selected");
-        }
+        deselectItems();
         item.getStyleClass().add("shop-container-vbox-selected");
     }
 
-    public void deselectItem(Node item) {
-        item.getStyleClass().remove("shop-container-vbox-selected");
+    public void deselectItems() {
+        for (Node elem : this.getChildren()) {
+            elem.getStyleClass().remove("shop-container-vbox-selected");
+        }
     }
 
     public boolean getSelectedState(Node item) {

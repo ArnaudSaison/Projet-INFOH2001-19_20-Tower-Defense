@@ -22,6 +22,7 @@ public class MapView extends Pane implements Printable {
     private Map map; // Référence à la carte du modèle
 
     // Éléments à ajouter et retirer
+    private ArrayList<Drawable> elementsOnMapView;
     private ArrayList<Node> elementsToRemove;
     private ArrayList<Node> elementsToAdd;
 
@@ -39,6 +40,7 @@ public class MapView extends Pane implements Printable {
     public MapView(Map map) {
         // Initialisation des attributs
         this.map = map;
+        elementsOnMapView = new ArrayList<>();
         elementsToRemove = new ArrayList<>();
         elementsToAdd = new ArrayList<>();
         tempElementOnMap = false;
@@ -59,6 +61,7 @@ public class MapView extends Pane implements Printable {
     /**
      * Initilisation des listeners
      */
+    @Override
     public void initListeners() {
         for (Tile t : map.getTiles()) {
             t.getDrawing().initListeners();
@@ -104,7 +107,8 @@ public class MapView extends Pane implements Printable {
         Position deltaPos = pos1.getMultiplied((-1) * deltaPPM / oldPPM);
 
         // Mise à jour des tiles
-        update();
+        map.updateDrawing();
+        updateTiles();
 
         // Translation de Map
         this.setLayoutX(this.getLayoutX() + deltaPos.getX());
@@ -116,8 +120,8 @@ public class MapView extends Pane implements Printable {
     /**
      * Mise à jour de toute la représentation de la carte
      */
+    @Override
     public void update() {
-        updateTiles();
         updateDrawables();
     }
 
@@ -137,6 +141,7 @@ public class MapView extends Pane implements Printable {
     public void updateDrawables() {
         getChildren().addAll(elementsToAdd);
         getChildren().removeAll(elementsToRemove);
+
         elementsToRemove.clear();
         elementsToAdd.clear();
 
@@ -151,6 +156,7 @@ public class MapView extends Pane implements Printable {
     }
 
     // Liaison directe avec le modèle sans interaction avec JavaFX
+
     /**
      * Ajouter un élément Printable à cet objet JavaFX
      */
@@ -182,6 +188,7 @@ public class MapView extends Pane implements Printable {
 
     public TemporaryItem getTempElement() {
         return tempElement;
+
     }
 
     public boolean tempElementPresent() {

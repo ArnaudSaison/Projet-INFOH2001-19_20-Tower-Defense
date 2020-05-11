@@ -23,7 +23,7 @@ public class NPCView extends VBox implements Printable {
 
     // Fonctionnement
     private HeadedDir viewDir;
-    private double widthProportion = 1.0/2.0; // proportion de la largeur d'une case occupée
+    private double widthProportion = 1.0 / 2.0; // proportion de la largeur d'une case occupée
     private double scale;
 
     // JavaFX
@@ -73,11 +73,13 @@ public class NPCView extends VBox implements Printable {
         });
     }
 
+    @Override
     public void initListeners() {
 
     }
 
     // ==================== Mises à jour ====================
+    @Override
     public void update() {
         HeadedDir dir = npc.getHeadedDir();
         if (viewDir != dir) {

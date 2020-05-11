@@ -21,6 +21,7 @@ public class Path {
 
     /**
      * La classe Path décrit un chemin qui peut être parcourru sous forme d'une liste de positions.
+     *
      * @param intCoordinates liste de IntCoordinates qui représentent les coordonnées des cases sur la carte
      */
     public Path(ArrayList<IntCoordinates> intCoordinates, Map map) {
@@ -30,7 +31,7 @@ public class Path {
         random = new Random();
 
         // Initilisation de la portée aléatoire maximale autour du centre d'une case
-        maxRandomRange = map.getTileMetricWidth() * 1.0/4.0;
+        maxRandomRange = map.getTileMetricWidth() * 1.0 / 4.0;
 
         // Construction de toutes les positions métriques sur la carte
         for (IntCoordinates coords : coordinates) {
@@ -58,12 +59,13 @@ public class Path {
     public ArrayList<Position> getRandomPositions() {
         ArrayList<Position> res = new ArrayList<>();
 
-        double len =  maxRandomRange * random.nextDouble();
-        double angle =  2 * Math.PI * random.nextDouble();
+        double len = maxRandomRange * random.nextDouble();
+        double angle = 2 * Math.PI * random.nextDouble();
 
         for (Position pos : positions) {
             res.add(pos.getAdded(new Position(len, angle, new Position(map), map)));
         }
+
         return res;
     }
 
