@@ -1,0 +1,26 @@
+Zoom : le joueur peut ajuster le niveau de zoom de la carte.
+Déplacement carte : le joueur peut déplacer la carte avec sa souris.
+Sélection carte : via un menu, le joueur peut choisir la carte sur laquelle il veut jouer avec détection automatique des cartes du dossier cartes.
+Menu : permet d'accéder au jeu ou à l'éditeur de carte.
+Pause jeu : met le jeu en pause.
+Pop-up : demande au joueur si il veut bien quitter le jeu.
+Sens PNJ: la représentation du PNG change selon leur direction.
+Barre de vie : indique la vie du PNJ.
+Différents PNJ : types de PNJ = résistant aux explosions, résistant au ralentissement, vie augmentée, plus rapide,... + changement de l'apparence en fonction.
+Paramètrage PNJ : via un fichier Properties.
+Paramètrage vagues : via un fichier Properties.
+Création vague : possibilité de créer autant de vagues que souhaité. 
+Cycle vague : nombre infini de vague avec augmentation progressive de la difficulté.
+Projectiles : s'orientent dans la direction de leur déplacement.  
+Chemin : les cartes peuvent comporter plusieurs chemins qui peuvent se diviser en plusieurs branches et ne passent jamais deux fois par la même case.
+Indication : flèches sur la carte pour signaler les entrées et les sorties.
+Flux subdivisé : le flux de PNJ peut se diviser à une intersection. 
+Trajet randomisé : le trajet des PNG est aléatoire à partir d'une entrée donnée vers une sortie aléatoire. 
+Connexion cases : les cases type chemin se connectent graphiquement.
+Cases obstacle : empêchent de construire à cet emplacement.
+Mine d'or : produit de l'or et ont une capacité maximale.
+Effet zone : la tour donne des dégats à tous les ennemis dans un rayon donné autour du point d'impact du projectile.
+Effet ralentissement : la tour ralentit les ennemis touchés.
+Types tour:  tir plus rapide, plus grande portée...
+Pop-up amélioration : affiche les attributs du niveau actuel et suivant et un bouton pour améliorer.
+Editeur de carte : le joueur peut éditer une carte.
