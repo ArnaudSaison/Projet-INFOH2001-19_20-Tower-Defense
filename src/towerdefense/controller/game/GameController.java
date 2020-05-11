@@ -5,6 +5,7 @@ import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.geometry.Pos;
 import javafx.scene.control.Button;
 import javafx.scene.control.ScrollPane;
 import javafx.scene.image.Image;
@@ -22,12 +23,10 @@ import towerdefense.MainApplication;
 import towerdefense.controller.generic.GUIController;
 import towerdefense.game.map.Map;
 import towerdefense.game.map.MapFactory;
-import towerdefense.game.map.Position;
 import towerdefense.game.model.GameModel;
 import towerdefense.game.model.Player;
 import towerdefense.game.model.Shop;
-import towerdefense.game.npcs.StandardNPC;
-import towerdefense.game.waves.WaveFactory;
+import towerdefense.view.GameOverView;
 import towerdefense.view.map.MapView;
 import towerdefense.view.shop.ShopView;
 
@@ -123,6 +122,7 @@ public class GameController implements Initializable, GUIController {
      */
     public void setMainApplication(MainApplication main) {
         this.mainApplication = main;
+        mainApplication.getMainWindow().setTitle("Tower Defense");
 
         // Initilisation du modèle
         String mapPath = mainApplication.getSelectedMapPath();
@@ -176,6 +176,14 @@ public class GameController implements Initializable, GUIController {
         gameHealthInfoBarText.setText(player.getHealth() + "/" + player.getMaxHealth());
         gameGoldInfoBarText.setText(String.valueOf(player.getGold()));
         gameScoreInfoBarText.setText("Score: " + player.getScore());
+
+        if (gameModel.isGameOver()) {
+            mapView.setDisable(true);
+            pauseButton.setDisable(true);
+            sidebar.setDisable(true);
+            GameOverView gameOverView = new GameOverView(player.getScore());
+            gameBox.getChildren().add(gameOverView);
+        }
 //        j ++;
     }
 
@@ -248,7 +256,7 @@ public class GameController implements Initializable, GUIController {
      */
     @FXML
     public void handleQuitGameButtonClicked(MouseEvent event) throws IOException {
-        if (gameModel.getRunning()) {
+        if (gameModel.isRunning()) {
             gameModel.pauseGame();
             boolean answer = mainApplication.confirmWindow(
                     "The Game is not finished yet. Do you want to quit anyway ?",
@@ -257,7 +265,7 @@ public class GameController implements Initializable, GUIController {
                     "Confirm");
             if (answer) {
                 quitGame();
-            } else if (gameModel.getRunning()) {
+            } else if (gameModel.isRunning()) {
                 gameModel.resumeGame();
             }
         } else {
@@ -274,7 +282,7 @@ public class GameController implements Initializable, GUIController {
             pauseButton.setText("Pause Game");
             pauseButtonView.setImage(pauseIcon);
 
-            if (gameModel.getRunning()) {
+            if (gameModel.isRunning()) {
                 gameModel.resumeGame();
 
             } else {

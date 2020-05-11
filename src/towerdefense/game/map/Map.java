@@ -155,14 +155,6 @@ public class Map implements Drawable {
         return mapView;
     }
 
-    /**
-     * Retirer la représentation graphique de l'élément de la vue
-     * Cette méthode ne sert pas à faire disparaître la représentation en question,
-     * mais bien à supprimer toute référence de cette raprésentation et ainsi pouvoir supprimer this
-     */
-    public void removeDrawing() {
-    }
-
     // ======== Gestion des éléments présents sur la carte n'étant pas des cases ========
 
     /**
@@ -251,17 +243,19 @@ public class Map implements Drawable {
      * @return true si toutes les cases dans la zone sont libres
      */
     public boolean canBeBuiltOn(int x, int y, int size) {
-        boolean blocked = false;
+        boolean free = true;
         int i = 0;
         int j = 0;
-        while (!blocked && i < size) {
-            while (!blocked && j < size) {
-                blocked = getTile(x + i, y + j).getBlockedState();
+        while (free && i < size) {
+            while (free && j < size) {
+                free = !(getTile(x + i, y + j).getBlockedState());
+//                System.out.println("CanBeBuiltOn: " + free + " for tile [" + (x + i) + ", " + (y + j) + "]");
                 j++;
             }
+            j = 0;
             i++;
         }
-        return !blocked;
+        return free;
     }
 
     /**

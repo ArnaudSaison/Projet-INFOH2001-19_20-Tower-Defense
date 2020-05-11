@@ -22,7 +22,7 @@ public class CanonTower extends Tower {
     public void attack() {
         super.attack();
         for (NPC target : super.targets) {
-            Shell shell = new Shell(map, gameModel, damageDeal, 2, range, super.position, target, 4);
+            Shell shell = new Shell(map, gameModel, damageDeal, 2, range, super.position, target, 5);
             gameModel.initializeElement(shell);
         }
     }

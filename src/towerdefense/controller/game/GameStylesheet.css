@@ -187,7 +187,7 @@
 }
 
 .next-level-label {
-    -fx-text-fill: #ffb800;
+    -fx-text-fill: #cc9200;
 }
 
 .next-level {
@@ -196,6 +196,11 @@
 
 .no-upgrade-label {
 
+}
+
+.prompt-item-name {
+    -fx-font-size: 15;
+    -fx-font-weight: bold;
 }
 
 .close-button {
@@ -236,9 +241,37 @@
 ======================================================================================================================*/
 .retrieve-gold {
     -fx-background-color: white;
+    -fx-background-radius: 10;
     -fx-cursor: hand;
 }
 
 .retrieve-gold:hover {
-    -fx-background-color: #a6a6a6;
+    -fx-border-color: green;
+    -fx-border-width: 2;
+    -fx-border-style: solid outside;
+    -fx-border-radius: 10;
+}
+
+.retrieve-gold-full {
+    -fx-background-color: #ffb3b3;
+}
+
+
+
+/*======================================================================================================================
+                                                    GAME OVER
+======================================================================================================================*/
+.game-over {
+    -fx-background-color: white;
+    -fx-background-radius: 50;
+    -fx-spacing: 50;
+}
+
+.game-over-main-label {
+    -fx-font-size: 50;
+    -fx-font-weight: bolder;
+}
+
+.game-over-score-label {
+    -fx-font-size: 30;
 }

@@ -69,7 +69,7 @@ public abstract class Projectile implements Runnable, Drawable, Movable, Placeab
 
         try {
             // si le jeu est en cours et que le NPC ni arrivé au bout du chemin, ni mort
-            while (gameModel.getRunning() && !isArrived && target.getAlive()) {
+            while (gameModel.isRunning() && !isArrived && target.getAlive()) {
                 if (!gameModel.getPaused()) { // si le jeu n'est pas en pause
                     move(); // déplacement
 
@@ -190,7 +190,7 @@ public abstract class Projectile implements Runnable, Drawable, Movable, Placeab
         double maxDistance = velocity / gameModel.getConfig().getModelFrameRate();
 
         finalPosition = target.getPosition();
-        direction = finalPosition.getSubstracted(position);
+        direction.setToPosition(finalPosition.getSubstracted(position));
         double distance = direction.getNorm();
         angle = direction.getAngle();
 

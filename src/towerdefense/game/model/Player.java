@@ -31,7 +31,7 @@ public class Player implements Runnable {
         int scoreTime = (int) Math.round(1.0 / sleepTime * 1000); // Le score est défini comme le nombre de secondes survécues
 
         try {
-            while (gameModel.getRunning()) { // si le jeu est en cours
+            while (gameModel.isRunning()) { // si le jeu est en cours
                 if (!gameModel.getPaused()) { // si le jeu n'est pas en pause
                     if (timer == 0) { // si le timer est terminé
                         increaseScore(); // augmentation du score

@@ -56,7 +56,7 @@ public abstract class ElementView extends StackPane implements Printable {
 
         buildJFX(50, 50); // construction de JFX avec grande résolution
 
-        setStyle("-fx-border-color: magenta; -fx-border-width: 1;");
+//        setStyle("-fx-border-color: magenta; -fx-border-width: 1;");
     }
 
     private void buildJFX(double sizeX, double sizeY) {

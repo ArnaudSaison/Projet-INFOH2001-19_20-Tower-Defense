@@ -12,7 +12,6 @@ import towerdefense.game.npcs.NPC;
 import towerdefense.view.Printable;
 import towerdefense.view.towers.TowerView;
 
-import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Collections;
 
@@ -159,7 +158,7 @@ public abstract class Tower implements Buyable, Upgradable, Placeable, Drawable,
      */
     @Override
     public void initialize() {
-        if (gameModel.getRunning()) {
+        if (gameModel.isRunning()) {
             tTower.start();
         }
     }
@@ -174,7 +173,7 @@ public abstract class Tower implements Buyable, Upgradable, Placeable, Drawable,
         int reloadTime = (int) Math.round(1.0 / fireRate / sleepTime * 1000);
 
         try {
-            while (gameModel.getRunning()) { // si le jeu est en cours
+            while (gameModel.isRunning()) { // si le jeu est en cours
                 if (!gameModel.getPaused()) { // si le jeu n'est pas en pause
                     if (timer == 0) { // si le timer est temriné
                         attack(); // lancer une attaque

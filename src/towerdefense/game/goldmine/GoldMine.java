@@ -154,7 +154,7 @@ public class GoldMine implements ProducesGold, Buyable, Upgradable, Placeable, D
      */
     @Override
     public void initialize() {
-        if (gameModel.getRunning()) {
+        if (gameModel.isRunning()) {
             tGoldMine.start();
         }
     }
@@ -170,7 +170,7 @@ public class GoldMine implements ProducesGold, Buyable, Upgradable, Placeable, D
         int productionTime = (int) Math.round(1.0 / sleepTime * 1000); // la mine produira toujours toutes les secondes pour éviter d'avoir un temps = 0
 
         try {
-            while (gameModel.getRunning()) { // si le jeu est en cours
+            while (gameModel.isRunning()) { // si le jeu est en cours
                 if (!gameModel.getPaused()) { // si le jeu n'est pas en pause
                     if (timer == 0) { // si le timer est temriné
                         produceGold(productionRate); // produire l'or que la mine produit en une seconde

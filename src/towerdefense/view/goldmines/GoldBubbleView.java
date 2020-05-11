@@ -1,6 +1,7 @@
 package towerdefense.view.goldmines;
 
 import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.Background;
@@ -8,7 +9,6 @@ import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.CornerRadii;
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.Paint;
 import towerdefense.game.goldmine.GoldMine;
 
 public class GoldBubbleView extends StackPane {
@@ -21,13 +21,24 @@ public class GoldBubbleView extends StackPane {
 
         this.getStyleClass().add("retrieve-gold");
         this.getChildren().add(goldImage);
+        setAlignment(Pos.CENTER);
 
-        this.setPadding(new Insets(size / 6));
-        this.setBackground(new Background(new BackgroundFill(Color.WHITE, new CornerRadii(size / 6.0), Insets.EMPTY)));
+        this.setMaxSize(size, size);
+        this.setPadding(new Insets((size / 4.0)));
+        CornerRadii cr = new CornerRadii((size / 4.0));
+        this.setBackground(new Background(new BackgroundFill(Color.WHITE, cr, new Insets(0))));
 
         // Récupération de l'or
         this.setOnMouseClicked(mouseEvent -> {
             goldMine.retrieveGold();
         });
+    }
+
+    public void setFull() {
+        this.getStyleClass().add("retrieve-gold-full");
+    }
+
+    public void setNotFull() {
+        this.getStyleClass().remove("retrieve-gold-full");
     }
 }

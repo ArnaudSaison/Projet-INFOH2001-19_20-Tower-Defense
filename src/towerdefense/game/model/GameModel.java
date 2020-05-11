@@ -43,6 +43,7 @@ public class GameModel implements Runnable {
     private Player player;
     private Shop shop;
     private int round;
+    private boolean gameOver;
 
     // Eléments de la carte:
     private ArrayList<Hittable> hittables; //listeners des projectiles à effet de zone.
@@ -144,13 +145,13 @@ public class GameModel implements Runnable {
 
 
     public void initialize() {
-        gameThread.start(); // démarrage des vagues
-
-        player.initialize(); // Démarrage du joueur
-
         // Attributs permettant à tous les threads de connaître l'état du jeu
         running = true;
         paused = false;
+
+        gameThread.start(); // démarrage des vagues
+
+        player.initialize(); // Démarrage du joueur
 
         // Il faut démarrer tous les threads de toutes les tours et mines d'or déjà posées
         for (Placeable placeable : placeables) {
@@ -184,6 +185,7 @@ public class GameModel implements Runnable {
     }
 
     public void setGameOver() {
+        gameOver = true;
         running = false;
     }
 
@@ -303,7 +305,7 @@ public class GameModel implements Runnable {
         return paused;
     }
 
-    public Boolean getRunning() {
+    public Boolean isRunning() {
         return running;
     }
 
@@ -329,5 +331,9 @@ public class GameModel implements Runnable {
 
     public int getRound() {
         return round;
+    }
+
+    public boolean isGameOver() {
+        return gameOver;
     }
 }

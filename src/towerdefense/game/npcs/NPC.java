@@ -154,7 +154,7 @@ public abstract class NPC implements Drawable, Movable, Placeable, Runnable, Hit
         double sleepTime = 1.0 / gameModel.getConfig().getModelFrameRate() * 1000;
 
         try {
-            while (gameModel.getRunning() && !isArrived && alive) { // si le jeu est en cours et que le NPC n'est pas encore arrivé au bout du chemin
+            while (gameModel.isRunning() && !isArrived && alive) { // si le jeu est en cours et que le NPC n'est pas encore arrivé au bout du chemin
                 if (!gameModel.getPaused()) { // si le jeu n'est pas en pause
                     move(); // déplacement
 

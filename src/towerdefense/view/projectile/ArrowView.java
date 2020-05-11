@@ -1,5 +1,9 @@
 package towerdefense.view.projectile;
 
+import javafx.event.EventHandler;
+import javafx.geometry.Point3D;
+import javafx.scene.input.MouseEvent;
+import javafx.scene.transform.Rotate;
 import towerdefense.game.map.Map;
 import towerdefense.game.map.Position;
 import towerdefense.view.ElementView;
@@ -12,8 +16,14 @@ public class ArrowView extends ElementView {
 
         this.direction = direction;
 
-        setStyle("-fx-border-color: magenta; -fx-border-width: 1;");
+        setOnMouseClicked(mouseEvent -> {
+            System.out.println("arrow going in direction " + direction + " with angle of " + direction.getAngle() + " degrees and actual rotation is set to " + (imageView.getRotate() + 45));
+        });
 
+        imageView.setRotationAxis(Rotate.Z_AXIS);
+        updateRotation();
+
+//        setStyle("-fx-border-color: magenta; -fx-border-width: 1;");
     }
 
     @Override
@@ -23,6 +33,6 @@ public class ArrowView extends ElementView {
     }
 
     public void updateRotation() {
-        imageView.setRotate(direction.getAngle() - 45); // -45 car c'est l'orientation par défaut de l'asset
+        imageView.setRotate(-(direction.getAngle() - 45)); // -45 car c'est l'orientation par défaut de l'asset
     }
 }

@@ -7,6 +7,8 @@ import towerdefense.game.npcs.HeadedDir;
  * et la représentation graphique.
  */
 public class Position {
+    private final Object syncKeySetPos = new Object();
+
     // ==================== Attributs ====================
     // x et y sont en coordonnées métriques, cela permet de changer l'échelle à volonté par la suite
     private double x;
@@ -42,6 +44,14 @@ public class Position {
         this.x = x;
         this.y = y;
         this.map = map;
+    }
+
+    /**
+     * Réservé aux tests
+     */
+    public Position(double x, double y) {
+        this.x = x;
+        this.y = y;
     }
 
     /**
@@ -144,12 +154,19 @@ public class Position {
 
     /**
      * Changer abscisse et ordonnée en même temps
+     *
      * @param x
      * @param y
      */
     public void setXY(double x, double y) {
         this.x = x;
         this.y = y;
+    }
+
+    public void setToPosition(Position pos) {
+        synchronized (syncKeySetPos) {
+            this.setXY(pos.getX(), pos.getY());
+        }
     }
 
     //***** Getters *******
@@ -359,11 +376,37 @@ public class Position {
      * @return angle en degrés
      */
     public double getAngle() {
-        double alpha = Math.atan(Math.abs(y / x)) * 180; // on ajoute ∏/2 car y est orienté vers le bas
-        int quadrant = getQuadrant();
-        alpha += quadrant * 90;
 
-        return alpha;
+        double res;
+
+        if (x != 0 && y != 0) {
+            double alpha = Math.atan(Math.abs(y / x)) * 180 / Math.PI; // on ajoute ∏/2 car y est orienté vers le bas
+            int quadrant = getQuadrant();
+            res = (quadrant + 1) * 90 - alpha;
+//        System.out.println("Pour la position " + this + " Angle= " + alpha + " Quadrant= " + quadrant);
+
+        } else if (x == 0 && y == 0) { // centre
+            res = 0;
+
+        } else if (x > 0 && y == 0) { // à droite
+            res = 0;
+
+        } else if (x == 0 && y < 0) { // au dessus
+            res = 90;
+
+        } else if (x < 0 && y == 0) { // à gauche
+            res = 180;
+
+        } else if (x == 0 && y > 0) { // en bas
+            res = 270;
+
+        } else {
+            res = 0;
+        }
+
+        synchronized (syncKeySetPos) {
+            return res;
+        }
     }
 
     /**
