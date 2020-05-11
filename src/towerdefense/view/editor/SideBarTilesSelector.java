@@ -79,4 +79,20 @@ public class SideBarTilesSelector extends VBox {
 
         return vBox;
     }
+
+    // Sélection d'un item (doit se trouver dans cette classe afin de pouvoir modifier tous les boutons)
+    public void setSelectedItem(Node item) {
+        deselectItems();
+        item.getStyleClass().add("tile-sidebar-selected");
+    }
+
+    public void deselectItems() {
+        for (Node elem : this.getChildren()) {
+            elem.getStyleClass().remove("tile-sidebar-selected");
+        }
+    }
+
+    public boolean getSelectedState(Node item) {
+        return item.getStyleClass().contains("tile-sidebar-selected");
+    }
 }

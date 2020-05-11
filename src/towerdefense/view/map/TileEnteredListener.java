@@ -1,12 +1,9 @@
 package towerdefense.view.map;
 
 import javafx.event.EventHandler;
-import javafx.scene.Node;
-import javafx.scene.input.DragEvent;
 import javafx.scene.input.MouseEvent;
 import towerdefense.game.map.Map;
 import towerdefense.game.map.Tile;
-import towerdefense.view.shop.TemporaryItem;
 
 public class TileEnteredListener implements EventHandler<MouseEvent> {
     private Tile tile;

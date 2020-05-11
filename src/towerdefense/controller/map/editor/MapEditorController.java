@@ -17,7 +17,6 @@ import towerdefense.controller.generic.GUIController;
 import towerdefense.game.Buyable;
 import towerdefense.game.map.Map;
 import towerdefense.game.map.MapFactory;
-import towerdefense.view.editor.SideBarTilesSelector;
 import towerdefense.view.map.MapView;
 
 import java.awt.Desktop;
