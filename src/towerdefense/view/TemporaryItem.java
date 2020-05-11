@@ -1,4 +1,4 @@
-package towerdefense.view.shop;
+package towerdefense.view;
 
 import towerdefense.game.map.Position;
 

@@ -159,8 +159,10 @@ public class Position {
      * @param y
      */
     public void setXY(double x, double y) {
-        this.x = x;
-        this.y = y;
+        synchronized (syncKeySetPos) {
+            this.x = x;
+            this.y = y;
+        }
     }
 
     public void setToPosition(Position pos) {
@@ -278,19 +280,23 @@ public class Position {
      */
 
     public double getDistance(Position p) {
-        double varX = x - p.getX();
-        double varY = y - p.getY();
-        return getNorm(varX, varY);
+        synchronized (syncKeySetPos) {
+            double varX = x - p.getX();
+            double varY = y - p.getY();
+            return getNorm(varX, varY);
+        }
     }
 
     /**
      * (en place) Normaliser la distane entre l'origine et le point
      */
     public void normalize() {
-        double norm = getNorm();
-        if (norm != 0) {
-            x /= norm;
-            y /= norm;
+        synchronized (syncKeySetPos) {
+            double norm = getNorm();
+            if (norm != 0) {
+                x /= norm;
+                y /= norm;
+            }
         }
     }
 
@@ -298,10 +304,12 @@ public class Position {
      * Normaliser la distane entre l'origine et le point
      */
     public Position getNormalized() {
-        double norm = getNorm();
-        x /= norm;
-        y /= norm;
-        return new Position(x, y, map);
+        synchronized (syncKeySetPos) {
+            double norm = getNorm();
+            x /= norm;
+            y /= norm;
+            return new Position(x, y, map);
+        }
     }
 
     // ==================== Fonctionnement de la classe ====================
@@ -313,8 +321,10 @@ public class Position {
      * @param fact facteur de multiplication
      */
     public void multiply(double fact) {
-        x *= fact;
-        y *= fact;
+        synchronized (syncKeySetPos) {
+            x *= fact;
+            y *= fact;
+        }
     }
 
     /**
@@ -324,8 +334,10 @@ public class Position {
      * @return position
      */
     public Position getMultiplied(double fact) {
-        assertMapAttached();
-        return new Position(x * fact, y * fact, map);
+        synchronized (syncKeySetPos) {
+            assertMapAttached();
+            return new Position(x * fact, y * fact, map);
+        }
     }
 
     /**
@@ -334,8 +346,10 @@ public class Position {
      * @param pos2 positon à additionner
      */
     public void add(Position pos2) {
-        x += pos2.getX();
-        y += pos2.getY();
+        synchronized (syncKeySetPos) {
+            x += pos2.getX();
+            y += pos2.getY();
+        }
     }
 
     /**
@@ -355,8 +369,10 @@ public class Position {
      * @param pos2 positon à soustraire
      */
     public void substract(Position pos2) {
-        x -= pos2.getX();
-        y -= pos2.getY();
+        synchronized (syncKeySetPos) {
+            x -= pos2.getX();
+            y -= pos2.getY();
+        }
     }
 
     /**
